@@ -1,0 +1,46 @@
+spring:
+  cloud:
+    gateway:
+      server:
+        webmvc:
+          routes:
+            - id: auth-service-route
+              uri: http://auth-service:8085
+              predicates:
+                - Path=/auth/**
+
+            - id: school-structure-service-route
+              uri: http://school-structure-service:8081
+              predicates:
+                - Path=/api/group/**,/api/student/**,/api/teacher/**,/api/subject/**,/api/parent/**,/api/teaching-assignment/**
+              filters:
+                - StripPrefix=1
+
+            - id: grade-service-route
+              uri: http://grade-service:8082
+              predicates:
+                - Path=/api/grade/**,/api/semester-grade/**
+              filters:
+                - StripPrefix=1
+
+            - id: schedule-service-route
+              uri: http://schedule-service:8083
+              predicates:
+                - Path=/api/schedule/**,/api/schedule-override/**
+              filters:
+                - StripPrefix=1
+
+            - id: teaching-service-route
+              uri: http://teaching-service:8084
+              predicates:
+                - Path=/api/assessment/**,/api/attendance/**,/api/session/**
+              filters:
+                - StripPrefix=1
+
+jwt:
+  secret: ${JWT_SECRET:VvyRVvEHvgAySvx17fYT6sCr1AXkuDvW66uiuFDwfVP}
+  access-token-validity-ms: 900000
+
+logging:
+  level:
+    org.springframework.security: DEBUG

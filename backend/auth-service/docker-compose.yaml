@@ -1,0 +1,40 @@
+services:
+  auth-service:
+    build: ./
+    container_name: auth-service
+    restart: unless-stopped
+    networks:
+      - school_network
+    environment:
+      DB_HOST: auth-service-db
+    ports:
+      - "8085:8085"
+    depends_on:
+      auth-service-db:
+        condition: service_healthy
+
+  auth-service-db:
+    image: postgres:16-alpine
+    container_name: auth-service-db
+    restart: unless-stopped
+    networks:
+      - school_network
+    environment:
+      POSTGRES_DB: auth-service-db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - auth_service_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d auth-service-db" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  auth_service_data:
+
+networks:
+  school_network:
+    driver: bridge
+    external: true

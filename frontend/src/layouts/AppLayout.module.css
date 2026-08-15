@@ -1,0 +1,13 @@
+.layout {
+  display: flex;
+  max-width: 80rem;
+  margin: 0 auto;
+}
+
+.content {
+  margin: 0 auto;
+}
+
+.container {
+  margin: 1em;
+}

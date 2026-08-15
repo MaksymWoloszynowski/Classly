@@ -1,0 +1,33 @@
+.sidebar {
+  width: 16rem;
+  padding: 1rem;
+  border-right: 0.0625rem solid #e1e8ed;
+  height: 100vh;
+  font-size: 1.5rem;
+  position: sticky;
+  top: 0;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  height: 100%;
+}
+
+.link,
+.active {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 9999px;
+  text-decoration: none;
+  color: #14171a;
+  transition: background-color 0.2s;
+}
+
+svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}

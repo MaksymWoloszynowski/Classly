@@ -1,0 +1,180 @@
+services:
+  api-gateway:
+    build:
+      context: ./api-gateway
+      secrets:
+        - maven_settings
+    container_name: api-gateway
+    restart: unless-stopped
+    networks:
+      - school_network
+    ports:
+      - "8080:8080"
+
+  school-structure-service:
+    build:
+      context: ./school-structure-service
+      secrets:
+        - maven_settings
+    container_name: school-structure-service
+    restart: unless-stopped
+    networks:
+      - school_network
+    environment:
+      DB_HOST: school-structure-service-db
+    ports:
+      - "8081:8081"
+    depends_on:
+      school-structure-service-db:
+        condition: service_healthy
+
+  grade-service:
+    build:
+      context: ./grade-service
+      secrets:
+        - maven_settings
+    container_name: grade-service
+    restart: unless-stopped
+    networks:
+      - school_network
+    environment:
+      DB_HOST: grade-service-db
+      SCHOOL_STRUCTURE_HOST: school-structure-service
+      SCHOOL_STRUCTURE_GRPC_PORT: 9090
+    ports:
+      - "8082:8082"
+    depends_on:
+      grade-service-db:
+        condition: service_healthy
+      school-structure-service:
+        condition: service_started
+
+  schedule-service:
+    build:
+      context: ./schedule-service
+      secrets:
+        - maven_settings
+
+    container_name: schedule-service
+    restart: unless-stopped
+    networks:
+      - school_network
+    environment:
+      DB_HOST: schedule-service-db
+      SCHOOL_STRUCTURE_HOST: school-structure-service
+      SCHOOL_STRUCTURE_GRPC_PORT: 9090
+    ports:
+      - "8083:8083"
+    depends_on:
+      schedule-service-db:
+        condition: service_healthy
+      school-structure-service:
+        condition: service_started
+
+  teaching-service:
+    build:
+      context: ./teaching-service
+      secrets:
+        - maven_settings
+    container_name: teaching-service
+    restart: unless-stopped
+    networks:
+      - school_network
+    environment:
+      DB_HOST: teaching-service-db
+      SCHOOL_STRUCTURE_HOST: school-structure-service
+      SCHOOL_STRUCTURE_GRPC_PORT: 9090
+    ports:
+      - "8084:8084"
+    depends_on:
+      teaching-service-db:
+        condition: service_healthy
+      school-structure-service:
+        condition: service_started
+
+  schedule-service-db:
+    image: postgres:16-alpine
+    container_name: schedule-service-db
+    restart: unless-stopped
+    networks:
+      - school_network
+    environment:
+      POSTGRES_DB: schedule-service-db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - schedule_service_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d schedule-service-db" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  grade-service-db:
+    image: postgres:16-alpine
+    container_name: grade-service-db
+    restart: unless-stopped
+    networks:
+      - school_network
+    environment:
+      POSTGRES_DB: grade-service-db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - grade_service_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d grade-service-db" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  teaching-service-db:
+    image: postgres:16-alpine
+    container_name: teaching-service-db
+    restart: unless-stopped
+    networks:
+      - school_network
+    environment:
+      POSTGRES_DB: teaching-service-db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - teaching_service_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d teaching-service-db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  school-structure-service-db:
+    image: postgres:16-alpine
+    container_name: school-structure-service-db
+    restart: unless-stopped
+    networks:
+      - school_network
+    environment:
+      POSTGRES_DB: school-structure-service-db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - school-structure_service_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d school-structure-service-db" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  teaching_service_data:
+  school-structure_service_data:
+  grade_service_data:
+  schedule_service_data:
+
+networks:
+  school_network:
+    driver: bridge
+    external: true
+
+secrets:
+  maven_settings:
+    file: ./settings.xml

@@ -1,0 +1,1 @@
+INSERT INTO access_codes (id, code, role, ref_id, used) VALUES ('33333333-1111-1111-1111-111111111111', '1234567', 'ROLE_STUDENT', 'cccccccc-1111-1111-1111-111111111111', false )

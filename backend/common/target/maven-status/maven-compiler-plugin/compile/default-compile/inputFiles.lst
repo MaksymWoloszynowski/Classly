@@ -1,0 +1,4 @@
+/Users/maksym/Documents/Projects/school-management-system/backend/common/src/main/java/org/edziennik/security/AuthenticatedUser.java
+/Users/maksym/Documents/Projects/school-management-system/backend/common/src/main/java/org/edziennik/security/JwtAuthenticationFilter.java
+/Users/maksym/Documents/Projects/school-management-system/backend/common/src/main/java/org/edziennik/security/JwtVerifier.java
+/Users/maksym/Documents/Projects/school-management-system/backend/common/src/main/java/org/edziennik/security/SecurityConfig.java

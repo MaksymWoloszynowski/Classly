@@ -1,0 +1,42 @@
+services:
+  grade-service:
+    build: ./
+    container_name: grade-service
+    restart: unless-stopped
+    networks:
+      - school_network
+    environment:
+      DB_HOST: grade-service-db
+      SCHOOL_STRUCTURE_HOST: school-structure-service
+      SCHOOL_STRUCTURE_GRPC_PORT: 9090
+    ports:
+      - "8082:8082"
+    depends_on:
+      grade-service-db:
+        condition: service_healthy
+
+  grade-service-db:
+    image: postgres:16-alpine
+    container_name: grade-service-db
+    restart: unless-stopped
+    networks:
+      - school_network
+    environment:
+      POSTGRES_DB: grade-service-db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - grade_service_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d grade-service-db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  grade_service_data:
+
+networks:
+  school_network:
+    driver: bridge
+    external: true

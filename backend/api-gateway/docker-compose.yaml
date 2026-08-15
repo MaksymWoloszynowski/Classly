@@ -1,0 +1,14 @@
+services:
+  api-gateway:
+    build: ./
+    container_name: api-gateway
+    restart: unless-stopped
+    networks:
+      - school_network
+    ports:
+      - "8080:8080"
+
+networks:
+  school_network:
+    driver: bridge
+    external: true

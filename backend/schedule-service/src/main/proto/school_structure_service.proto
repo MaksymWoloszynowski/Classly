@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+option java_package = "org.edziennik.schoolstructureservice.grpc";
+option java_multiple_files = true;
+
+service SchoolStructureService {
+  rpc GetStudent (StudentRequest) returns (StudentResponse);
+  rpc GetSubject (SubjectRequest) returns (SubjectResponse);
+  rpc GetTeacher (TeacherRequest) returns (TeacherResponse);
+  rpc GetStudentIdsByGroup (GroupRequest) returns (StudentIdListResponse);
+  rpc GetTeachingAssignment (TeachingAssignmentRequest) returns (TeachingAssignmentResponse);
+  rpc GetTeachingAssignmentIdsByGroup(GroupRequest) returns (TeachingAssignmentIdListResponse);
+}
+
+message StudentRequest {
+  string student_id = 1;
+}
+
+message StudentResponse {
+  string first_name = 1;
+  string last_name = 2;
+}
+
+message SubjectRequest {
+  string subject_id = 1;
+}
+
+message SubjectResponse {
+  string name = 1;
+}
+
+message TeacherRequest {
+  string teacher_id = 1;
+}
+
+message TeacherResponse {
+  string name = 1;
+}
+
+message GroupRequest {
+  string group_id = 1;
+}
+message TeachingAssignmentRequest {
+  string teaching_assignment_id = 1;
+}
+
+message TeachingAssignmentResponse {
+  string subject = 1;
+  string teacher = 2;
+  string group = 3;
+}
+
+message StudentIdListResponse {
+  repeated string student_ids = 1;
+}
+
+message TeachingAssignmentIdListResponse {
+  repeated string teaching_assignment_ids = 1;
+}

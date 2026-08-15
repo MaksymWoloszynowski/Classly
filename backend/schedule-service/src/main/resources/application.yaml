@@ -1,0 +1,29 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: schedule-service
+
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/schedule-service-db
+    username: postgres
+    password: postgres
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+grpc:
+  client:
+    school-structure-service:
+      address: static://${SCHOOL_STRUCTURE_HOST:localhost}:${SCHOOL_STRUCTURE_GRPC_PORT:9090}
+      negotiationType: plaintext
+
+  server:
+    port: -1

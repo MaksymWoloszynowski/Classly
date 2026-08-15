@@ -1,0 +1,42 @@
+services:
+  teaching-service:
+    build: ./
+    container_name: teaching-service
+    restart: unless-stopped
+    networks:
+      - school_network
+    environment:
+      DB_HOST: teaching-service-db
+      SCHOOL_STRUCTURE_HOST: school-structure-service
+      SCHOOL_STRUCTURE_GRPC_PORT: 9090
+    ports:
+      - "8084:8084"
+    depends_on:
+      teaching-service-db:
+        condition: service_healthy
+
+  teaching-service-db:
+    image: postgres:16-alpine
+    container_name: teaching-service-db
+    restart: unless-stopped
+    networks:
+      - school_network
+    environment:
+      POSTGRES_DB: teaching-service-db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - teaching_service_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d teaching-service-db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  teaching_service_data:
+
+networks:
+  school_network:
+    driver: bridge
+    external: true

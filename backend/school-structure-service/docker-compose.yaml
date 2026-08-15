@@ -1,0 +1,49 @@
+services:
+  school-structure-service:
+    build:
+      context: .
+      secrets:
+        - maven_settings
+    container_name: school-structure-service
+    restart: unless-stopped
+    networks:
+      - school_network
+    environment:
+      DB_HOST: school-structure-service-db
+    extra_hosts:
+      - "nexus.example.local:host-gateway"
+    ports:
+      - "8081:8081"
+    depends_on:
+      school-structure-service-db:
+        condition: service_healthy
+
+  school-structure-service-db:
+    image: postgres:16-alpine
+    container_name: school-structure-service-db
+    restart: unless-stopped
+    networks:
+      - school_network
+    environment:
+      POSTGRES_DB: school-structure-service-db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - school-structure_service_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d school-structure-service-db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  school-structure_service_data:
+
+networks:
+  school_network:
+    driver: bridge
+    external: true
+
+secrets:
+  maven_settings:
+    file: ../settings.xml
