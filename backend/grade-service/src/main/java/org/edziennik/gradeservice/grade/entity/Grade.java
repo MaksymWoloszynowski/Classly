@@ -31,9 +31,7 @@ public class Grade {
     private String description;
 
     @NotNull
-    @Min(1)
-    @Max(2)
-    private int semester;
+    private UUID classificationPeriod;
 
     @NotNull
     @Enumerated(EnumType.STRING)

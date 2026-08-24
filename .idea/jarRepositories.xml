@@ -7,6 +7,11 @@
       <option name="url" value="https://repo.maven.apache.org/maven2" />
     </remote-repository>
     <remote-repository>
+      <option name="id" value="github" />
+      <option name="name" value="github" />
+      <option name="url" value="https://maven.pkg.github.com/MaksymWoloszynowski/school-management-system" />
+    </remote-repository>
+    <remote-repository>
       <option name="id" value="demorepo" />
       <option name="name" value="demorepo" />
       <option name="url" value="https://nexus.example.local/repository/demorepo/" />

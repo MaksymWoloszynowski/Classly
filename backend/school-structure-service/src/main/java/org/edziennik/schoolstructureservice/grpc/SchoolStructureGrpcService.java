@@ -7,8 +7,8 @@ import org.edziennik.schoolstructureservice.student.entity.Student;
 import org.edziennik.schoolstructureservice.student.repository.StudentRepository;
 import org.edziennik.schoolstructureservice.subject.repository.SubjectRepository;
 import org.edziennik.schoolstructureservice.teacher.repository.TeacherRepository;
-import org.edziennik.schoolstructureservice.teachingassignment.entity.TeachingAssignment;
-import org.edziennik.schoolstructureservice.teachingassignment.repository.TeachingAssignmentRepository;
+import org.edziennik.schoolstructureservice.teachingAssignment.entity.TeachingAssignment;
+import org.edziennik.schoolstructureservice.teachingAssignment.repository.TeachingAssignmentRepository;
 
 import java.util.List;
 import java.util.UUID;

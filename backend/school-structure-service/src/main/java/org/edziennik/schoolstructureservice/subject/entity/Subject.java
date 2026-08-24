@@ -3,7 +3,7 @@ package org.edziennik.schoolstructureservice.subject.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
-import org.edziennik.schoolstructureservice.teachingassignment.entity.TeachingAssignment;
+import org.edziennik.schoolstructureservice.teachingAssignment.entity.TeachingAssignment;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.util.HashSet;

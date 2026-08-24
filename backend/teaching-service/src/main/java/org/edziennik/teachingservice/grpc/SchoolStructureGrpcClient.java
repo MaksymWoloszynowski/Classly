@@ -9,10 +9,8 @@ import org.edziennik.schoolstructureservice.grpc.TeachingAssignmentRequest;
 import org.edziennik.schoolstructureservice.grpc.TeachingAssignmentResponse;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class SchoolStructureGrpcClient {
@@ -38,5 +36,14 @@ public class SchoolStructureGrpcClient {
             result.put(id, r.getFirstName() + " " + r.getLastName());
         }
         return result;
+    }
+
+    public List<UUID> getTeachingAssignmentIdsByGroup(UUID groupId) {
+        GroupRequest request = GroupRequest.newBuilder().setGroupId(groupId.toString()).build();
+        TeachingAssignmentIdListResponse response = blockingStub.getTeachingAssignmentIdsByGroup(request);
+
+        return response.getTeachingAssignmentIdsList().stream()
+                .map(UUID::fromString)
+                .collect(Collectors.toList());
     }
 }

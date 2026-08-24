@@ -10,6 +10,7 @@ import org.edziennik.teachingservice.session.mapper.SessionMapper;
 import org.edziennik.teachingservice.session.repository.SessionRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,6 +34,12 @@ public class SessionService {
 
     public List<SessionResponseDTO> getSessionsByTeachingAssignment(UUID teachingAssignmentId) {
         return mapToDTOList(sessionRepository.findByTeachingAssignmentId(teachingAssignmentId));
+    }
+
+    public List<SessionResponseDTO> getSessionsByGroupAndDate(UUID groupId, LocalDate from, LocalDate to) {
+        List<UUID> teachingAssignmentIds = schoolStructureClient.getTeachingAssignmentIdsByGroup(groupId);
+
+        return mapToDTOList(sessionRepository.findByTeachingAssignmentIdInAndDateBetween(teachingAssignmentIds, from, to));
     }
 
     public SessionResponseDTO createSession(SessionRequestDTO dto) {

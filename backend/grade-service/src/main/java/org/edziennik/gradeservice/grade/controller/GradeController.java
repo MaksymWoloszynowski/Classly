@@ -24,9 +24,9 @@ public class GradeController {
             @RequestParam(required = false) UUID studentId,
             @RequestParam(required = false) UUID groupId,
             @RequestParam(required = false) UUID subjectId,
-            @RequestParam(required = false) Integer semester
+            @RequestParam(required = false) UUID classificationPeriod
     ) {
-        List<GradeResponseDTO> grades = gradeService.getGrades(studentId, groupId, subjectId, semester);
+        List<GradeResponseDTO> grades = gradeService.getGrades(studentId, groupId, subjectId, classificationPeriod);
 
         return ResponseEntity.ok().body(grades);
     }

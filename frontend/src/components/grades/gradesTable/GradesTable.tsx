@@ -8,15 +8,13 @@ interface GradesTableProps {
   secondSemesterGrades: Grade[];
   annualGrades: Grade[];
   subjects: Subject[];
-  isLoading: boolean;
 }
 
 const GradesTable = ({
   firstSemesterGrades,
   secondSemesterGrades,
   annualGrades,
-  subjects,
-  isLoading,
+  subjects
 }: GradesTableProps) => {
   const [selectedSemester, setSelectedSemester] = useState<1 | 2>(1);
 

@@ -16,7 +16,7 @@ public class GradeResponseDTO  {
     private double grade;
     private GradeType type;
     private String description;
-    private int semester;
+    private UUID classificationPeriod;
     private int weight;
     private LocalDate date;
     private UUID studentId;

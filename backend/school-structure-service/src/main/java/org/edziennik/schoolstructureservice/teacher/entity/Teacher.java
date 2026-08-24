@@ -6,7 +6,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
-import org.edziennik.schoolstructureservice.teachingassignment.entity.TeachingAssignment;
+import org.edziennik.schoolstructureservice.teachingAssignment.entity.TeachingAssignment;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.util.HashSet;

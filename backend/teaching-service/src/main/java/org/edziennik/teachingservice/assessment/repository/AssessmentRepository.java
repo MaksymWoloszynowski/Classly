@@ -9,5 +9,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface AssessmentRepository extends JpaRepository<Assessment, UUID>, JpaSpecificationExecutor<Assessment> {
-    List<Assessment> findByTeachingAssignmentIdAndDateDueBetween(UUID teachingAssignmentId, LocalDate from, LocalDate to);
+    List<Assessment> findByTeachingAssignmentId(UUID teachingAssignmentId);
+    List<Assessment> findByTeachingAssignmentIdInAndDateDueBetween(List<UUID> teachingAssignmentId, LocalDate from, LocalDate to);
 }

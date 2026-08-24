@@ -18,6 +18,7 @@ import org.edziennik.schoolstructureservice.grpc.TeachingAssignmentResponse;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -72,13 +73,22 @@ public class ScheduleService {
     }
 
     public List<ScheduleOccurrenceDTO> getGroupScheduleForDate(UUID groupId, LocalDate from, LocalDate to) {
+        long days = ChronoUnit.DAYS.between(from, to) + 1;
+
         List<UUID> teachingAssignmentIds = schoolStructureClient.getTeachingAssignmentIdsByGroup(groupId);
 
         List<Schedule> schedules = scheduleRepository.findByTeachingAssignmentIdInAndValidFromLessThanEqualAndValidToGreaterThanEqual(
                 teachingAssignmentIds, from, to);
-        List<ScheduleOccurrence> occurrences = schedules.stream()
-                .map(entry -> ScheduleMapper.toOccurrence(entry, from))
-                .toList();
+
+        List<ScheduleOccurrence> occurrences = new ArrayList<>();
+
+        for (int i = 0; i < (days / 7) + 1; i++) {
+            int weekOffset = i * 7;
+
+            occurrences.addAll(schedules.stream()
+                    .map(entry -> ScheduleMapper.toOccurrence(entry, from.plusDays(weekOffset)))
+                    .toList());
+        }
 
         List<UUID> scheduleIds = schedules.stream().map(Schedule::getId).toList();
         List<ScheduleOverride> overrides = scheduleOverrideRepository

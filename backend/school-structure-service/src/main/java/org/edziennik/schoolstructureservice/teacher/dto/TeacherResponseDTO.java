@@ -1,7 +1,7 @@
 package org.edziennik.schoolstructureservice.teacher.dto;
 
 import lombok.*;
-import org.edziennik.schoolstructureservice.teachingassignment.dto.TeachingAssignmentResponseDTO;
+import org.edziennik.schoolstructureservice.teachingAssignment.dto.TeachingAssignmentResponseDTO;
 
 import java.util.Set;
 import java.util.UUID;

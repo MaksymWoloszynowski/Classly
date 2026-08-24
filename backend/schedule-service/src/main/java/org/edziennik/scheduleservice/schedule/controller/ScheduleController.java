@@ -32,10 +32,9 @@ public class ScheduleController {
     }
 
     @GetMapping("/date")
-    public ResponseEntity<List<ScheduleOccurrenceDTO>> getGroupScheduleForWeek(@RequestParam(required = true) UUID groupId,
+    public ResponseEntity<List<ScheduleOccurrenceDTO>> getGroupScheduleForDate(@RequestParam(required = true) UUID groupId,
                                                                                @RequestParam(required = true) LocalDate from,
                                                                                @RequestParam(required = true) LocalDate to) {
-
         return ResponseEntity.ok(scheduleService.getGroupScheduleForDate(groupId, from, to));
     }
 

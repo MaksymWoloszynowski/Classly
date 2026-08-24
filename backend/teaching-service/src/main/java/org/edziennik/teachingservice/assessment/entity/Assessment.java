@@ -26,9 +26,6 @@ public class Assessment {
     private UUID teachingAssignmentId;
 
     @NotNull
-    private UUID groupId;
-
-    @NotNull
     private LocalDate dateMade;
 
     @NotNull

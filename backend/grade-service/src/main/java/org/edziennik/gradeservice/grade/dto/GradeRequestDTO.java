@@ -21,9 +21,7 @@ public class GradeRequestDTO {
     private GradeType type;
 
     @NotNull
-    @Min(1)
-    @Max(2)
-    private int semester;
+    private UUID classificationPeriod;
 
     private String description;
 
@@ -37,7 +35,4 @@ public class GradeRequestDTO {
 
     @NotNull
     private UUID subjectId;
-
-    @NotNull
-    private String subjectName;
 }

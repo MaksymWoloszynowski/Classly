@@ -1,11 +1,12 @@
-export type GradeType = "exam" | "homework" | "project" | "quiz" | "annual";
+export type GradeType =  "CURRENT" | "QUIZ" | "HOMEWORK" | "TEST" | "CLASS_TEST" | "PARTICIPATION"
+
 
 export type Grade = {
     id: string;
     grade: number;
     type: GradeType;
     description: string;
-    semester: number;
+    classificationPeriod: string;
     weight: number;
     date: string;
     studentId: string;

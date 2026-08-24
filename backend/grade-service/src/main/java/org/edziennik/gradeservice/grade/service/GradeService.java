@@ -25,7 +25,7 @@ public class GradeService {
         this.schoolStructureClient = schoolStructureClient;
     }
 
-    public List<GradeResponseDTO> getGrades(UUID studentId, UUID groupId, UUID subjectId, Integer semester) {
+    public List<GradeResponseDTO> getGrades(UUID studentId, UUID groupId, UUID subjectId, UUID classificationPeriod) {
         Specification<Grade> spec = Specification.allOf();
 
         if (studentId != null) {
@@ -38,8 +38,8 @@ public class GradeService {
         if (subjectId != null) {
             spec = spec.and((root, query, cb) -> cb.equal(root.get("subjectId"), subjectId));
         }
-        if (semester != null) {
-            spec = spec.and((root, query, cb) -> cb.equal(root.get("semester"), semester));
+        if (classificationPeriod != null) {
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("classificationPeriod"), classificationPeriod));
         }
 
         return mapToDTOList(gradeRepository.findAll(spec));

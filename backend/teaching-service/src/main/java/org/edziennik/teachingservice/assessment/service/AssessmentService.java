@@ -8,9 +8,11 @@ import org.edziennik.teachingservice.assessment.exception.AssessmentNotFoundExce
 import org.edziennik.teachingservice.assessment.mapper.AssessmentMapper;
 import org.edziennik.teachingservice.assessment.repository.AssessmentRepository;
 import org.edziennik.teachingservice.grpc.SchoolStructureGrpcClient;
+import org.edziennik.teachingservice.session.dto.SessionResponseDTO;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,21 +26,23 @@ public class AssessmentService {
         this.schoolStructureClient = schoolStructureClient;
     }
 
-    public List<AssessmentResponseDTO> getAllAssessments(UUID teachingAssignmentId, UUID groupID) {
-        Specification<Assessment> spec = Specification.allOf();
+    public List<AssessmentResponseDTO> getAllAssessments(UUID teachingAssignmentId) {
 
         if (teachingAssignmentId != null) {
-            spec = spec.and(((root, query, cb) -> cb.equal(root.get("teachingAssignmentId"), teachingAssignmentId)));
-        }
-        if (groupID != null) {
-            spec = spec.and(((root, query, cb) -> cb.equal(root.get("groupId"), groupID)));
+           mapToDTOList(assessmentRepository.findByTeachingAssignmentId(teachingAssignmentId));
         }
 
-        return mapToDTOList(assessmentRepository.findAll(spec));
+        return mapToDTOList(assessmentRepository.findAll());
     }
 
     public AssessmentResponseDTO getAssessmentById(UUID id) {
         return mapToDTO(getAssessment(id));
+    }
+
+    public List<AssessmentResponseDTO> getAssessmentsByGroupAndDate(UUID groupId, LocalDate from, LocalDate to) {
+        List<UUID> teachingAssignmentIds = schoolStructureClient.getTeachingAssignmentIdsByGroup(groupId);
+
+        return mapToDTOList(assessmentRepository.findByTeachingAssignmentIdInAndDateDueBetween(teachingAssignmentIds, from, to));
     }
 
     public AssessmentResponseDTO createAssessment(AssessmentRequestDTO dto) {
@@ -50,7 +54,6 @@ public class AssessmentService {
         Assessment assessment = getAssessment(id);
 
         assessment.setTeachingAssignmentId(dto.getTeachingAssignmentId());
-        assessment.setGroupId(dto.getGroupId());
         assessment.setDateDue(dto.getDateDue());
         assessment.setType(dto.getType());
         assessment.setDescription(dto.getDescription());

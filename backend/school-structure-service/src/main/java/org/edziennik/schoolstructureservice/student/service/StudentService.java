@@ -12,7 +12,7 @@ import org.edziennik.schoolstructureservice.student.repository.StudentRepository
 import org.edziennik.schoolstructureservice.subject.dto.SubjectResponseDTO;
 import org.edziennik.schoolstructureservice.subject.entity.Subject;
 import org.edziennik.schoolstructureservice.subject.mapper.SubjectMapper;
-import org.edziennik.schoolstructureservice.teachingassignment.entity.TeachingAssignment;
+import org.edziennik.schoolstructureservice.teachingAssignment.entity.TeachingAssignment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

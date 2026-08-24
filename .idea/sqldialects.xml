@@ -2,5 +2,8 @@
 <project version="4">
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/backend/auth-service/src/main/resources/db/migration/V2__seed_test_data.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/data/01_school_structure.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/data/02_schedule.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/data/04_teaching.sql" dialect="GenericSQL" />
   </component>
 </project>

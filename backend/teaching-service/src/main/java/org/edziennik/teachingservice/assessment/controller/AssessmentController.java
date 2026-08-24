@@ -7,6 +7,7 @@ import org.edziennik.teachingservice.assessment.service.AssessmentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,10 +22,18 @@ public class AssessmentController {
 
     @GetMapping
     public ResponseEntity<List<AssessmentResponseDTO>> getAssessments(
-            @RequestParam(required = false) UUID teachingAssignmentId,
-            @RequestParam(required = false) UUID groupId) {
+            @RequestParam(required = false) UUID teachingAssignmentId) {
 
-        return ResponseEntity.ok(assessmentService.getAllAssessments(teachingAssignmentId, groupId));
+        return ResponseEntity.ok(assessmentService.getAllAssessments(teachingAssignmentId));
+    }
+
+    @GetMapping("/date")
+    public ResponseEntity<List<AssessmentResponseDTO>> getAssessmentsByGroupAndDate(
+            @RequestParam(required = true) UUID groupId,
+            @RequestParam(required = true) LocalDate from,
+            @RequestParam(required = true) LocalDate to) {
+
+        return ResponseEntity.ok(assessmentService.getAssessmentsByGroupAndDate(groupId, from, to));
     }
 
     @GetMapping("/{id}")

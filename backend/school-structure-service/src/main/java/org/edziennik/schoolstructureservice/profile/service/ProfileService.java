@@ -33,42 +33,48 @@ public class ProfileService {
     public ProfileResponseDTO getProfile(AuthenticatedUser user) {
         switch (user.role()) {
             case "ROLE_STUDENT" -> {
-                return buildStudentProfile(user.refId());
+                return buildStudentProfile(user);
             }
             case "ROLE_PARENT" -> {
-                return buildParentProfile(user.refId());
+                return buildParentProfile(user);
             }
             case "ROLE_TEACHER" -> {
-                return buildTeacherProfile(user.refId());
+                return buildTeacherProfile(user);
             }
 
             default -> throw new IllegalStateException("Unsupported role: " + user.role());
         }
     }
 
-    private ProfileResponseDTO buildStudentProfile(UUID id) {
+    private ProfileResponseDTO buildStudentProfile(AuthenticatedUser user) {
+        UUID id = user.refId();
         Student student = studentRepository.findById(id).orElseThrow(() -> new StudentNotFoundException("Student not found with ID: " + id));;
 
         return ProfileResponseDTO.builder()
-                            .userId(id)
-                            .student(StudentMapper.toDTO(student))
-                            .build();
+                .userId(id)
+                .role(user.role())
+                .student(StudentMapper.toDTO(student))
+                .build();
     }
 
-    private ProfileResponseDTO buildTeacherProfile(UUID id) {
+    private ProfileResponseDTO buildTeacherProfile(AuthenticatedUser user) {
+        UUID id = user.refId();
         Teacher teacher = teacherRepository.findById(id).orElseThrow(() -> new TeacherNotFoundException("Teacher not found with ID: " + id));;
 
         return ProfileResponseDTO.builder()
                 .userId(id)
+                .role(user.role())
                 .teacher(TeacherMapper.toDTO(teacher))
                 .build();
     }
 
-    private ProfileResponseDTO buildParentProfile(UUID id) {
+    private ProfileResponseDTO buildParentProfile(AuthenticatedUser user) {
+        UUID id = user.refId();
         Parent parent = parentRepository.findById(id).orElseThrow(() -> new ParentNotFoundException("Parent not found with ID: " + id));;
 
         return ProfileResponseDTO.builder()
                 .userId(id)
+                .role(user.role())
                 .parent(ParentMapper.toDTO(parent))
                 .build();
     }

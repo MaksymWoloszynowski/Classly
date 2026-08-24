@@ -14,7 +14,6 @@ CREATE TABLE attendance (
 
 CREATE TABLE assessment (
     id UUID PRIMARY KEY,
-    group_id UUID NOT NULL,
     teaching_assignment_id UUID NOT NULL,
     description VARCHAR(255),
     date_made DATE NOT NULL DEFAULT NOW(),

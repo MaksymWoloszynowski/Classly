@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.edziennik.schoolstructureservice.student.entity.Student;
 import org.edziennik.schoolstructureservice.teacher.entity.Teacher;
-import org.edziennik.schoolstructureservice.teachingassignment.entity.TeachingAssignment;
+import org.edziennik.schoolstructureservice.teachingAssignment.entity.TeachingAssignment;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.util.HashSet;

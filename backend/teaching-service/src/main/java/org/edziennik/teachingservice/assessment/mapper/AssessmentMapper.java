@@ -20,7 +20,6 @@ public class AssessmentMapper {
         return Assessment.builder()
                 .teachingAssignmentId(dto.getTeachingAssignmentId())
                 .dateDue(dto.getDateDue())
-                .groupId(dto.getGroupId())
                 .type(dto.getType())
                 .description(dto.getDescription())
                 .build();

@@ -31,7 +31,7 @@ public class SemesterGrade {
     private SemesterGradeType type;
 
     @NotNull
-    private String schoolYear;
+    private UUID classificationPeriod;
 
     @NotNull
     private UUID studentId;

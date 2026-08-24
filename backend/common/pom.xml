@@ -46,7 +46,7 @@
         <repository>
             <id>github</id>
             <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/edziennik/common</url>
+            <url>https://maven.pkg.github.com/MaksymWoloszynowski/school-management-system</url>
         </repository>
     </distributionManagement>
 

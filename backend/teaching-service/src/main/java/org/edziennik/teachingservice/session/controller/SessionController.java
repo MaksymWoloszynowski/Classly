@@ -7,6 +7,7 @@ import org.edziennik.teachingservice.session.service.SessionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,6 +33,16 @@ public class SessionController {
     @GetMapping("/{id}")
     public ResponseEntity<SessionResponseDTO> getSessionById(@PathVariable UUID id) {
         return ResponseEntity.ok(sessionService.getSessionById(id));
+    }
+
+    @GetMapping("/date")
+    public ResponseEntity<List<SessionResponseDTO>> getSessionsByGroupAndDate(
+            @RequestParam(required = true) UUID groupId,
+            @RequestParam(required = true) LocalDate from,
+            @RequestParam(required = true) LocalDate to
+            ) {
+
+        return ResponseEntity.ok(sessionService.getSessionsByGroupAndDate(groupId, from, to));
     }
 
     @PostMapping

@@ -15,9 +15,6 @@ public class AssessmentRequestDTO {
     private UUID teachingAssignmentId;
 
     @NotNull
-    private UUID groupId;
-
-    @NotNull
     private LocalDate dateDue;
 
     @NotNull

@@ -1,6 +1,7 @@
 package org.edziennik.gradeservice.semester_grade.controller;
 
 import jakarta.validation.groups.Default;
+import org.edziennik.gradeservice.grade.dto.GradeResponseDTO;
 import org.edziennik.gradeservice.semester_grade.dto.SemesterGradeRequestDTO;
 import org.edziennik.gradeservice.semester_grade.dto.SemesterGradeResponseDTO;
 import org.edziennik.gradeservice.semester_grade.service.SemesterGradeService;
@@ -21,10 +22,15 @@ public class SemesterGradeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<SemesterGradeResponseDTO>> getAllGrades() {
-        List<SemesterGradeResponseDTO> gradeResponseDTO = semesterGradeService.getAllGrades();
+    public ResponseEntity<List<SemesterGradeResponseDTO>> getGrades(
+            @RequestParam(required = false) UUID studentId,
+            @RequestParam(required = false) UUID groupId,
+            @RequestParam(required = false) UUID subjectId,
+            @RequestParam(required = false) UUID classificationPeriod
+    ) {
+        List<SemesterGradeResponseDTO> grades = semesterGradeService.getGrades(studentId, groupId, subjectId, classificationPeriod);
 
-        return ResponseEntity.ok().body(gradeResponseDTO);
+        return ResponseEntity.ok().body(grades);
     }
 
     @GetMapping("/{id}")

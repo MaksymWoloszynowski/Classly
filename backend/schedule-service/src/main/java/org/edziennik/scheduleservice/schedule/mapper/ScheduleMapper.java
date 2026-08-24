@@ -42,6 +42,7 @@ public class ScheduleMapper {
                 .date(occurrenceDate)
                 .startTime(schedule.getStartTime())
                 .endTime(schedule.getEndTime())
+                .room(schedule.getRoom())
                 .build();
     }
 

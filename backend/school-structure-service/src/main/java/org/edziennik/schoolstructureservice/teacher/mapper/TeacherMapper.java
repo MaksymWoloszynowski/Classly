@@ -3,7 +3,7 @@ package org.edziennik.schoolstructureservice.teacher.mapper;
 import org.edziennik.schoolstructureservice.teacher.dto.TeacherRequestDTO;
 import org.edziennik.schoolstructureservice.teacher.dto.TeacherResponseDTO;
 import org.edziennik.schoolstructureservice.teacher.entity.Teacher;
-import org.edziennik.schoolstructureservice.teachingassignment.mapper.TeachingAssignmentMapper;
+import org.edziennik.schoolstructureservice.teachingAssignment.mapper.TeachingAssignmentMapper;
 
 import java.util.stream.Collectors;
 

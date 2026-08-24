@@ -28,7 +28,7 @@ public class SemesterGradeRequestDTO {
     private UUID studentId;
 
     @NotNull
-    private String schoolYear;
+    private UUID classificationPeriod;
 
     @NotNull
     private UUID subjectId;

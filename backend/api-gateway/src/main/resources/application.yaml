@@ -12,7 +12,7 @@ spring:
             - id: school-structure-service-route
               uri: http://school-structure-service:8081
               predicates:
-                - Path=/api/group/**,/api/student/**,/api/teacher/**,/api/subject/**,/api/parent/**,/api/teaching-assignment/**
+                - Path=/api/group/**,/api/student/**,/api/teacher/**,/api/subject/**,/api/parent/**,/api/teaching-assignment/**,/api/my-profile/**,/api/classification-period/**
               filters:
                 - StripPrefix=1
 

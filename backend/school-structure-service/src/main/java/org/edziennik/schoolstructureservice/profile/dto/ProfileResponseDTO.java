@@ -14,6 +14,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ProfileResponseDTO {
     private UUID userId;
+    private String role;
     private StudentResponseDTO student;
     private TeacherResponseDTO teacher;
     private ParentResponseDTO parent;
