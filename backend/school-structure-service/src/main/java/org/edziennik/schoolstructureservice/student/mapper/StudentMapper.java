@@ -3,6 +3,7 @@ package org.edziennik.schoolstructureservice.student.mapper;
 import org.edziennik.schoolstructureservice.parent.mapper.ParentMapper;
 import org.edziennik.schoolstructureservice.student.dto.StudentRequestDTO;
 import org.edziennik.schoolstructureservice.student.dto.StudentResponseDTO;
+import org.edziennik.schoolstructureservice.student.dto.StudentSummaryDTO;
 import org.edziennik.schoolstructureservice.student.entity.Student;
 
 import java.util.stream.Collectors;
@@ -27,6 +28,14 @@ public class StudentMapper {
                 .firstName(studentRequestDTO.getFirstName())
                 .lastName(studentRequestDTO.getLastName())
                 .dateOfBirth(studentRequestDTO.getDateOfBirth())
+                .build();
+    }
+
+    public static StudentSummaryDTO toSummaryDTO(Student student) {
+        return StudentSummaryDTO.builder()
+                .id(student.getId())
+                .firstName(student.getFirstName())
+                .lastName(student.getLastName())
                 .build();
     }
 }

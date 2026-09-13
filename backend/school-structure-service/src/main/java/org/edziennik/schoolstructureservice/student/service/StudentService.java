@@ -32,7 +32,11 @@ public class StudentService {
     }
 
     public List<StudentResponseDTO> getAllStudents() {
-        return studentRepository.findAll().stream().map(StudentMapper::toDTO).collect(Collectors.toList());
+        return studentRepository.findAllWithGroup().stream().map(StudentMapper::toDTO).collect(Collectors.toList());
+    }
+
+    public List<StudentResponseDTO> getStudentsByGroup(UUID groupId) {
+        return studentRepository.findByGroupId(groupId).stream().map(StudentMapper::toDTO).toList();
     }
 
     public StudentResponseDTO getStudentById(UUID studentId) {

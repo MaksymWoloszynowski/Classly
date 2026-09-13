@@ -10,8 +10,6 @@ services:
       - school_network
     environment:
       DB_HOST: school-structure-service-db
-    extra_hosts:
-      - "nexus.example.local:host-gateway"
     ports:
       - "8081:8081"
     depends_on:

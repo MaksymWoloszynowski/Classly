@@ -47,5 +47,6 @@ CREATE TABLE classification_periods (
     id UUID PRIMARY KEY,
     date_from DATE NOT NULL,
     date_to DATE NOT NULL,
-    semester int NOT NULL
+    semester int NOT NULL,
+    CONSTRAINT chk_period_dates CHECK (date_from <= date_to)
 );

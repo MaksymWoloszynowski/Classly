@@ -1,6 +1,9 @@
 services:
   grade-service:
-    build: ./
+    build:
+      context: ./
+      secrets:
+        - maven_settings
     container_name: grade-service
     restart: unless-stopped
     networks:
@@ -40,3 +43,7 @@ networks:
   school_network:
     driver: bridge
     external: true
+
+secrets:
+  maven_settings:
+    file: ../settings.xml

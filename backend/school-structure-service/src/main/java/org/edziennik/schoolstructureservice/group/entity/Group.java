@@ -30,7 +30,7 @@ public class Group {
     @OneToMany(mappedBy = "group")
     private Set<Student> students = new HashSet<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "homeroom_teacher_id")
     private Teacher homeroomTeacher;
 

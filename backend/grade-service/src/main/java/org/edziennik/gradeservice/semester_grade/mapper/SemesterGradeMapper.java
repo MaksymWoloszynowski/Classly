@@ -14,7 +14,7 @@ public class SemesterGradeMapper {
                 .classificationPeriod(grade.getClassificationPeriod())
                 .type(grade.getType())
                 .studentId(grade.getStudentId())
-                .subjectId(grade.getSubjectId())
+                .teachingAssignmentId(grade.getTeachingAssignmentId())
                 .build();
     }
 
@@ -24,7 +24,7 @@ public class SemesterGradeMapper {
                 .type(gradeDTO.getType())
                 .classificationPeriod(gradeDTO.getClassificationPeriod())
                 .studentId(gradeDTO.getStudentId())
-                .subjectId(gradeDTO.getSubjectId())
+                .teachingAssignmentId(gradeDTO.getTeachingAssignmentId())
                 .build();
     }
 }

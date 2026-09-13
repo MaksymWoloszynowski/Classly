@@ -1,22 +1,85 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+:root {
+  --color-primary: #2c3e63;
+  --color-primary-hover: #1f2c48;
+  --color-accent: #e8a845;
+  --color-accent-dark: #a37c40;
+
+  --color-bg: #f5f7fa;
+  --color-bg-dark: #ddd;
+  --color-surface: #ffffff;
+
+  --color-text-primary: #1e2430;
+  --color-text-secondary: #6b7280;
+
+  --color-border: #e2e6ec;
+
+  --color-grade-red: #c0392b;
+  --color-grade-blue: #4a7fbf;
+  --color-grade-green: #5b9a6f;
+
+  --color-attendance-present: #5b9a6f;
+  --color-attendance-unexcused-absence: #c0392b;
+  --color-attendance-tardy: #e8a845;
+  --color-attendance-absent: #8b9aae;
+
+  --color-override-cancelled: #c0392b;
+  --color-override-substitution: #e8a845;
+  --color-override-room-change: #4a7fbf;
+
+  --color-assessment-test: #dc2626;
+  --color-assessment-quiz: #2563eb;
+  --color-assessment-class-test: #7c3aed;
+  --color-assessment-homework: #ea580c;
+
+  --color-delete: #dc2626;
+}
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+h1,h2,h3,h4,p {
+  margin: 0;
+  padding: 0;
 }
 
 html {
-    font-family: "WorkSans", Arial, sans-serif;
+  font-family:
+    "Roboto", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial,
+    "Lucida Grande", sans-serif;
+  background-color: var(--color-bg);
 }
 
 a {
-  color: #1da1f2;
   text-decoration: none;
-  transition: color 0.15s ease, text-decoration 0.15s ease;
+  transition:
+    color 0.15s ease,
+    text-decoration 0.15s ease;
+  color: var(--color-surface);
 }
 
 a:focus-visible {
   outline: none;
   text-decoration: underline;
+}
+
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.pageTitle {
+    margin-bottom: 1.25rem;
+    font-size: 1.8rem;
+}
+
+.calendar {
+  background-color: var(--color-surface);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
 }

@@ -71,7 +71,7 @@ public class ScheduleOverrideService {
     }
 
     private ScheduleOverrideResponseDTO mapToDTO(ScheduleOverride override) {
-        TeachingAssignmentResponse teachingAssignmentResponse = schoolStructureClient.getGrpcTeachingAssignment(override.getSchedule().getTeachingAssignmentId());
+        TeachingAssignmentResponse teachingAssignmentResponse = schoolStructureClient.getGrpcTeachingAssignment(override.getSubstituteTeachingAssignmentId());
 
         ScheduleOverrideResponseDTO responseDTO = ScheduleOverrideMapper.toDTO(override);
 
@@ -82,14 +82,14 @@ public class ScheduleOverrideService {
     }
 
     private List<ScheduleOverrideResponseDTO> mapToDTOList(List<ScheduleOverride> schedule) {
-        Set<UUID> ids = schedule.stream().map(o -> o.getSchedule().getTeachingAssignmentId()).collect(Collectors.toSet());
+        Set<UUID> ids = schedule.stream().map(ScheduleOverride::getSubstituteTeachingAssignmentId).collect(Collectors.toSet());
         Map<UUID, TeachingAssignmentResponse> assignmentDataById = schoolStructureClient.getTeachingAssignments(ids);
 
         return schedule.stream().map(scheduleEntry -> {
             ScheduleOverrideResponseDTO response = ScheduleOverrideMapper.toDTO(scheduleEntry);
 
-            response.setSubstituteSubjectName(assignmentDataById.get(scheduleEntry.getSchedule().getTeachingAssignmentId()).getSubject());
-            response.setSubstituteTeacherName(assignmentDataById.get(scheduleEntry.getSchedule().getTeachingAssignmentId()).getTeacher());
+            response.setSubstituteSubjectName(assignmentDataById.get(scheduleEntry.getSubstituteTeachingAssignmentId()).getSubject());
+            response.setSubstituteTeacherName(assignmentDataById.get(scheduleEntry.getSubstituteTeachingAssignmentId()).getTeacher());
 
             return response;
         }).collect(Collectors.toList());
@@ -102,6 +102,6 @@ public class ScheduleOverrideService {
 
     private Schedule getSchedule(UUID scheduleId) {
         return scheduleRepository.findById(scheduleId)
-                .orElseThrow(() -> new ScheduleNotFoundException("Schedule not found with ID: " + scheduleId));
+                .orElseThrow(() -> new ScheduleNotFoundException(scheduleId));
     }
 }

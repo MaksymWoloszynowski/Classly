@@ -12,27 +12,13 @@ import java.util.UUID;
 @Setter
 public class GradeRequestDTO {
     @NotNull
+    private UUID gradeCategoryId;
+
+    @NotNull
     @DecimalMin("0.0")
     @DecimalMax("100.0")
     private double grade;
 
     @NotNull
-    @Enumerated
-    private GradeType type;
-
-    @NotNull
-    private UUID classificationPeriod;
-
-    private String description;
-
-    @NotNull
-    @Min(0)
-    @Max(3)
-    private int weight;
-
-    @NotNull
     private UUID studentId;
-
-    @NotNull
-    private UUID subjectId;
 }

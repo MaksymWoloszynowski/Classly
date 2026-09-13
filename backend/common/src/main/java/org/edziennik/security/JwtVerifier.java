@@ -11,11 +11,10 @@ import javax.crypto.SecretKey;
 import java.util.Optional;
 import java.util.UUID;
 
-@Component
 public class JwtVerifier {
     private final SecretKey signingKey;
 
-    public JwtVerifier(@Value("${jwt.secret}") String secret) {
+    public JwtVerifier(String secret) {
         this.signingKey = Keys.hmacShaKeyFor(secret.getBytes());
     }
 

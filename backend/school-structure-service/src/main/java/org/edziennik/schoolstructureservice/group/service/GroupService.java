@@ -31,7 +31,7 @@ public class GroupService {
     }
 
     public List<GroupResponseDTO> getAllGroups() {
-        List<Group> groups = groupRepository.findAll();
+        List<Group> groups = groupRepository.findAllWithHomeroomTeacher();
         return groups.stream().map(GroupMapper::toDTO).toList();
     }
 

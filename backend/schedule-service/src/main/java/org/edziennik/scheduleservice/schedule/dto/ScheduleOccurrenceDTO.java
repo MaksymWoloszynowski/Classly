@@ -1,13 +1,11 @@
 package org.edziennik.scheduleservice.schedule.dto;
 
 import lombok.*;
-import org.edziennik.scheduleservice.schedule.entity.OccurrenceStatus;
-import org.edziennik.scheduleservice.schedule.entity.ScheduleOccurrence;
 import org.edziennik.scheduleservice.schedule_override.dto.ScheduleOverrideResponseDTO;
-import org.edziennik.scheduleservice.schedule_override.entity.ScheduleOverride;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -15,12 +13,14 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ScheduleOccurrenceDTO {
+    private UUID scheduleId;
     private LocalDate date;
-    private int dayOfWeek;
     private LocalTime startTime;
     private LocalTime endTime;
+    private UUID teachingAssignmentId;
     private String subjectName;
     private String teacherName;
+    private String groupName;
     private String room;
     private ScheduleOverrideResponseDTO override;
 }

@@ -17,6 +17,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.http.HttpMethod;
 
 import javax.crypto.SecretKey;
 import java.io.IOException;
@@ -69,6 +70,10 @@ public class JwtGatewayFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request)
             throws ServletException {
+        if (HttpMethod.OPTIONS.matches(request.getMethod())) {
+            return true;
+        }
+
         String path = request.getRequestURI();
         for (String publicPath : PublicPaths.PATHS) {
             if (path.startsWith(publicPath)) {

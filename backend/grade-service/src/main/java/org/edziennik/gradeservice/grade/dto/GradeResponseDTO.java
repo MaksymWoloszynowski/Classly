@@ -13,14 +13,12 @@ import java.util.UUID;
 @NoArgsConstructor
 public class GradeResponseDTO  {
     private UUID id;
+    private UUID categoryId;
     private double grade;
     private GradeType type;
     private String description;
-    private UUID classificationPeriod;
     private int weight;
     private LocalDate date;
-    private UUID studentId;
     private String studentFullName;
-    private UUID subjectId;
-    private String subjectName;
+    private String subject;
 }

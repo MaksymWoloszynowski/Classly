@@ -1,0 +1,88 @@
+.event {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    margin: 0 0.5em;
+    padding: 0.4rem 0.5rem;
+    border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-primary);
+    background-color: var(--color-surface);
+    overflow: hidden;
+}
+
+.teacherEvent {
+    cursor: pointer;
+}
+
+.eventHeader {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.2rem;
+}
+
+.time {
+    font-size: 0.7rem;
+    opacity: 0.7;
+}
+
+.subject {
+    margin-bottom: 0.3rem;
+
+    font-size: 0.9rem;
+    font-weight: 600;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+
+    font-size: 0.7rem;
+    opacity: 0.8;
+}
+
+.details span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.override {
+    height: fit-content;
+    padding: 0.15rem 0.35rem;
+    border-radius: 0.2rem;
+
+    /* background-color: var(--color-override); */
+    color: white;
+
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.checkIcon {
+    padding: 0.15rem;
+    border-radius: 0.2rem;
+    background-color: var(--color-attendance-present);
+    color: white;
+    font-size: 0.3rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.CANCELLED {
+    background-color: var(--color-override-cancelled);
+}
+
+.SUBSTITUTION {
+    background-color: var(--color-override-substitution);
+}
+
+.ROOM_CHANGE {
+    background-color: var(--color-override-room-change);
+}

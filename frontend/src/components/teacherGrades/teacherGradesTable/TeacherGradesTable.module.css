@@ -1,0 +1,61 @@
+.tableContainer {
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  background: var(--color-surface);
+}
+
+.teacherTable {
+  width: 100%;
+  min-width: 62rem;
+  border-collapse: collapse;
+}
+
+.teacherTable th,
+.teacherTable td {
+  border-bottom: 1px solid var(--color-border);
+  padding: 0.75rem 0.65rem;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.teacherTable th {
+  background: var(--color-bg);
+  color: var(--color-text-primary);
+  font-size: 0.8rem;
+}
+
+.teacherTable tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.teacherTable tbody tr:hover {
+  background: #fafbfd;
+}
+
+.numberColumn {
+  width: 3.5rem;
+  color: var(--color-text-secondary);
+}
+
+.studentColumn,
+.studentName {
+  min-width: 13rem;
+  text-align: left;
+}
+
+.categoryColumn {
+  min-width: 8rem;
+  max-width: 12rem;
+  white-space: normal !important;
+}
+
+.summaryCell {
+  min-width: 6.5rem;
+}
+
+.emptyState {
+  padding: 2rem;
+  color: var(--color-text-secondary);
+  text-align: center;
+}

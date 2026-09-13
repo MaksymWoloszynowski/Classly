@@ -6,6 +6,8 @@ import org.edziennik.teachingservice.session.dto.SessionResponseDTO;
 import org.edziennik.teachingservice.session.service.SessionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.edziennik.security.AuthenticatedUser;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -22,12 +24,11 @@ public class SessionController {
 
     @GetMapping
     public ResponseEntity<List<SessionResponseDTO>> getSessions(
-            @RequestParam(required = false) UUID teachingAssignmentId) {
+            @RequestParam(required = false) UUID teachingAssignmentId,
+            @RequestParam(required = false) LocalDate from,
+            @RequestParam(required = false) LocalDate to) {
 
-        if (teachingAssignmentId != null) {
-            return ResponseEntity.ok(sessionService.getSessionsByTeachingAssignment(teachingAssignmentId));
-        }
-        return ResponseEntity.ok(sessionService.getAllSessions());
+        return ResponseEntity.ok(sessionService.getSessions(teachingAssignmentId, from, to));
     }
 
     @GetMapping("/{id}")
@@ -46,18 +47,24 @@ public class SessionController {
     }
 
     @PostMapping
-    public ResponseEntity<SessionResponseDTO> createSession(@Valid @RequestBody SessionRequestDTO dto) {
-        return ResponseEntity.ok(sessionService.createSession(dto));
+    public ResponseEntity<SessionResponseDTO> createSession(@Valid @RequestBody SessionRequestDTO dto, @AuthenticationPrincipal AuthenticatedUser user) {
+        return ResponseEntity.ok(sessionService.createSession(dto, user));
+    }
+
+    @GetMapping("/query/teacher")
+    public ResponseEntity<List<SessionResponseDTO>> getSessionsForTeacher(
+            @AuthenticationPrincipal AuthenticatedUser user, @RequestParam LocalDate from, @RequestParam LocalDate to) {
+        return ResponseEntity.ok(sessionService.getSessionsForTeacher(user, from, to));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SessionResponseDTO> updateSession(@PathVariable UUID id, @Valid @RequestBody SessionRequestDTO dto) {
-        return ResponseEntity.ok(sessionService.updateSession(id, dto));
+    public ResponseEntity<SessionResponseDTO> updateSession(@PathVariable UUID id, @Valid @RequestBody SessionRequestDTO dto, @AuthenticationPrincipal AuthenticatedUser user) {
+        return ResponseEntity.ok(sessionService.updateSession(id, dto, user));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSession(@PathVariable UUID id) {
-        sessionService.deleteSession(id);
+    public ResponseEntity<Void> deleteSession(@PathVariable UUID id, @AuthenticationPrincipal AuthenticatedUser user) {
+        sessionService.deleteSession(id, user);
         return ResponseEntity.noContent().build();
     }
 }

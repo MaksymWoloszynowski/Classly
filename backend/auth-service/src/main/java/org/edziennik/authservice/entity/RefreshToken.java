@@ -19,7 +19,7 @@ public class RefreshToken {
     @UuidGenerator
     private UUID id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 

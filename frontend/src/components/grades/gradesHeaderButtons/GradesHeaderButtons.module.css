@@ -1,0 +1,17 @@
+.tableHeader {
+  display: flex;
+  gap: 0.5rem;
+  border-bottom: 3px solid var(--color-border);
+}
+
+.button {
+  border: none;
+  background: transparent;
+  padding: 1.5rem;
+  font-size: 1.8rem;
+  cursor: pointer;
+}
+
+.active {
+    border-bottom: 3px solid var(--color-accent);
+}

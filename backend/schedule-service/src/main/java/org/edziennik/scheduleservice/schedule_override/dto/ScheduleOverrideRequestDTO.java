@@ -22,9 +22,7 @@ public class ScheduleOverrideRequestDTO {
     @NotNull
     private OverrideType type;
 
-    private UUID substituteTeacherId;
-
-    private UUID substituteSubjectId;
+    private UUID substituteTeachingAssignmentId;
 
     private String newRoom;
 }

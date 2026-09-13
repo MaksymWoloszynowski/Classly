@@ -42,13 +42,13 @@ public class TeachingAssignmentService {
         Specification<TeachingAssignment> spec = Specification.allOf();
 
         if (groupId != null) {
-            spec = spec.and((root, query, cb) -> cb.equal(root.get("groupId"), groupId));
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("group").get("id"), groupId));
         }
         if (teacherId != null) {
-            spec = spec.and((root, query, cb) -> cb.equal(root.get("teacherId"), teacherId));
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("teacher").get("id"), teacherId));
         }
         if (subjectId != null) {
-            spec = spec.and((root, query, cb) -> cb.equal(root.get("subjectId"), subjectId));
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("subject").get("id"), subjectId));
         }
 
         return teachingAssignmentRepository.findAll(spec).stream().map(TeachingAssignmentMapper::toDTO).toList();

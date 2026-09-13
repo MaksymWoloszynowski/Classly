@@ -2,9 +2,12 @@ package org.edziennik.schoolstructureservice.group.mapper;
 
 import org.edziennik.schoolstructureservice.group.dto.GroupRequestDTO;
 import org.edziennik.schoolstructureservice.group.dto.GroupResponseDTO;
+import org.edziennik.schoolstructureservice.group.dto.GroupSummaryDTO;
 import org.edziennik.schoolstructureservice.group.entity.Group;
 import org.edziennik.schoolstructureservice.student.dto.StudentSummaryDTO;
+import org.edziennik.schoolstructureservice.student.mapper.StudentMapper;
 
+import java.util.Comparator;
 import java.util.stream.Collectors;
 
 public class GroupMapper {
@@ -13,18 +16,23 @@ public class GroupMapper {
                 .id(group.getId())
                 .name(group.getName())
                 .students(group.getStudents().stream()
-                        .map(s -> StudentSummaryDTO.builder()
-                                .id(s.getId())
-                                .firstName(s.getFirstName())
-                                .lastName(s.getLastName())
-                                .build())
-                        .collect(Collectors.toSet()))
+                        .map(StudentMapper::toSummaryDTO)
+                        .sorted(Comparator.comparing(StudentSummaryDTO::getLastName))
+                        .collect(Collectors.toList()))
+                .homeroomTeacher(group.getHomeroomTeacher().getFirstName()+ " " + group.getHomeroomTeacher().getLastName())
                 .build();
     }
 
     public static Group toModel(GroupRequestDTO groupRequestDTO) {
         return Group.builder()
                 .name(groupRequestDTO.getGroupName())
+                .build();
+    }
+
+    public static GroupSummaryDTO toSummaryDTO(Group group) {
+        return GroupSummaryDTO.builder()
+                .id(group.getId())
+                .name(group.getName())
                 .build();
     }
 }

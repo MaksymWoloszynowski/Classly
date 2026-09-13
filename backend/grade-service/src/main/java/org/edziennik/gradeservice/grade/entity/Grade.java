@@ -3,6 +3,7 @@ package org.edziennik.gradeservice.grade.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
+import org.edziennik.gradeservice.gradeCategory.entity.GradeCategory;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDate;
@@ -20,6 +21,11 @@ public class Grade {
     @UuidGenerator
     private UUID id;
 
+    @ManyToOne
+    @JoinColumn(name = "grade_category_id")
+    @NotNull
+    private GradeCategory gradeCategory;
+
     @NotNull
     @DecimalMin("0.0")
     @DecimalMax("100.0")
@@ -28,23 +34,6 @@ public class Grade {
     @NotNull
     private LocalDate date;
 
-    private String description;
-
-    @NotNull
-    private UUID classificationPeriod;
-
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    private GradeType type;
-
-    @NotNull
-    @Min(0)
-    @Max(3)
-    private int weight;
-
     @NotNull
     private UUID studentId;
-
-    @NotNull
-    private UUID subjectId;
 }

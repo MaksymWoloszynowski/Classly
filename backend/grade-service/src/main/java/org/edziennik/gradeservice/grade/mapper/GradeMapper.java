@@ -2,7 +2,9 @@ package org.edziennik.gradeservice.grade.mapper;
 
 import org.edziennik.gradeservice.grade.dto.GradeRequestDTO;
 import org.edziennik.gradeservice.grade.dto.GradeResponseDTO;
+import org.edziennik.gradeservice.grade.dto.GradeSummaryDTO;
 import org.edziennik.gradeservice.grade.entity.Grade;
+import org.edziennik.gradeservice.gradeCategory.entity.GradeCategory;
 
 import java.time.LocalDate;
 
@@ -11,27 +13,30 @@ public class GradeMapper {
 
         return GradeResponseDTO.builder()
                 .id(grade.getId())
+                .categoryId(grade.getGradeCategory().getId())
                 .grade(grade.getGrade())
                 .date(grade.getDate())
-                .description(grade.getDescription())
-                .classificationPeriod(grade.getClassificationPeriod())
-                .type(grade.getType())
-                .weight(grade.getWeight())
-                .studentId(grade.getStudentId())
-                .subjectId(grade.getSubjectId())
+                .description(grade.getGradeCategory().getDescription())
+                .type(grade.getGradeCategory().getType())
+                .weight(grade.getGradeCategory().getWeight())
                 .build();
     }
 
-    public static Grade toModel(GradeRequestDTO gradeDTO) {
+    public static Grade toModel(GradeRequestDTO gradeDTO, GradeCategory gradeCategory) {
         return Grade.builder()
+                .gradeCategory(gradeCategory)
                 .grade(gradeDTO.getGrade())
                 .date(LocalDate.now())
-                .description(gradeDTO.getDescription())
-                .classificationPeriod(gradeDTO.getClassificationPeriod())
-                .type(gradeDTO.getType())
-                .weight(gradeDTO.getWeight())
                 .studentId(gradeDTO.getStudentId())
-                .subjectId(gradeDTO.getSubjectId())
+                .build();
+    }
+
+    public static GradeSummaryDTO toSummaryDTO(Grade grade) {
+        return GradeSummaryDTO.builder()
+                .id(grade.getId())
+                .grade(grade.getGrade())
+                .date(grade.getDate())
+                .studentId(grade.getStudentId())
                 .build();
     }
 }

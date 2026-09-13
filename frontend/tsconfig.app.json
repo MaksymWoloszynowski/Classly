@@ -7,7 +7,11 @@
     "types": ["vite/client"],
     "paths": {
       "@components/*": ["./src/components/*"],
-      "@pages/*": ["./src/pages/*"]
+      "@pages/*": ["./src/pages/*"],
+      "@types-local/*": ["./src/types/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@api/*": ["./src/api/*"]
     },
     "allowArbitraryExtensions": true,
     "skipLibCheck": true,

@@ -7,9 +7,11 @@ public class AttendanceMapper {
     public static AttendanceResponseDTO toDTO(Attendance attendance) {
         return AttendanceResponseDTO.builder()
                 .id(attendance.getId())
-                .sessionId(attendance.getSession().getId())
                 .studentId(attendance.getStudentId())
                 .type(attendance.getType())
+                .date(attendance.getSession().getDate())
+                .startTime(attendance.getSession().getStartTime())
+                .endTime(attendance.getSession().getEndTime())
                 .build();
     }
 }

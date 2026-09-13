@@ -1,14 +1,27 @@
 import { useEffect, useState } from "react";
-import type { Session } from "../../types/session";
-import useAuth from "../../hooks/useAuth";
+import type { Session } from "../../types/domain/session";
+import useStudentScope from "../../hooks/useStudentScope";
 import api from "../../api/api";
 import LoadingOverlay from "../../components/loadingOverlay/LoadingOverlay";
+import styles from "./Sessions.module.css";
+import SessionsTable from "@components/sessions/sessionsTable/SessionsTable";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { formatDate } from "../../utils/date";
 
 const Sessions = () => {
-  const { auth } = useAuth();
-  const [sessions, setSessions] = useState<Session[] | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [weekStart, setWeekStart] = useState(new Date());
+  const { activeStudent } = useStudentScope();
+  const [sessions, setSessions] = useState<Session[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  const getLastMonday = () => {
+    const date = new Date();
+    const day = date.getDay();
+    const daysSinceMonday = (day + 6) % 7;
+    date.setDate(date.getDate() - daysSinceMonday);
+    return date;
+  };
+
+  const [weekStart, setWeekStart] = useState<Date>(getLastMonday());
 
   const addDays = (date: Date, days: number) => {
     const result = new Date(date);
@@ -16,22 +29,16 @@ const Sessions = () => {
     return result;
   };
 
-  const formatDate = (date: Date) =>
-    date.toLocaleDateString("pl-PL", {
-      day: "2-digit",
-      month: "2-digit",
-    });
-
   const weekEnd = addDays(weekStart, 6);
 
   const fetchSessions = async () => {
-    if (!auth?.student?.groupId) return;
+    if (!activeStudent?.groupId) return;
 
     setLoading(true);
 
     try {
       const response = await api.get(
-        `/api/session/date?groupId=${auth.student.groupId}&from=${weekStart.toLocaleDateString("en-CA")}&to=${weekEnd.toLocaleDateString("en-CA")}`,
+        `/api/session/date?groupId=${activeStudent.groupId}&from=${weekStart.toLocaleDateString("en-CA")}&to=${weekEnd.toLocaleDateString("en-CA")}`,
       );
 
       setSessions(response.data);
@@ -44,7 +51,7 @@ const Sessions = () => {
 
   useEffect(() => {
     fetchSessions();
-  }, [weekStart, auth?.student?.groupId]);
+  }, [weekStart, activeStudent?.groupId]);
 
   const previousWeek = () => {
     setWeekStart((date) => addDays(date, -7));
@@ -58,21 +65,26 @@ const Sessions = () => {
     <>
       {loading && <LoadingOverlay />}
 
-      <div>
-        <div className="week-picker">
-          <button onClick={previousWeek}>←</button>
+      <div className={styles.page}>
+        <div className={styles.pageTitle}>Sessions</div>
+        <div className={styles.content}>
+          <div className={styles.header}>
+            <div className={styles.weekPicker}>
+              <button className={styles.arrow} onClick={previousWeek}>
+                <ChevronLeft />
+              </button>
 
-          <span>
-            {formatDate(weekStart)} - {formatDate(weekEnd)}
-          </span>
+              <span>
+                {formatDate(weekStart)} - {formatDate(weekEnd)}
+              </span>
 
-          <button onClick={nextWeek}>→</button>
-        </div>
+              <button className={styles.arrow} onClick={nextWeek}>
+                <ChevronRight />
+              </button>
+            </div>
+          </div>
 
-        <div>
-          {sessions?.map((session) => (
-            <div key={session.id}>{session.description}</div>
-          ))}
+          <SessionsTable sessions={sessions} />
         </div>
       </div>
     </>

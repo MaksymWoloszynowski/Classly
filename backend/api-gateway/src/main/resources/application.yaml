@@ -19,7 +19,7 @@ spring:
             - id: grade-service-route
               uri: http://grade-service:8082
               predicates:
-                - Path=/api/grade/**,/api/semester-grade/**
+                - Path=/api/grade/**,/api/semester-grade/**,/api/grade-category
               filters:
                 - StripPrefix=1
 

@@ -1,9 +1,9 @@
+import api from "@api/api";
+import LoadingOverlay from "@components/loadingOverlay/LoadingOverlay";
+import useAuth from "@hooks/useAuth";
+import type { Profile } from "@types-local/profile";
 import { useEffect, useState } from "react";
-import useAuth from "../hooks/useAuth";
 import { Outlet } from "react-router-dom";
-import api from "../api/api";
-import type { Profile } from "../types/profile";
-import LoadingOverlay from "../components/loadingOverlay/LoadingOverlay";
 
 const PersistLogin = () => {
   const { setAuth } = useAuth();

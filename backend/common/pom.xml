@@ -6,7 +6,7 @@
 
     <groupId>org.edziennik</groupId>
     <artifactId>common</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.2</version>
 
     <dependencies>
         <dependency>
@@ -39,17 +39,12 @@
     </dependencies>
 
     <distributionManagement>
-<!--        <snapshotRepository>-->
-<!--            <id>demorepo</id>-->
-<!--            <url>https://nexus.example.local/repository/demorepo/</url>-->
-<!--        </snapshotRepository>-->
         <repository>
             <id>github</id>
             <name>GitHub Packages</name>
             <url>https://maven.pkg.github.com/MaksymWoloszynowski/school-management-system</url>
         </repository>
     </distributionManagement>
-
 
 
     <properties>

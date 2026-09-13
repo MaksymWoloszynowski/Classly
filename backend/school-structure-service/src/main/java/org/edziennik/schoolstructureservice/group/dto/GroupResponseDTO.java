@@ -3,7 +3,7 @@ package org.edziennik.schoolstructureservice.group.dto;
 import lombok.*;
 import org.edziennik.schoolstructureservice.student.dto.StudentSummaryDTO;
 
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -14,5 +14,6 @@ import java.util.UUID;
 public class GroupResponseDTO {
     private UUID id;
     private String name;
-    private Set<StudentSummaryDTO> students;
+    private List<StudentSummaryDTO> students;
+    private String homeroomTeacher;
 }

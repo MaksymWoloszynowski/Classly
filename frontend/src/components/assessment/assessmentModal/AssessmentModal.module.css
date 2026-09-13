@@ -1,0 +1,128 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.details {
+  position: relative;
+  width: min(32rem, 100%);
+  padding: 1.5rem;
+  border-style: solid;
+  border-width: 2px;
+
+  background: var(--color-surface);
+  border-radius: 0.75rem;
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.close {
+  width: 2rem;
+  height: 2rem;
+
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.details h2 {
+  margin: 0 0 1.5rem;
+  font-size: 1.5rem;
+}
+
+.info {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr 1fr;
+}
+
+.info div,
+.description {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.info span,
+.description > span {
+  color: var(--color-text-secondary);
+  font-size: 0.8rem;
+}
+
+.description {
+  margin-top: 1.5rem;
+}
+
+.description p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.button {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  color: var(--color-text);
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.button:hover {
+  background: var(--color-background);
+}
+
+.button:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+.delete {
+  background-color: var(--color-delete);
+  color: var(--color-surface);
+  border-color: var(--color-delete);
+}
+
+.delete:hover {
+  background: var(--color-surface);
+  color: var(--color-delete);
+}
+
+.test {
+  border-color: var(--color-assessment-test);
+}
+
+.quiz {
+  border-color: var(--color-assessment-quiz);
+}
+
+.exam {
+  border-color: var(--color-assessment-exam);
+}
+
+.homework {
+  border-color: var(--color-assessment-homework);
+}

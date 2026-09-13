@@ -22,8 +22,10 @@ public class StudentController {
     }
 
     @GetMapping
-    public ResponseEntity<List<StudentResponseDTO>> getAllStudents() {
-        List<StudentResponseDTO> students = studentService.getAllStudents();
+    public ResponseEntity<List<StudentResponseDTO>> getAllStudents(@RequestParam(required = false) UUID groupId) {
+        List<StudentResponseDTO> students = groupId == null
+                ? studentService.getAllStudents()
+                : studentService.getStudentsByGroup(groupId);
 
         return ResponseEntity.ok().body(students);
     }

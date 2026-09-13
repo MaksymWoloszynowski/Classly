@@ -6,6 +6,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import org.edziennik.schoolstructureservice.group.entity.Group;
 import org.edziennik.schoolstructureservice.teachingAssignment.entity.TeachingAssignment;
 import org.hibernate.annotations.UuidGenerator;
 
@@ -33,4 +34,7 @@ public class Teacher {
 
     @OneToMany(mappedBy = "teacher")
     private Set<TeachingAssignment> teachingAssignments = new HashSet<>();
+
+    @OneToMany(mappedBy = "homeroomTeacher")
+    private Set<Group> groups = new HashSet<>();
 }

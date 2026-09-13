@@ -46,6 +46,15 @@ public class SchoolStructureGrpcClient {
                 .collect(Collectors.toList());
     }
 
+    public List<UUID> getTeachingAssignmentIdsByTeacher(UUID teacherId) {
+        TeacherRequest request = TeacherRequest.newBuilder().setTeacherId(teacherId.toString()).build();
+        TeachingAssignmentIdListResponse response = blockingStub.getTeachingAssignmentIdsByTeacher(request);
+
+        return response.getTeachingAssignmentIdsList().stream()
+                .map(UUID::fromString)
+                .collect(Collectors.toList());
+    }
+
     public Map<UUID, TeachingAssignmentResponse> getTeachingAssignments(Set<UUID> ids) {
         return ids.stream().collect(Collectors.toMap(id -> id, this::getGrpcTeachingAssignment));
     }

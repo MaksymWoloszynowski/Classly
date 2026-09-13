@@ -27,3 +27,7 @@ grpc:
 
   server:
     port: -1
+
+jwt:
+  secret: ${JWT_SECRET:VvyRVvEHvgAySvx17fYT6sCr1AXkuDvW66uiuFDwfVP}
+  access-token-validity-ms: 900000

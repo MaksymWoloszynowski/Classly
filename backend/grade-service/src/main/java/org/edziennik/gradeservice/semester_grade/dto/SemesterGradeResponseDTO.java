@@ -17,6 +17,6 @@ public class SemesterGradeResponseDTO {
     private UUID classificationPeriod;
     private UUID studentId;
     private String studentFullName;
-    private UUID subjectId;
+    private UUID teachingAssignmentId;
     private String subjectName;
 }

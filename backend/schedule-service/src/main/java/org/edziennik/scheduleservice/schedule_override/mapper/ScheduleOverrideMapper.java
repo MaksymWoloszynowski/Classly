@@ -10,7 +10,7 @@ public class ScheduleOverrideMapper {
                 .scheduleId(override.getSchedule().getId())
                 .date(override.getDate())
                 .type(override.getType())
-                .substituteTeacherId(override.getSubstituteTeacherId())
+                .substituteTeachingAssignmentId(override.getSubstituteTeachingAssignmentId())
                 .newRoom(override.getNewRoom())
                 .build();
     }

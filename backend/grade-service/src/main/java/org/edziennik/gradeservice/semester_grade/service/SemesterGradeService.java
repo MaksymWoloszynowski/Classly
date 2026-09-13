@@ -65,7 +65,6 @@ public class SemesterGradeService {
 
         grade.setGrade(gradeRequestDTO.getGrade());
         grade.setType(gradeRequestDTO.getType());
-        grade.setSubjectId(gradeRequestDTO.getSubjectId());
         grade.setStudentId(gradeRequestDTO.getStudentId());
         grade.setClassificationPeriod(gradeRequestDTO.getClassificationPeriod());
 
@@ -81,27 +80,28 @@ public class SemesterGradeService {
 
     private SemesterGradeResponseDTO mapToDTO(SemesterGrade grade) {
         StudentResponse studentResponse = schoolStructureClient.getStudent(grade.getStudentId());
-        SubjectResponse subjectResponse = schoolStructureClient.getSubject(grade.getSubjectId());
+        TeachingAssignmentResponse assignmentResponse = schoolStructureClient.getTeachingAssignment(grade.getTeachingAssignmentId());
 
         SemesterGradeResponseDTO responseDTO = SemesterGradeMapper.toDTO(grade);
 
         responseDTO.setStudentFullName(studentResponse.getFirstName() + " " + studentResponse.getLastName());
-        responseDTO.setSubjectName(subjectResponse.getName());
+        responseDTO.setSubjectName(assignmentResponse.getSubject());
 
         return responseDTO;
     }
 
     private List<SemesterGradeResponseDTO> mapToDTOList(List<SemesterGrade> grades) {
         Set<UUID> studentIds = grades.stream().map(SemesterGrade::getStudentId).collect(Collectors.toSet());
-        Set<UUID> subjectIds = grades.stream().map(SemesterGrade::getSubjectId).collect(Collectors.toSet());
+        Set<UUID> groupIds = studentIds.stream().map(id -> UUID.fromString(schoolStructureClient.getStudent(id).getGroupId())).collect(Collectors.toSet());
+        Set<UUID> teachingAssignmentsIds = groupIds.stream().map(schoolStructureClient::getTeachingAssignmentIdsByGroup).flatMap(List::stream).collect(Collectors.toSet());
 
-        Map<UUID, String> studentNames = schoolStructureClient.getStudentNames(studentIds);
-        Map<UUID, String> subjectNames = schoolStructureClient.getSubjectNames(subjectIds);
+        Map<UUID, StudentResponse> studentNames = schoolStructureClient.getStudents(studentIds);
+        Map<UUID, TeachingAssignmentResponse> teachingAssignmentResponseMap = schoolStructureClient.getTeachingAssignments(teachingAssignmentsIds);
 
         return grades.stream().map(grade -> {
             SemesterGradeResponseDTO dto = SemesterGradeMapper.toDTO(grade);
-            dto.setStudentFullName(studentNames.get(grade.getStudentId()));
-            dto.setSubjectName(subjectNames.get(grade.getSubjectId()));
+            dto.setStudentFullName(studentNames.get(grade.getStudentId()).getFirstName()+ " " + studentNames.get(grade.getStudentId()).getLastName());
+            dto.setSubjectName(teachingAssignmentResponseMap.get(grade.getTeachingAssignmentId()).getSubject());
             return dto;
         }).collect(Collectors.toList());
     }

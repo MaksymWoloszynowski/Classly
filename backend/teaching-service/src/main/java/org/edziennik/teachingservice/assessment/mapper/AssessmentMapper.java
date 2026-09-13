@@ -4,6 +4,8 @@ import org.edziennik.teachingservice.assessment.dto.AssessmentRequestDTO;
 import org.edziennik.teachingservice.assessment.dto.AssessmentResponseDTO;
 import org.edziennik.teachingservice.assessment.entity.Assessment;
 
+import java.time.LocalDate;
+
 public class AssessmentMapper {
     public static AssessmentResponseDTO toDTO(Assessment assessment) {
         return AssessmentResponseDTO.builder()
@@ -19,6 +21,7 @@ public class AssessmentMapper {
     public static Assessment toModel(AssessmentRequestDTO dto) {
         return Assessment.builder()
                 .teachingAssignmentId(dto.getTeachingAssignmentId())
+                .dateMade(LocalDate.now())
                 .dateDue(dto.getDateDue())
                 .type(dto.getType())
                 .description(dto.getDescription())

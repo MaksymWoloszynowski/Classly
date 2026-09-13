@@ -12,7 +12,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ScheduleOccurrence {
-    private UUID scheduleId;
+    private Schedule schedule;
     private UUID teachingAssignmentId;
     private LocalDate date;
     private LocalTime startTime;

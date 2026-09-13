@@ -10,6 +10,7 @@ import org.edziennik.schoolstructureservice.grpc.TeachingAssignmentResponse;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
@@ -29,13 +30,22 @@ public class SchoolStructureGrpcClient {
         return blockingStub.getStudent(request);
     }
 
-    public Map<UUID, String> getStudentNames(Set<UUID> studentIds) {
-        Map<UUID, String> result = new HashMap<>();
-        for (UUID id : studentIds) {
-            StudentResponse r = getStudent(id);
-            result.put(id, r.getFirstName() + " " + r.getLastName());
-        }
-        return result;
+    public Map<UUID, StudentResponse> getStudents(Set<UUID> studentIds) {
+        StudentIdsRequest request = StudentIdsRequest.newBuilder()
+                .addAllStudentIds(
+                        studentIds.stream()
+                                .map(UUID::toString)
+                                .toList()
+                )
+                .build();
+
+        StudentListResponse response = blockingStub.getStudents(request);
+
+        return response.getStudentsList().stream()
+                .collect(Collectors.toMap(
+                        student -> UUID.fromString(student.getId()),
+                        Function.identity()
+                ));
     }
 
     public List<UUID> getTeachingAssignmentIdsByGroup(UUID groupId) {
@@ -45,5 +55,29 @@ public class SchoolStructureGrpcClient {
         return response.getTeachingAssignmentIdsList().stream()
                 .map(UUID::fromString)
                 .collect(Collectors.toList());
+    }
+
+    public List<UUID> getTeachingAssignmentIdsByTeacher(UUID teacherId) {
+        TeacherRequest request = TeacherRequest.newBuilder().setTeacherId(teacherId.toString()).build();
+        TeachingAssignmentIdListResponse response = blockingStub.getTeachingAssignmentIdsByTeacher(request);
+        return response.getTeachingAssignmentIdsList().stream().map(UUID::fromString).toList();
+    }
+
+    public Map<UUID, TeachingAssignmentResponse> getTeachingAssignments(Set<UUID> teachingAssignmentsIds) {
+        TeachingAssignmentIdsRequest request = TeachingAssignmentIdsRequest.newBuilder()
+                .addAllTeachingAssignmentIds(
+                        teachingAssignmentsIds.stream()
+                                .map(UUID::toString)
+                                .toList()
+                )
+                .build();
+
+        TeachingAssignmentListResponse response = blockingStub.getTeachingAssignments(request);
+
+        return response.getTeachingAssignmentsList().stream()
+                .collect(Collectors.toMap(
+                        assignment -> UUID.fromString(assignment.getId()),
+                        Function.identity()
+                ));
     }
 }

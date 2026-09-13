@@ -1,0 +1,71 @@
+
+.attendanceItem {
+    display: grid;
+    grid-template-columns: 5rem minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 1rem;
+
+    padding: 0.6rem 0;
+
+    border-bottom: 1px solid var(--color-border);
+}
+
+.attendanceItem:last-child {
+    border-bottom: none;
+}
+
+.attendanceTime {
+    color: var(--color-text-secondary);
+    font-size: 0.75rem;
+}
+
+.attendanceSubject {
+    min-width: 0;
+
+    font-size: 0.85rem;
+    font-weight: 500;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.attendanceStatus {
+    padding: 0.25rem 0.5rem;
+
+    border-radius: 0.25rem;
+
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.PRESENT {
+    color: var(--color-attendance-present);
+}
+
+.TARDY {
+    color: var(--color-attendance-tardy);
+    background-color: color-mix(
+        in srgb,
+        var(--color-attendance-tardy) 12%,
+        transparent
+    );
+}
+
+.ABSENT {
+    color: var(--color-attendance-absent);
+    background-color: color-mix(
+        in srgb,
+        var(--color-attendance-absent) 12%,
+        transparent
+    );
+}
+
+.UNEXCUSED_ABSENCE {
+    color: var(--color-attendance-unexcused-absence);
+    background-color: color-mix(
+        in srgb,
+        var(--color-attendance-unexcused-absence) 12%,
+        transparent
+    );
+}

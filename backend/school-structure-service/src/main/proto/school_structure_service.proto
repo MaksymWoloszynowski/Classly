@@ -5,11 +5,14 @@ option java_multiple_files = true;
 
 service SchoolStructureService {
   rpc GetStudent (StudentRequest) returns (StudentResponse);
+  rpc GetStudents(StudentIdsRequest) returns (StudentListResponse);
   rpc GetSubject (SubjectRequest) returns (SubjectResponse);
   rpc GetTeacher (TeacherRequest) returns (TeacherResponse);
   rpc GetStudentIdsByGroup (GroupRequest) returns (StudentIdListResponse);
   rpc GetTeachingAssignment (TeachingAssignmentRequest) returns (TeachingAssignmentResponse);
+  rpc GetTeachingAssignments(TeachingAssignmentIdsRequest) returns (TeachingAssignmentListResponse);
   rpc GetTeachingAssignmentIdsByGroup(GroupRequest) returns (TeachingAssignmentIdListResponse);
+  rpc GetTeachingAssignmentIdsByTeacher(TeacherRequest) returns (TeachingAssignmentIdListResponse);
 }
 
 message StudentRequest {
@@ -17,8 +20,18 @@ message StudentRequest {
 }
 
 message StudentResponse {
-  string first_name = 1;
-  string last_name = 2;
+  string id = 1;
+  string first_name = 2;
+  string last_name = 3;
+  string group_id = 4;
+}
+
+message StudentIdsRequest {
+  repeated string studentIds = 1;
+}
+
+message StudentListResponse {
+  repeated StudentResponse students = 1;
 }
 
 message SubjectRequest {
@@ -45,9 +58,18 @@ message TeachingAssignmentRequest {
 }
 
 message TeachingAssignmentResponse {
-  string subject = 1;
-  string teacher = 2;
-  string group = 3;
+  string id = 1;
+  string subject = 2;
+  string teacher = 3;
+  string group = 4;
+}
+
+message TeachingAssignmentIdsRequest {
+  repeated string teaching_assignment_ids = 1;
+}
+
+message TeachingAssignmentListResponse {
+  repeated TeachingAssignmentResponse teaching_assignments = 1;
 }
 
 message StudentIdListResponse {

@@ -6,6 +6,7 @@ import org.edziennik.scheduleservice.schedule.dto.ScheduleRequestDTO;
 import org.edziennik.scheduleservice.schedule.dto.ScheduleResponseDTO;
 import org.edziennik.scheduleservice.schedule.entity.Schedule;
 import org.edziennik.scheduleservice.schedule.entity.ScheduleOccurrence;
+import org.edziennik.scheduleservice.schedule_override.entity.ScheduleOverride;
 
 import java.time.LocalDate;
 
@@ -23,6 +24,16 @@ public class ScheduleMapper {
                 .build();
     }
 
+    public static void updateModel(Schedule schedule, ScheduleRequestDTO dto) {
+        schedule.setTeachingAssignmentId(dto.getTeachingAssignmentId());
+        schedule.setDayOfWeek(dto.getDayOfWeek());
+        schedule.setStartTime(dto.getStartTime());
+        schedule.setEndTime(dto.getEndTime());
+        schedule.setRoom(dto.getRoom());
+        schedule.setValidFrom(dto.getValidFrom());
+        schedule.setValidTo(dto.getValidTo());
+    }
+
     public static Schedule toModel(ScheduleRequestDTO scheduleDTO) {
         return Schedule.builder()
                 .teachingAssignmentId(scheduleDTO.getTeachingAssignmentId())
@@ -37,32 +48,46 @@ public class ScheduleMapper {
         LocalDate occurrenceDate = date.plusDays(schedule.getDayOfWeek() - 1);
 
         return ScheduleOccurrence.builder()
-                .scheduleId(schedule.getId())
+                .schedule(schedule)
                 .teachingAssignmentId(schedule.getTeachingAssignmentId())
                 .date(occurrenceDate)
                 .startTime(schedule.getStartTime())
                 .endTime(schedule.getEndTime())
                 .room(schedule.getRoom())
+                .teachingAssignmentId(schedule.getTeachingAssignmentId())
                 .build();
     }
 
     public static ScheduleOccurrenceDTO occurrenceToDTO(ScheduleOccurrence occurrence) {
         return ScheduleOccurrenceDTO.builder()
+                .scheduleId(occurrence.getSchedule().getId())
                 .date(occurrence.getDate())
-                .dayOfWeek(occurrence.getDate().getDayOfWeek().getValue())
                 .startTime(occurrence.getStartTime())
                 .endTime(occurrence.getEndTime())
                 .room(occurrence.getRoom())
+                .teachingAssignmentId(occurrence.getTeachingAssignmentId())
                 .build();
     }
 
     public static ScheduleOccurrenceDTO occurrenceToDTOFromAdditional(AdditionalSchedule schedule) {
         return ScheduleOccurrenceDTO.builder()
+                .scheduleId(schedule.getId())
                 .date(schedule.getDate())
-                .dayOfWeek(schedule.getDate().getDayOfWeek().getValue())
                 .startTime(schedule.getStartTime())
                 .endTime(schedule.getEndTime())
                 .room(schedule.getRoom())
+                .teachingAssignmentId(schedule.getTeachingAssignmentId())
+                .build();
+    }
+
+    public static ScheduleOccurrenceDTO occurrenceToDTOFromOverride(ScheduleOverride schedule) {
+        return ScheduleOccurrenceDTO.builder()
+                .scheduleId(schedule.getId())
+                .date(schedule.getDate())
+                .startTime(schedule.getSchedule().getStartTime())
+                .endTime(schedule.getSchedule().getEndTime())
+                .room(schedule.getSchedule().getRoom())
+                .teachingAssignmentId(schedule.getSubstituteTeachingAssignmentId())
                 .build();
     }
 }

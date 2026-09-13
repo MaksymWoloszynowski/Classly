@@ -4,6 +4,8 @@ import lombok.*;
 import org.edziennik.teachingservice.attendance.entity.AttendanceType;
 import org.edziennik.teachingservice.session.dto.SessionResponseDTO;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.UUID;
 
 @Getter
@@ -18,4 +20,7 @@ public class AttendanceResponseDTO {
     private AttendanceType type;
     private String subject;
     private String teacher;
+    private LocalDate date;
+    private LocalTime startTime;
+    private LocalTime endTime;
 }

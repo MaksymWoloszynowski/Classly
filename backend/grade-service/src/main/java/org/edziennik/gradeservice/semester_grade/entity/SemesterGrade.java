@@ -37,5 +37,5 @@ public class SemesterGrade {
     private UUID studentId;
 
     @NotNull
-    private UUID subjectId;
+    private UUID teachingAssignmentId;
 }

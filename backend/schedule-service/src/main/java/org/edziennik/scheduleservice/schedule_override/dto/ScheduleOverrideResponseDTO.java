@@ -16,9 +16,8 @@ public class ScheduleOverrideResponseDTO {
     private UUID scheduleId;
     private LocalDate date;
     private OverrideType type;
-    private UUID substituteTeacherId;
+    private UUID substituteTeachingAssignmentId;
     private String substituteTeacherName;
-    private UUID substituteSubjectId;
     private String substituteSubjectName;
     private String newRoom;
 }

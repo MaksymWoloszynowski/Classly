@@ -1,0 +1,26 @@
+td {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+td:last-of-type td {
+  border-bottom: none;
+}
+
+.row:hover {
+  transition: background-color 0.2s;
+  background-color: var(--color-bg);
+}
+
+.grades {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.5rem;
+  width: 100%;
+}
+
+@media (max-width: 1200px) {
+  .grades {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

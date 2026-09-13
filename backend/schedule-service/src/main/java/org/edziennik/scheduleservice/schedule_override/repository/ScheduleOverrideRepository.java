@@ -8,6 +8,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ScheduleOverrideRepository extends JpaRepository<ScheduleOverride, UUID> {
-    List<ScheduleOverride> findByScheduleIdInAndDateBetween(List<UUID> scheduleId, LocalDate start, LocalDate end);
-    List<ScheduleOverride> findByScheduleIdInAndDate(List<UUID> scheduleId, LocalDate date);
+    List<ScheduleOverride> findByScheduleIdInAndDateBetween(List<UUID> scheduleId, LocalDate from, LocalDate to);
+    List<ScheduleOverride> findBySubstituteTeachingAssignmentIdInAndDateBetween(List<UUID> teachingAssignmentIds, LocalDate from, LocalDate to);
 }

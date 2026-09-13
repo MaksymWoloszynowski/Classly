@@ -11,7 +11,9 @@ import org.edziennik.schoolstructureservice.teachingAssignment.entity.TeachingAs
 import org.edziennik.schoolstructureservice.teachingAssignment.repository.TeachingAssignmentRepository;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @GrpcService
 public class SchoolStructureGrpcService extends SchoolStructureServiceGrpc.SchoolStructureServiceImplBase {
@@ -33,10 +35,7 @@ public class SchoolStructureGrpcService extends SchoolStructureServiceGrpc.Schoo
 
         studentRepository.findById(studentId).ifPresentOrElse(
                 student -> {
-                    StudentResponse response = StudentResponse.newBuilder()
-                            .setFirstName(student.getFirstName())
-                            .setLastName(student.getLastName())
-                            .build();
+                    StudentResponse response = toStudentResponse(student);
                     responseObserver.onNext(response);
                     responseObserver.onCompleted();
                 },
@@ -46,6 +45,24 @@ public class SchoolStructureGrpcService extends SchoolStructureServiceGrpc.Schoo
                                 .asRuntimeException()
                 )
         );
+    }
+
+    @Override
+    public void getStudents(StudentIdsRequest request, StreamObserver<StudentListResponse> responseObserver) {
+        Set<UUID> studentIds = request.getStudentIdsList().stream().map(UUID::fromString).collect(Collectors.toSet());
+
+        List<Student> students = studentRepository.findByIdIn(studentIds);
+
+        StudentListResponse response = StudentListResponse.newBuilder()
+                .addAllStudents(
+                        students
+                                .stream()
+                                .map(this::toStudentResponse)
+                                .toList()
+                ).build();
+
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
     }
 
     @Override
@@ -94,11 +111,7 @@ public class SchoolStructureGrpcService extends SchoolStructureServiceGrpc.Schoo
 
         teachingAssignmentRepository.findById(teachingAssignmentId).ifPresentOrElse(
                 teachingAssignment -> {
-                    TeachingAssignmentResponse response = TeachingAssignmentResponse.newBuilder()
-                            .setGroup(teachingAssignment.getGroup().getName())
-                            .setSubject(teachingAssignment.getSubject().getName())
-                            .setTeacher(teachingAssignment.getTeacher().getFirstName() + " " + teachingAssignment.getTeacher().getLastName())
-                            .build();
+                    TeachingAssignmentResponse response = toTeachingAssignmentResponse(teachingAssignment);
                     responseObserver.onNext(response);
                     responseObserver.onCompleted();
                 },
@@ -108,6 +121,28 @@ public class SchoolStructureGrpcService extends SchoolStructureServiceGrpc.Schoo
                                 .asRuntimeException()
                 )
         );
+    }
+
+    @Override
+
+    public void getTeachingAssignments(TeachingAssignmentIdsRequest request, StreamObserver<TeachingAssignmentListResponse> responseObserver) {
+
+        Set<UUID> assignmentIds = request.getTeachingAssignmentIdsList()
+                .stream()
+                .map(UUID::fromString)
+                .collect(Collectors.toSet());
+
+        List<TeachingAssignment> assignments = teachingAssignmentRepository.findAllByIdIn(assignmentIds);
+
+        TeachingAssignmentListResponse response = TeachingAssignmentListResponse.newBuilder()
+                        .addAllTeachingAssignments(
+                                assignments.stream()
+                                        .map(this::toTeachingAssignmentResponse)
+                                        .toList()
+                        )
+                        .build();
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
     }
 
     @Override
@@ -132,5 +167,35 @@ public class SchoolStructureGrpcService extends SchoolStructureServiceGrpc.Schoo
 
         responseObserver.onNext(response);
         responseObserver.onCompleted();
+    }
+
+    @Override
+    public void getTeachingAssignmentIdsByTeacher(TeacherRequest request, StreamObserver<TeachingAssignmentIdListResponse> responseObserver) {
+        UUID teacherId = UUID.fromString(request.getTeacherId());
+
+        List<TeachingAssignment> assignments= teachingAssignmentRepository.findByTeacherId(teacherId);
+
+        TeachingAssignmentIdListResponse response = TeachingAssignmentIdListResponse.newBuilder().addAllTeachingAssignmentIds(assignments.stream().map(assignment -> assignment.getId().toString()).toList()).build();
+
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
+    }
+
+    private StudentResponse toStudentResponse(Student student) {
+        return StudentResponse.newBuilder()
+                .setId(student.getId().toString())
+                .setFirstName(student.getFirstName())
+                .setLastName(student.getLastName())
+                .setGroupId(student.getGroup().getId().toString())
+                .build();
+    }
+
+    private TeachingAssignmentResponse toTeachingAssignmentResponse(TeachingAssignment assignment) {
+        return TeachingAssignmentResponse.newBuilder()
+                .setId(assignment.getId().toString())
+                .setGroup(assignment.getGroup().getName())
+                .setTeacher(assignment.getTeacher().getFirstName()+ " " + assignment.getTeacher().getLastName())
+                .setSubject(assignment.getSubject().getName())
+                .build();
     }
 }

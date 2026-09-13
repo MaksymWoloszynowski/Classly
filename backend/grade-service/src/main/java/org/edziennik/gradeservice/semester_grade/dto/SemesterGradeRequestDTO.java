@@ -31,5 +31,5 @@ public class SemesterGradeRequestDTO {
     private UUID classificationPeriod;
 
     @NotNull
-    private UUID subjectId;
+    private UUID teachingAssignmentId;
 }

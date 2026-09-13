@@ -1,0 +1,82 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.editor {
+  width: min(28rem, 100%);
+  padding: 1.25rem;
+  border-radius: 0.5rem;
+  background: var(--color-surface);
+  box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.2);
+}
+
+.editorHeader,
+.editorActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.editorHeader {
+  margin-bottom: 1.25rem;
+}
+
+.editorHeader span {
+  display: block;
+  margin-top: 0.25rem;
+  color: var(--color-text-secondary);
+  font-size: 0.85rem;
+}
+
+.iconButton {
+  padding: 0.35rem;
+  color: var(--color-text-secondary);
+}
+
+.editorField {
+  display: grid;
+  gap: 0.4rem;
+  color: var(--color-text-secondary);
+  font-size: 0.85rem;
+}
+
+.editorActions {
+  justify-content: flex-end;
+  margin-top: 1.25rem;
+}
+
+.primaryButton,
+.secondaryButton,
+.deleteButton {
+  border-radius: 0.3rem;
+  padding: 0.55rem 0.8rem;
+  font-weight: 600;
+}
+
+.primaryButton {
+  background: var(--color-primary);
+  color: var(--color-surface);
+}
+
+.secondaryButton {
+  border: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+}
+
+.deleteButton {
+  margin-right: auto;
+  color: var(--color-delete);
+}
+
+.error {
+  margin-top: 0.6rem;
+  color: var(--color-delete);
+  font-size: 0.85rem;
+}
