@@ -4,13 +4,16 @@ import type { Assessment } from "@types-local/index";
 import { useState } from "react";
 import {
   useCalendarController,
+  type EventClickInfo,
   type EventDisplayInfo,
 } from "@fullcalendar/react";
 import useStudentScope from "@hooks/useStudentScope";
 import api from "@api/api";
 import LoadingOverlay from "@components/loadingOverlay/LoadingOverlay";
+import ErrorMessage from "@components/errorMessage/ErrorMessage";
 import Calendar from "@components/calendar/Calendar";
 import AssessmentModal from "@components/assessment/assessmentModal/AssessmentModal";
+import { useTranslation } from "../../../hooks/useTranslation";
 
 const typeClass: Record<AssessmentType, string> = {
   TEST: styles.test,
@@ -29,11 +32,13 @@ type AssessmentEventProps = {
 const StudentAssessments = () => {
   const [assessments, setAssessments] = useState<Assessment[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
   const [selectedAssessment, setSelectedAssessment] =
     useState<Assessment | null>(null);
 
   const controller = useCalendarController();
   const { activeStudent } = useStudentScope();
+  const { t } = useTranslation();
 
   const fetchAssessments = async (start?: Date, end?: Date) => {
     const viewStart = start ?? controller.view?.activeStart;
@@ -41,18 +46,20 @@ const StudentAssessments = () => {
     if (!viewStart || !viewEnd) return;
 
     try {
+      setError(null);
       const response = await api.get<Assessment[]>(
         `/api/assessment/student/date?groupId=${activeStudent?.groupId}&from=${viewStart.toLocaleDateString("en-CA")}&to=${viewEnd.toLocaleDateString("en-CA")}`,
       );
       setAssessments(response.data);
     } catch (error) {
       console.error("Error fetching assessments:", error);
+      setError("Assessments could not be loaded.");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleEventClick = (info: EventDisplayInfo) => {
+  const handleEventClick = (info: EventClickInfo) => {
     const assessment = assessments?.find((item) => item.id === info.event.id);
 
     if (assessment) {
@@ -87,8 +94,9 @@ const StudentAssessments = () => {
   return (
     <>
       {loading && <LoadingOverlay />}
+      {error && <ErrorMessage message={error} />}
       <div className={styles.page}>
-        <div className={styles.pageTitle}>Assessments</div>
+        <div className={styles.pageTitle}>{t("assessments")}</div>
         <div className={styles.calendar}>
           <Calendar
             controller={controller}

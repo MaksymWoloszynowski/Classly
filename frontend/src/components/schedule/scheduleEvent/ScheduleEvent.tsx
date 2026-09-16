@@ -2,14 +2,17 @@ import type { EventDisplayInfo } from "@fullcalendar/react";
 import styles from "./ScheduleEvent.module.css";
 import useAuth from "@hooks/useAuth";
 import { CheckIcon } from "lucide-react";
+import { useTranslation } from "@hooks/useTranslation";
 
 interface EventDisplayProps {
   eventInfo: EventDisplayInfo;
 }
 
 const ScheduleEvent = ({ eventInfo }: EventDisplayProps) => {
+  const { t } = useTranslation();
   const { auth } = useAuth();
-  const { teacher, room, override, group, realized } = eventInfo.event.extendedProps;
+  const { teacher, room, override, group, realized } =
+    eventInfo.event.extendedProps;
 
   const isTeacher = auth?.role === "ROLE_TEACHER";
 
@@ -34,16 +37,22 @@ const ScheduleEvent = ({ eventInfo }: EventDisplayProps) => {
             {override.type}
           </div>
         )}
-        {isTeacher && realized && <div className={styles.realized}><CheckIcon  className={styles.checkIcon}/></div>}
+        {isTeacher && realized && (
+          <div className={styles.realized}>
+            <CheckIcon className={styles.checkIcon} />
+          </div>
+        )}
       </div>
 
       <div>
         <div className={styles.subject}>{eventInfo.event.title}</div>
 
         <div className={styles.details}>
-          <span>{isTeacher ? `Group: ${group}` : teacher}</span>
+          <span>{isTeacher ? `${t("group")} ${group}` : teacher}</span>
 
-          <span>Room: {room}</span>
+          <span>
+            {t("room")}: {room}
+          </span>
         </div>
       </div>
     </div>

@@ -5,13 +5,16 @@ import useAuth from "../../hooks/useAuth";
 import type { Schedule } from "../../types/domain/schedule";
 import type { Session } from "../../types/domain/session";
 import LoadingOverlay from "../../components/loadingOverlay/LoadingOverlay";
+import ErrorMessage from "../../components/errorMessage/ErrorMessage";
 import SessionRealizationModal from "../../components/sessions/sessionRealizationModal/SessionRealizationModal";
 import styles from "./Realizations.module.css";
+import { useTranslation } from "../../hooks/useTranslation";
 
 const today = () => new Date().toLocaleDateString("en-CA");
 
 const Realizations = () => {
   const { auth } = useAuth();
+  const { t } = useTranslation();
   const [from, setFrom] = useState(today());
   const [to, setTo] = useState(today());
   const [loading, setLoading] = useState(true);
@@ -39,7 +42,7 @@ const Realizations = () => {
         setSchedule(scheduleResponse.data);
         setSessions(sessionResponse.data);
       } catch {
-        setError("Error fetching data.");
+        setError(t("genericError"));
       } finally {
         setLoading(false);
       }
@@ -82,7 +85,7 @@ const Realizations = () => {
     <>
       {loading && <LoadingOverlay />}
       <div className={styles.page}>
-        <div className={styles.pageTitle}>Realizations</div>
+        <div className={styles.pageTitle}>{t("realizations")}</div>
         <div className={styles.filters}>
           <input
             type="date"
@@ -103,12 +106,12 @@ const Realizations = () => {
               checked={showOnlyUnrealized}
               onChange={(event) => setShowOnlyUnrealized(event.target.checked)}
             />
-            Show only unrealized
+            {t("showOnlyUnrealized")}
           </label>
         </div>
-        {error && <p className={styles.error}>{error}</p>}
+        {error && <ErrorMessage message={error} />}
         <section className={styles.list}>
-          {dates.length === 0 && <p>No sessions found.</p>}
+          {dates.length === 0 && <p>{t("noSessions")}</p>}
           {dates.map((date) => (
             <div key={date} className={styles.listItem}>
               <div className={styles.date}>{date}</div>
@@ -128,11 +131,11 @@ const Realizations = () => {
                         {item.startTime.slice(0, 5)}–{item.endTime.slice(0, 5)}
                       </span>
                       <span>{item.subjectName}</span>
-                      <span>Group: {item.groupName}</span>
+                      <span>{t("group")}: {item.groupName}</span>
                       {session && (
                         <Check
                           className={styles.check}
-                          aria-label="Realized"
+                          aria-label={t("realized")}
                         />
                       )}
                     </button>

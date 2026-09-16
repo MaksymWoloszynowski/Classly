@@ -11,7 +11,6 @@ import org.edziennik.gradeservice.gradeCategory.mapper.GradeCategoryMapper;
 import org.edziennik.gradeservice.gradeCategory.repository.GradeCategoryRepository;
 import org.edziennik.gradeservice.grpc.SchoolStructureGrpcClient;
 import org.edziennik.schoolstructureservice.grpc.StudentResponse;
-import org.edziennik.gradeservice.security.TeacherAccessService;
 import org.edziennik.security.AuthenticatedUser;
 import org.springframework.stereotype.Service;
 
@@ -21,12 +20,10 @@ import java.util.*;
 public class GradeCategoryService {
     private final SchoolStructureGrpcClient schoolStructureClient;
     private final GradeCategoryRepository gradeCategoryRepository;
-    private final TeacherAccessService teacherAccessService;
 
-    public GradeCategoryService(GradeCategoryRepository gradeCategoryRepository, SchoolStructureGrpcClient schoolStructureClient, TeacherAccessService teacherAccessService) {
+    public GradeCategoryService(GradeCategoryRepository gradeCategoryRepository, SchoolStructureGrpcClient schoolStructureClient) {
         this.gradeCategoryRepository = gradeCategoryRepository;
         this.schoolStructureClient = schoolStructureClient;
-        this.teacherAccessService = teacherAccessService;
     }
 
     public List<GradeCategoryResponseDTO> getGradeCategories(UUID teachingAssignmentId) {
@@ -51,21 +48,17 @@ public class GradeCategoryService {
     }
 
     public GradeCategoryResponseDTO createGradeCategory(GradeCategoryRequestDTO categoryRequestDTO, AuthenticatedUser user) {
-        teacherAccessService.requireAssignmentAccess(user, categoryRequestDTO.getTeachingAssignmentId());
-
         GradeCategory newGrade = gradeCategoryRepository.save(GradeCategoryMapper.toModel(categoryRequestDTO));
 
         return mapToDTO(newGrade);
     }
 
-    public GradeCategoryResponseDTO updateGradeCategory(UUID gradeCategoryId, GradeCategoryRequestDTO gradeRequestDTO, AuthenticatedUser user) {
+    public GradeCategoryResponseDTO updateGradeCategory(UUID gradeCategoryId, GradeCategoryRequestDTO categoryRequestDTO, AuthenticatedUser user) {
         GradeCategory gradeCategory = getGradeCategory(gradeCategoryId);
 
-        teacherAccessService.requireAssignmentAccess(user, gradeCategory.getTeachingAssignmentId());
-
-        gradeCategory.setDescription(gradeRequestDTO.getDescription());
-        gradeCategory.setWeight(gradeRequestDTO.getWeight());
-        gradeCategory.setType(gradeRequestDTO.getType());
+        gradeCategory.setDescription(categoryRequestDTO.getDescription());
+        gradeCategory.setWeight(categoryRequestDTO.getWeight());
+        gradeCategory.setType(categoryRequestDTO.getType());
 
         GradeCategory updated = gradeCategoryRepository.save(gradeCategory);
 
@@ -74,8 +67,6 @@ public class GradeCategoryService {
 
     public void deleteGradeCategory(UUID id, AuthenticatedUser user) {
         GradeCategory gradeCategory = getGradeCategory(id);
-
-        teacherAccessService.requireAssignmentAccess(user, gradeCategory.getTeachingAssignmentId());
 
         gradeCategoryRepository.delete(gradeCategory);
     }

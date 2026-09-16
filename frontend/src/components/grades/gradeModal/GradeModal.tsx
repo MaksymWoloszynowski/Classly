@@ -3,6 +3,7 @@ import type { Grade } from "../../../types/domain/grade";
 import styles from "./GradeModal.module.css";
 import type { TeachingAssignment } from "../../../types/domain/teachingAssignment";
 import { formatDate } from "../../../utils/date";
+import { createPortal } from "react-dom";
 
 import useTeacher from "@hooks/useTeacher";
 
@@ -23,7 +24,7 @@ const GradeModal = ({
 }: GradeModalProps) => {
   const { isAssignmentTeacher } = useTeacher();
 
-  return (
+  return createPortal(
     <div className={styles.overlay} onClick={() => setSelectedGrade(null)}>
       <div className={styles.modal}>
         <div className={styles.header}>
@@ -83,7 +84,8 @@ const GradeModal = ({
           </div>
         )}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 };
 

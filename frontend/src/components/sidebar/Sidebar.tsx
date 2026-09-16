@@ -17,29 +17,40 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import useLogout from "../../hooks/useLogout";
+import ErrorMessage from "../errorMessage/ErrorMessage";
+import useLocalePath from "../../hooks/useLocalePath";
+import { useTranslation } from "../../hooks/useTranslation";
+import type { TranslationKey } from "../../i18n/translations";
 
 const studentMenu = [
-  { to: "/student/dashboard", label: "Dashboard", icon: House },
-  { to: "/student/grades", label: "Grades", icon: GraduationCap },
-  { to: "/student/schedule", label: "Schedule", icon: CalendarDays },
-  { to: "/student/assessments", label: "Assessments", icon: ClipboardCheck },
-  { to: "/student/sessions", label: "Sessions", icon: BookOpenCheck },
-  { to: "/student/attendance", label: "Attendance", icon: CalendarCheck },
+  { to: "/student/dashboard", label: "dashboard", icon: House },
+  { to: "/student/grades", label: "grades", icon: GraduationCap },
+  { to: "/student/schedule", label: "schedule", icon: CalendarDays },
+  { to: "/student/assessments", label: "assessments", icon: ClipboardCheck },
+  { to: "/student/sessions", label: "sessions", icon: BookOpenCheck },
+  { to: "/student/attendance", label: "attendance", icon: CalendarCheck },
 ];
 
 const teacherMenu = [
-  { to: "/teacher/dashboard", label: "Dashboard", icon: House },
-  { to: "/teacher/grades", label: "Grades", icon: GraduationCap },
-  { to: "/teacher/schedule", label: "My schedule", icon: CalendarDays },
-  { to: "/teacher/realizations", label: "Realizations", icon: BookOpenCheck },
-  { to: "/teacher/assessments", label: "Assessments", icon: ClipboardCheck },
+  { to: "/teacher/dashboard", label: "dashboard", icon: House },
+  { to: "/teacher/grades", label: "grades", icon: GraduationCap },
+  { to: "/teacher/schedule", label: "mySchedule", icon: CalendarDays },
+  { to: "/teacher/realizations", label: "realizations", icon: BookOpenCheck },
+  { to: "/teacher/assessments", label: "assessments", icon: ClipboardCheck },
 ];
 
 const Sidebar = () => {
   const { auth } = useAuth();
   const logout = useLogout();
-  const { activeStudent, availableStudents, selectStudent, isLoadingStudent } =
-    useStudentScope();
+  const localePath = useLocalePath();
+  const { t } = useTranslation();
+  const {
+    activeStudent,
+    availableStudents,
+    selectStudent,
+    isLoadingStudent,
+    error,
+  } = useStudentScope();
   const isTeacher = auth?.role === "ROLE_TEACHER";
   const menu = isTeacher ? teacherMenu : studentMenu;
   const [menuOpen, setMenuOpen] = useState(false);
@@ -61,7 +72,7 @@ const Sidebar = () => {
 
       {auth?.role === "ROLE_PARENT" && (
         <label className={styles.studentPicker}>
-          <span>Profil ucznia</span>
+          <span>{t("studentProfile")}</span>
           <select
             value={activeStudent?.id ?? ""}
             onChange={(event) => selectStudent(event.target.value)}
@@ -76,16 +87,18 @@ const Sidebar = () => {
         </label>
       )}
 
+      {error && <ErrorMessage message={error} />}
+
       {isTeacher ? (
         <div className={styles.sidebarTitle}>
-          <p>Teacher's panel</p>
+          <p>{t("teacherPanel")}</p>
           <p>
             {auth.teacher?.firstName} {auth.teacher?.lastName}
           </p>
         </div>
       ) : (
         <div className={styles.sidebarTitle}>
-          <p>Student's panel</p>
+          <p>{t("studentPanel")}</p>
           <p>
             {activeStudent?.firstName} {activeStudent?.lastName}
           </p>
@@ -96,22 +109,24 @@ const Sidebar = () => {
         {menu.map(({ to, label, icon: Icon }) => (
           <NavLink
             key={to}
-            to={to}
-            className={({ isActive }) => (isActive ? styles.active : styles.link)}
+            to={localePath(to)}
+            className={({ isActive }) =>
+              isActive ? styles.active : styles.link
+            }
             onClick={() => setMenuOpen(false)}
           >
             <Icon size={20} strokeWidth={1.8} />
-            <span>{label}</span>
+            <span>{t(label as TranslationKey)}</span>
           </NavLink>
         ))}
 
         <NavLink
-          to={"/messages"}
+          to={localePath("/messages")}
           className={({ isActive }) => (isActive ? styles.active : styles.link)}
           onClick={() => setMenuOpen(false)}
         >
           <Mail size={20} strokeWidth={1.8} />
-          <span>Messages</span>
+          <span>{t("messages")}</span>
         </NavLink>
         <div
           className={styles.bottom}
@@ -119,16 +134,24 @@ const Sidebar = () => {
         >
           <div className={styles.link}>
             <User size={20} strokeWidth={1.8} />
-            <div>More</div>
+            <div>{t("more")}</div>
             <span className={styles.arrow} />
           </div>
         </div>
 
         {logoutVisible && (
           <div className={styles.actionBox}>
-              <NavLink className={styles.link} onClick={() => logout()} to={'/profile'}>Your profile</NavLink>
-              <span></span>
-              <p className={styles.logout} onClick={() => logout()}>Logout</p>
+            <NavLink
+              className={styles.link}
+              onClick={() => logout()}
+              to={localePath("/profile")}
+            >
+              {t("yourProfile")}
+            </NavLink>
+            <span></span>
+            <p className={styles.logout} onClick={() => logout()}>
+              {t("logout")}
+            </p>
           </div>
         )}
       </nav>

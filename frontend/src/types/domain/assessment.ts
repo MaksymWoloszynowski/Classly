@@ -5,6 +5,7 @@ export type Assessment = {
     teachingAssignmentId: string;
     subjectName: string;
     teacherName: string;
+    groupName: string;
     dateMade: Date;
     dateDue: Date;
     type: AssessmentType;

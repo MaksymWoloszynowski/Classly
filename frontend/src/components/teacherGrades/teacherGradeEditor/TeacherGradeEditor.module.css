@@ -1,18 +1,14 @@
 .overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  display: grid;
-  place-items: center;
-  padding: 1rem;
-  background: rgba(0, 0, 0, 0.4);
+  composes: overlay from "@styles/Modal.module.css";
+}
+
+.editor {
+  composes: modal from "@styles/Modal.module.css";
 }
 
 .editor {
   width: min(28rem, 100%);
-  padding: 1.25rem;
   border-radius: 0.5rem;
-  background: var(--color-surface);
   box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.2);
 }
 
@@ -25,6 +21,7 @@
 }
 
 .editorHeader {
+  composes: header from "@styles/Modal.module.css";
   margin-bottom: 1.25rem;
 }
 
@@ -36,6 +33,7 @@
 }
 
 .iconButton {
+  composes: close from "@styles/Modal.module.css";
   padding: 0.35rem;
   color: var(--color-text-secondary);
 }
@@ -48,6 +46,7 @@
 }
 
 .editorActions {
+  composes: actions from "@styles/Modal.module.css";
   justify-content: flex-end;
   margin-top: 1.25rem;
 }
@@ -76,6 +75,7 @@
 }
 
 .error {
+  composes: error from "@styles/Modal.module.css";
   margin-top: 0.6rem;
   color: var(--color-delete);
   font-size: 0.85rem;

@@ -5,20 +5,23 @@ import { useNavigate } from "react-router-dom";
 import styles from "./Register.module.css";
 import useAuth from "../../hooks/useAuth.js";
 import axios from "axios";
+import ErrorMessage from "../../components/errorMessage/ErrorMessage";
+import useLocalePath from "../../hooks/useLocalePath";
+import { useTranslation } from "../../hooks/useTranslation.js";
+import TopBar from "../../components/topBar/TopBar";
 
 const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,128}$/;
 
 const Register = () => {
   const { setAuth } = useAuth();
   const navigate = useNavigate();
+  const localePath = useLocalePath();
   const emailRef = useRef<HTMLInputElement | null>(null);
 
   const [accessCode, setAccessCode] = useState("");
-  const [accessCodeFocus, setAccessCodeFocus] = useState(false);
 
   const [email, setEmail] = useState("");
   const validEmail = email.trim() !== "";
-  const [emailFocus, setEmailFocus] = useState(false);
 
   const [password, setPassword] = useState("");
   const validPassword = PASSWORD_REGEX.test(password);
@@ -29,6 +32,7 @@ const Register = () => {
   const [matchFocus, setMatchFocus] = useState(false);
 
   const [errMsg, setErrMsg] = useState("");
+  const { t } = useTranslation();
 
   useEffect(() => {
     emailRef.current?.focus();
@@ -59,7 +63,7 @@ const Register = () => {
       setPassword("");
       setMatchPassword("");
       setAccessCode("");
-      navigate("/home");
+      navigate(localePath("/home"));
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
         setErrMsg(err.response?.data?.message ?? "Registration failed.");
@@ -71,12 +75,14 @@ const Register = () => {
 
   return (
     <section className={styles.page}>
-      <div className={styles.container}>
-        <p className={errMsg ? styles.error : styles.invisible}>{errMsg}</p>
-        <h1 className={styles.title}>Create an account</h1>
-        <form className={styles.form} onSubmit={handleSubmit}>
+      <TopBar />
+      <div className={styles.formArea}>
+        <div className={styles.container}>
+          {errMsg && <ErrorMessage message={errMsg} />}
+          <h1 className={styles.title}>{t("register")}</h1>
+          <form className={styles.form} onSubmit={handleSubmit}>
           <label className={styles.label} htmlFor="email">
-            Email:
+            {t("email")}:
             <span className={styles.requiredAsterisk}> *</span>
           </label>
           <input
@@ -88,8 +94,6 @@ const Register = () => {
             value={email}
             required
             ref={emailRef}
-            onFocus={() => setEmailFocus(true)}
-            onBlur={() => setEmailFocus(false)}
             className={`${styles.input} ${
               email
                 ? validEmail
@@ -100,7 +104,7 @@ const Register = () => {
           />
 
           <label className={styles.label} htmlFor="password">
-            Password:
+            {t("password")}:
             <span className={styles.requiredAsterisk}> *</span>
           </label>
           <input
@@ -134,7 +138,7 @@ const Register = () => {
           </p>
 
           <label className={styles.label} htmlFor="confirm_pwd">
-            Confirm Password:
+            {t("confirmPassword")}:
             <span className={styles.requiredAsterisk}> *</span>
           </label>
           <input
@@ -166,7 +170,7 @@ const Register = () => {
           </p>
 
           <label className={styles.label} htmlFor="access_code">
-            Access Code:
+            {t("accessCode")}:
             <span className={styles.requiredAsterisk}> *</span>
           </label>
           <input
@@ -177,15 +181,14 @@ const Register = () => {
             }
             value={accessCode}
             required
-            onFocus={() => setAccessCodeFocus(true)}
-            onBlur={() => setAccessCodeFocus(false)}
             className={styles.input}
           />
 
           <button className={styles.button}>Sign Up</button>
-        </form>
-        <div className={styles.footer_text}>
-          <Link to="/login">Sign In</Link>
+          </form>
+          <div className={styles.footerText}>
+            <Link to={localePath("/login")}>{t("signIn")}</Link>
+          </div>
         </div>
       </div>
     </section>

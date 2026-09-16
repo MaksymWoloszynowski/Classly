@@ -1,21 +1,29 @@
 import { useEffect, useState } from "react";
 import type { Attendance } from "../../types/domain/attendance";
-import { useCalendarController } from "@fullcalendar/react";
+import {
+  useCalendarController,
+  type EventDisplayInfo,
+} from "@fullcalendar/react";
 import Calendar from "../../components/calendar/Calendar";
 import LoadingOverlay from "../../components/loadingOverlay/LoadingOverlay";
+import ErrorMessage from "../../components/errorMessage/ErrorMessage";
 import useStudentScope from "../../hooks/useStudentScope";
 import api from "../../api/api";
 import styles from "./Attendance.module.css";
+import { useTranslation } from "../../hooks/useTranslation";
 
 const AttendancePage = () => {
   const { activeStudent } = useStudentScope();
+  const { t } = useTranslation();
   const [attendance, setAttendance] = useState<Attendance[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
   const [viewType, setViewType] = useState("timeGridWeek");
   const controller = useCalendarController();
 
   const fetchAttendance = async (start: Date, end: Date) => {
     try {
+      setError(null);
       const response = await api.get(
         `/api/attendance/date?studentId=${activeStudent?.id}&from=${start.toLocaleDateString("en-CA")}&to=${end.toLocaleDateString("en-CA")}`,
       );
@@ -23,6 +31,7 @@ const AttendancePage = () => {
       setAttendance(response.data);
     } catch (error) {
       console.error("Error fetching attendance:", error);
+      setError("Attendance could not be loaded.");
     } finally {
       setLoading(false);
     }
@@ -30,8 +39,16 @@ const AttendancePage = () => {
 
   useEffect(() => {
     if (!activeStudent?.id || !controller.view) return;
-    fetchAttendance(controller.view.activeStart, controller.view.activeEnd);
-  }, [activeStudent?.id]);
+
+    const loadAttendance = async () => {
+      await fetchAttendance(
+        controller.view!.activeStart,
+        controller.view!.activeEnd,
+      );
+    };
+
+    loadAttendance();
+  }, [activeStudent?.id, controller.view]);
 
   const events =
     attendance.map((item: Attendance) => ({
@@ -52,9 +69,9 @@ const AttendancePage = () => {
   const tardy = attendance.filter((item) => item.type === "TARDY").length;
 
   const summaryHeaderText =
-    viewType === "dayGridMonth" ? "Month summary" : "Week summary";
+    viewType === "dayGridMonth" ? t("monthSummary") : t("weekSummary");
 
-  const renderEventContent = (eventInfo: any) => {
+  const renderEventContent = (eventInfo: EventDisplayInfo) => {
     return (
       <div
         className={`${styles.event} ${styles[eventInfo.event.extendedProps.type]}`}
@@ -84,45 +101,46 @@ const AttendancePage = () => {
   return (
     <>
       {loading && <LoadingOverlay />}
+      {error && <ErrorMessage message={error} />}
       <div className={styles.page}>
-        <div className={styles.pageTitle}>Attendance</div>
+        <div className={styles.pageTitle}>{t("attendance")}</div>
         <div className={styles.calendar}>
-<Calendar
-        controller={controller}
-        events={events}
-        action={fetchAttendance}
-        renderEventContent={renderEventContent}
-        initialView={viewType}
-        headerToolbar={{
-          left: "prev,next",
-          center: "title",
-          right: "timeGridWeek,dayGridMonth",
-        }}
-        setViewType={setViewType}
-      />
+          <Calendar
+            controller={controller}
+            events={events}
+            action={fetchAttendance}
+            renderEventContent={renderEventContent}
+            initialView={viewType}
+            headerToolbar={{
+              left: "prev,next",
+              center: "title",
+              right: "timeGridWeek,dayGridMonth",
+            }}
+            setViewType={setViewType}
+          />
         </div>
-      
-      <div className={styles.container}>
-        <div className={styles.header}>{summaryHeaderText}</div>
-        <div className={styles.summary}>
-          <div className={`${styles.summaryBox} ${styles.present}`}>
-            <div>Present</div>
-            <div className={styles.summaryNumber}>{present}</div>
-          </div>
-          <div className={`${styles.summaryBox} ${styles.absent}`}>
-            <div>Absent</div>
-            <div className={styles.summaryNumber}>{absent}</div>
-          </div>
-          <div className={`${styles.summaryBox} ${styles.unexcusedAbsence}`}>
-            <div>Unexcused absence</div>
-            <div className={styles.summaryNumber}>{unexcused}</div>
-          </div>
-          <div className={`${styles.summaryBox} ${styles.tardy}`}>
-            <div>Tardy</div>
-            <div className={styles.summaryNumber}>{tardy}</div>
+
+        <div className={styles.container}>
+          <div className={styles.header}>{summaryHeaderText}</div>
+          <div className={styles.summary}>
+            <div className={`${styles.summaryBox} ${styles.present}`}>
+              <div>{t("present")}</div>
+              <div className={styles.summaryNumber}>{present}</div>
+            </div>
+            <div className={`${styles.summaryBox} ${styles.absent}`}>
+              <div>{t("absent")}</div>
+              <div className={styles.summaryNumber}>{absent}</div>
+            </div>
+            <div className={`${styles.summaryBox} ${styles.unexcusedAbsence}`}>
+              <div>{t("unexcusedAbsence")}</div>
+              <div className={styles.summaryNumber}>{unexcused}</div>
+            </div>
+            <div className={`${styles.summaryBox} ${styles.tardy}`}>
+              <div>{t("tardy")}</div>
+              <div className={styles.summaryNumber}>{tardy}</div>
+            </div>
           </div>
         </div>
-      </div>
       </div>
     </>
   );

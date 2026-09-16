@@ -8,7 +8,9 @@ import {
 } from "@types-local/index";
 import type { TeachingAssignment } from "@types-local/domain/teachingAssignment";
 import styles from "./AssessmentCreateModal.module.css";
-import { assessmentTypeLabels } from "@types-local/labels";
+import ErrorMessage from "@components/errorMessage/ErrorMessage";
+import { useTranslation } from "../../../hooks/useTranslation";
+import { useAssessmentTypeLabels } from "@types-local/labels";
 
 type AssessmentCreateModalProps = {
   date: string;
@@ -26,7 +28,8 @@ const AssessmentCreateModal = ({
   onSaved,
 }: AssessmentCreateModalProps) => {
   const isEditing = Boolean(assessment);
-
+  const { t } = useTranslation();
+  const assessmentTypeLabels = useAssessmentTypeLabels()
   const [type, setType] = useState<AssessmentType | "">(assessment?.type ?? "");
 
   const [description, setDescription] = useState(assessment?.description ?? "");
@@ -63,7 +66,7 @@ const AssessmentCreateModal = ({
       console.error(error);
 
       setError(
-        isEditing ? "Error updating assessment" : "Error adding assessment",
+        isEditing ? t("assessmentsLoadError") : t("assessmentsLoadError"),
       );
     } finally {
       setSaving(false);
@@ -79,7 +82,7 @@ const AssessmentCreateModal = ({
       >
         <div className={styles.header}>
           <div>
-            <div>{isEditing ? "Update assessment" : "Add assessment"}</div>
+            <div>{isEditing ? t("updateAssessment") : t("addAssessment")}</div>
 
             <p>
               {assignment.subjectName} · {assignment.groupName}
@@ -92,14 +95,14 @@ const AssessmentCreateModal = ({
             type="button"
             className={styles.close}
             onClick={onClose}
-            aria-label="Close"
+            aria-label={t("close")}
           >
             <X />
           </button>
         </div>
 
         <label className={styles.label} htmlFor="assessment-type">
-          Assessment type
+          {t("assessmentType")}
         </label>
 
         <select
@@ -109,7 +112,7 @@ const AssessmentCreateModal = ({
           onChange={(event) => setType(event.target.value as AssessmentType)}
           required
         >
-          <option value="">Choose a type</option>
+          <option value="">{t("chooseType")}</option>
 
           {assessmentTypes.map((assessmentType) => (
             <option key={assessmentType} value={assessmentType}>
@@ -119,7 +122,7 @@ const AssessmentCreateModal = ({
         </select>
 
         <label className={styles.label} htmlFor="assessment-description">
-          Description (optional)
+          {t("description")} ({t("optional")})
         </label>
 
         <textarea
@@ -130,7 +133,7 @@ const AssessmentCreateModal = ({
           maxLength={255}
         />
 
-        {error && <p className={styles.error}>{error}</p>}
+        {error && <ErrorMessage message={error} />}
 
         <div className={styles.actions}>
           <button
@@ -139,7 +142,7 @@ const AssessmentCreateModal = ({
             onClick={onClose}
             disabled={saving}
           >
-            Cancel
+            {t("cancel")}
           </button>
 
           <button
@@ -150,8 +153,8 @@ const AssessmentCreateModal = ({
             {saving
               ? "Saving..."
               : isEditing
-                ? "Update assessment"
-                : "Add assessment"}
+                ? t("updateAssessment")
+                : t("addAssessment")}
           </button>
         </div>
       </form>

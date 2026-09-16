@@ -1,11 +1,14 @@
 package org.edziennik.schoolstructureservice.student.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.edziennik.schoolstructureservice.student.dto.StudentRequestDTO;
 import org.edziennik.schoolstructureservice.student.dto.StudentResponseDTO;
 import org.edziennik.schoolstructureservice.student.service.StudentService;
 import org.edziennik.schoolstructureservice.subject.dto.SubjectResponseDTO;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,6 +17,8 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/student")
+@Tag(name = "Students", description = "Manage students")
+@SecurityRequirement(name = "cookieAuth")
 public class StudentController {
     private final StudentService studentService;
 
@@ -37,14 +42,8 @@ public class StudentController {
         return ResponseEntity.ok().body(studentResponseDTO);
     }
 
-    @GetMapping("/{id}/subjects")
-    public ResponseEntity<Set<SubjectResponseDTO>> getStudentSubjects(@PathVariable UUID id) {
-        Set<SubjectResponseDTO> subjects = studentService.getStudentSubjects(id);
-
-        return ResponseEntity.ok().body(subjects);
-    }
-
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<StudentResponseDTO> createStudent(@Valid @RequestBody StudentRequestDTO studentRequestDTO) {
         StudentResponseDTO studentResponseDTO = studentService.createStudent(studentRequestDTO);
 
@@ -52,6 +51,7 @@ public class StudentController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<StudentResponseDTO> updateStudent(@PathVariable UUID id, @Valid @RequestBody StudentRequestDTO studentRequestDTO) {
         StudentResponseDTO studentResponseDTO = studentService.updateStudent(id, studentRequestDTO);
 
@@ -59,6 +59,7 @@ public class StudentController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteStudent(@PathVariable UUID id) {
         studentService.deleteStudent(id);
 
@@ -66,6 +67,7 @@ public class StudentController {
     }
 
     @DeleteMapping("/{id}/group")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<StudentResponseDTO> deleteStudentFromGroup(@PathVariable UUID id) {
         StudentResponseDTO studentResponseDTO = studentService.deleteStudentFromGroup(id);
 
@@ -73,6 +75,7 @@ public class StudentController {
     }
 
     @PostMapping("/{studentId}/group/{groupId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<StudentResponseDTO> addStudentToGroup(@PathVariable UUID studentId, @PathVariable UUID groupId) {
         StudentResponseDTO studentResponseDTO = studentService.addStudentToGroup(studentId, groupId);
 

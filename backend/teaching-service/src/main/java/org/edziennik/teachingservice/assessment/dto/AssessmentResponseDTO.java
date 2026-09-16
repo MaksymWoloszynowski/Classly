@@ -16,6 +16,7 @@ public class AssessmentResponseDTO {
     private UUID teachingAssignmentId;
     private String subjectName;
     private String teacherName;
+    private String groupName;
     private LocalDate dateMade;
     private LocalDate dateDue;
     private AssessmentType type;

@@ -4,6 +4,9 @@ import org.edziennik.schoolstructureservice.parent.dto.ParentRequestDTO;
 import org.edziennik.schoolstructureservice.parent.dto.ParentResponseDTO;
 import org.edziennik.schoolstructureservice.parent.dto.ParentSummaryDTO;
 import org.edziennik.schoolstructureservice.parent.entity.Parent;
+import org.edziennik.schoolstructureservice.student.mapper.StudentMapper;
+
+import java.util.stream.Collectors;
 
 public class ParentMapper {
     public static ParentResponseDTO toDTO(Parent parent) {
@@ -11,6 +14,9 @@ public class ParentMapper {
                 .id(parent.getId())
                 .firstName(parent.getFirstName())
                 .lastName(parent.getLastName())
+                .students(parent.getStudents().stream()
+                        .map(StudentMapper::toSummaryDTO)
+                        .collect(Collectors.toSet()))
                 .build();
     }
 

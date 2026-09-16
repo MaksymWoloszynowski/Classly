@@ -1,12 +1,14 @@
 import type { Attendance } from "@types-local/domain/attendance";
 import styles from "./DashboardAttendanceItem.module.css";
-import { attendanceTypeLabels } from "@types-local/labels";
+import { useAttendanceTypeLabels } from "@types-local/labels";
 
 const DashboardAttendanceItem = ({
   attendance,
 }: {
   attendance: Attendance;
 }) => {
+  const attendanceTypeLabels = useAttendanceTypeLabels();
+  
   return (
     <div key={attendance.id} className={styles.attendanceItem}>
       <div className={styles.attendanceTime}>
@@ -24,9 +26,7 @@ const DashboardAttendanceItem = ({
 
       <div className={styles.attendanceSubject}>{attendance.subject}</div>
 
-      <div
-        className={`${styles.attendanceStatus} ${styles[attendance.type]}`}
-      >
+      <div className={`${styles.attendanceStatus} ${styles[attendance.type]}`}>
         {attendanceTypeLabels[attendance.type]}
       </div>
     </div>

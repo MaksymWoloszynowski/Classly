@@ -1,0 +1,77 @@
+.overlay {
+  composes: overlay from "@styles/Modal.module.css";
+  z-index: 1100;
+  display: grid;
+  place-items: center;
+}
+
+.modal {
+  composes: modal from "@styles/Modal.module.css";
+  display: grid;
+  gap: 1rem;
+  width: min(28rem, 100%);
+  box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.2);
+}
+
+.header,
+.actions {
+  composes: header from "@styles/Modal.module.css";
+}
+
+.actions {
+  composes: actions from "@styles/Modal.module.css";
+  margin-top: 0;
+  justify-content: flex-end;
+}
+
+.header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.close {
+  composes: close from "@styles/Modal.module.css";
+}
+
+.modal label {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.details {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.details div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.details span {
+  color: var(--color-text-secondary);
+}
+
+.modal input,
+.modal select,
+.actions button {
+  min-height: 2.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.35rem;
+  padding: 0.5rem 0.7rem;
+  background: var(--color-surface);
+  font: inherit;
+}
+
+.actions {
+  justify-content: flex-end;
+}
+
+.error {
+  composes: error from "@styles/Modal.module.css";
+  margin: 0;
+  color: var(--color-delete);
+}

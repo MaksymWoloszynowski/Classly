@@ -1,0 +1,75 @@
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 4.5rem;
+  padding: 0.75rem 2rem;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: var(--color-primary);
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+}
+
+.logo:hover {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.logoMark {
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  color: var(--color-surface);
+  background: var(--color-primary);
+  border-radius: 0.5rem;
+  font-size: 1.05rem;
+}
+
+.languageSwitch {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem;
+  border-radius: 0.65rem;
+}
+
+.flagButton {
+  display: grid;
+  place-items: center;
+  border: 1px solid transparent;
+  border-radius: 0.45rem;
+  font-size: 1.25rem;
+  line-height: 1;
+  padding: 0.2rem;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.flagButton:hover {
+  border-color: var(--color-border);
+  background: var(--color-surface);
+  opacity: 1;
+}
+
+.flagButton:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--color-primary) 25%, transparent);
+  outline-offset: 2px;
+}
+
+@media (max-width: 1000px) {
+  .topBar {
+    min-height: 4rem;
+    padding: 0.65rem 1rem;
+  }
+}

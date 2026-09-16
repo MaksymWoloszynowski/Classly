@@ -1,0 +1,83 @@
+.overlay {
+  composes: overlay from "@styles/Modal.module.css";
+  z-index: 1100;
+  display: grid;
+  place-items: center;
+}
+
+.modal {
+  composes: modal from "@styles/Modal.module.css";
+  display: grid;
+  gap: 1rem;
+  width: min(26rem, 100%);
+  box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.2);
+}
+
+.header,
+.actions {
+  composes: header from "@styles/Modal.module.css";
+}
+
+.actions {
+  composes: actions from "@styles/Modal.module.css";
+  margin-top: 0;
+  justify-content: flex-end;
+}
+
+.title {
+  margin-bottom: 0.25rem;
+  font-size: 1.2rem;
+}
+
+.header span {
+  color: var(--color-text-secondary);
+}
+
+.close {
+  composes: close from "@styles/Modal.module.css";
+}
+
+.modal label {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.modal input,
+.actions button {
+  min-height: 2.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.35rem;
+  padding: 0.5rem 0.7rem;
+  font-size: 0.9rem;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.actions {
+  justify-content: space-between;
+}
+
+.button:disabled,
+.actions button:disabled {
+  opacity: 0.6;
+}
+
+.delete {
+  background-color: var(--color-delete);
+  color: var(--color-surface);
+  border-color: var(--color-delete);
+}
+
+.delete:hover {
+  background: var(--color-surface);
+  color: var(--color-delete);
+  border-color: var(--color-delete);
+}
+
+.error {
+  composes: error from "@styles/Modal.module.css";
+  margin: 0;
+  color: var(--color-delete);
+}

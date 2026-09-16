@@ -50,8 +50,38 @@
   white-space: normal !important;
 }
 
+.categoryButton {
+  width: 100%;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+}
+
+.categoryButton:hover {
+  text-decoration: underline;
+}
+
 .summaryCell {
   min-width: 6.5rem;
+}
+
+.semesterGradeButton {
+  min-width: 3rem;
+  border: 0;
+  padding: 0.25rem 0.5rem;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+}
+
+.semesterGradeButton:hover {
+  background: var(--color-background);
+  border-radius: 0.25rem;
 }
 
 .emptyState {

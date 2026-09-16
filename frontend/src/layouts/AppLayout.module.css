@@ -9,6 +9,15 @@
   margin: 2em;
 }
 
+.mainArea {
+  flex: 1;
+  min-width: 0;
+}
+
+.mainArea .content {
+  margin: 2rem;
+}
+
 @media (max-width: 1000px) {
   .layout {
     flex-direction: column;

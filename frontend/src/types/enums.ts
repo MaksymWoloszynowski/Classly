@@ -16,13 +16,16 @@ export const attendanceTypes = [
 
 export type AttendanceType = (typeof attendanceTypes)[number];
 
-export type GradeType =
-  | "CURRENT"
-  | "QUIZ"
-  | "HOMEWORK"
-  | "TEST"
-  | "CLASS_TEST"
-  | "PARTICIPATION";
+export const gradeTypes = [
+  "CURRENT",
+  "QUIZ",
+  "HOMEWORK",
+  "TEST",
+  "CLASS_TEST",
+  "PARTICIPATION",
+] as const;
+
+export type GradeType = (typeof gradeTypes)[number]
 
 export type SemesterGradeType =
   | "PROPOSED_SEMESTER"

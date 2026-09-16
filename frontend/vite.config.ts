@@ -11,12 +11,13 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      "@pages": path.resolve(__dirname, "./src/pages"),
-      "@components": path.resolve(__dirname, "./src/components"),
-      "@types-local": path.resolve(__dirname, "./src/types"),
-      "@hooks": path.resolve(__dirname, "./src/hooks"),
-      "@utils": path.resolve(__dirname, "./src/utils"),
-      "@api": path.resolve(__dirname, "./src/api"),
+      "@pages": path.resolve(import.meta.dirname, "./src/pages"),
+      "@components": path.resolve(import.meta.dirname, "./src/components"),
+      "@types-local": path.resolve(import.meta.dirname, "./src/types"),
+      "@hooks": path.resolve(import.meta.dirname, "./src/hooks"),
+      "@utils": path.resolve(import.meta.dirname, "./src/utils"),
+      "@api": path.resolve(import.meta.dirname, "./src/api"),
+      "@styles": path.resolve(import.meta.dirname, "./src/styles"),
     },
   },
 })

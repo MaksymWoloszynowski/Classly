@@ -1,10 +1,13 @@
 package org.edziennik.schoolstructureservice.subject.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.groups.Default;
 import org.edziennik.schoolstructureservice.subject.dto.SubjectRequestDTO;
 import org.edziennik.schoolstructureservice.subject.dto.SubjectResponseDTO;
 import org.edziennik.schoolstructureservice.subject.service.SubjectService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +16,8 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/subject")
+@Tag(name = "Subjects", description = "Manage subjects")
+@SecurityRequirement(name = "cookieAuth")
 public class SubjectController {
     private final SubjectService subjectService;
 
@@ -35,6 +40,7 @@ public class SubjectController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<SubjectResponseDTO> createSubject(@Validated({Default.class}) @RequestBody SubjectRequestDTO subjectRequestDTO) {
         SubjectResponseDTO subjectResponseDTO = subjectService.createSubject(subjectRequestDTO);
 
@@ -42,6 +48,7 @@ public class SubjectController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<SubjectResponseDTO> updateSubject(@PathVariable UUID id, @Validated({Default.class}) @RequestBody SubjectRequestDTO subjectRequestDTO) {
         SubjectResponseDTO subjectResponseDTO = subjectService.updateSubject(id, subjectRequestDTO);
 
@@ -49,6 +56,7 @@ public class SubjectController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteSubject(@PathVariable UUID id) {
         subjectService.deleteSubject(id);
 

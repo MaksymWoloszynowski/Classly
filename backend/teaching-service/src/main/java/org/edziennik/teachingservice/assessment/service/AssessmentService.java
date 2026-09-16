@@ -10,12 +10,6 @@ import org.edziennik.teachingservice.assessment.mapper.AssessmentMapper;
 import org.edziennik.teachingservice.assessment.repository.AssessmentRepository;
 import org.edziennik.teachingservice.grpc.SchoolStructureGrpcClient;
 import org.edziennik.teachingservice.security.TeacherAccessService;
-import org.edziennik.teachingservice.session.dto.SessionRequestDTO;
-import org.edziennik.teachingservice.session.dto.SessionResponseDTO;
-import org.edziennik.teachingservice.session.entity.Session;
-import org.edziennik.teachingservice.session.exception.SessionAlreadyRealizedException;
-import org.edziennik.teachingservice.session.mapper.SessionMapper;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -95,6 +89,7 @@ public class AssessmentService {
         AssessmentResponseDTO dto = AssessmentMapper.toDTO(assessment);
         dto.setSubjectName(assignment.getSubject());
         dto.setTeacherName(assignment.getTeacher());
+        dto.setGroupName(assignment.getGroup());
 
         return dto;
     }

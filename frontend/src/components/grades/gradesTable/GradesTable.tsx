@@ -8,6 +8,7 @@ import type {
 } from "@types-local/index";
 import styles from "./GradesTable.module.css";
 import GradesRow from "../gradesRow/GradesRow";
+import { useTranslation } from "@hooks/useTranslation";
 interface GradesTableProps {
   grades: StudentGradesByAssignment;
   semesterGrades: SemesterGrade[];
@@ -26,6 +27,7 @@ const GradesTable = ({
   setAssignment
 }: GradesTableProps) => {
   const { activeStudent } = useStudentScope();
+  const { t } = useTranslation();
 
   if (!activeStudent) {
     return null;
@@ -36,18 +38,18 @@ const GradesTable = ({
       <table className={styles.table}>
         <thead className={styles.tableHeader}>
           <tr>
-            <th className={styles.tableHeaderInfo}>Subject</th>
-            <th className={styles.tableHeaderInfo}>Grades</th>
-            <th className={styles.tableHeaderInfo}>Semester average</th>
+            <th className={styles.tableHeaderInfo}>{t("subject")}</th>
+            <th className={styles.tableHeaderInfo}>{t("grades")}</th>
+            <th className={styles.tableHeaderInfo}>{t("semesterAverage")}</th>
             <th className={styles.tableHeaderInfo}>
               {selectedSemester === 1
-                ? "Proposed semester grade"
-                : "Proposed annual grade"}
+                ? t("proposedSemesterGrade")
+                : t("proposedAnnualGrade")}
             </th>
             <th className={styles.tableHeaderInfo}>
               {selectedSemester === 1
-                ? "Final semester grade"
-                : "Final annual grade"}
+                ? t("finalSemesterGrade")
+                : t("finalAnnualGrade")}
             </th>
           </tr>
         </thead>

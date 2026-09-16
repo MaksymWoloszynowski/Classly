@@ -1,5 +1,6 @@
 import { type Dispatch, type SetStateAction } from "react";
 import styles from "./GradesHeaderButtons.module.css";
+import { useTranslation } from "@hooks/useTranslation";
 
 interface GradesHeaderButtonsProps {
   selectedSemester: number;
@@ -10,19 +11,21 @@ const GradesHeaderButtons = ({
   selectedSemester,
   setSelectedSemester,
 }: GradesHeaderButtonsProps) => {
+  const { t } = useTranslation();
+
   return (
     <div className={styles.tableHeader}>
       <button
         className={`${styles.button} ${selectedSemester === 1 && styles.active}`}
         onClick={() => setSelectedSemester(1)}
       >
-        First Semester
+        {t("firstSemester")}
       </button>
       <button
         className={`${styles.button} ${selectedSemester === 2 && styles.active}`}
         onClick={() => setSelectedSemester(2)}
       >
-        Second Semester
+        {t("secondSemester")}
       </button>
     </div>
   );

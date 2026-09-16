@@ -6,18 +6,24 @@ import interactionPlugin from "@fullcalendar/react/interaction"
 import "@fullcalendar/react/skeleton.css";
 import "@fullcalendar/react/themes/monarch/theme.css";
 import "@fullcalendar/react/themes/monarch/palettes/purple.css";
-import type { CalendarController, EventDisplayInfo } from "@fullcalendar/react";
+import type {
+  CalendarController,
+  DateClickInfo,
+  EventClickInfo,
+  EventDisplayInfo,
+  EventInput,
+} from "@fullcalendar/react";
 
 interface CalendarProps {
   controller: CalendarController;
-  events: any[];
+  events: EventInput[];
   action: (start: Date, end: Date) => void;
   renderEventContent: (eventInfo: EventDisplayInfo) => React.ReactNode;
   initialView: string;
   headerToolbar: object;
   setViewType?: (type: string) => void;
-  handleEventClick?: (info: any) => void;
-  handleDateClick?: (info: { dateStr: string }) => void;
+  handleEventClick?: (info: EventClickInfo) => void;
+  handleDateClick?: (info: DateClickInfo) => void;
 }
 
 const Calendar = ({
@@ -61,7 +67,7 @@ const Calendar = ({
         eventContent={renderEventContent}
         headerToolbar={headerToolbar}
         datesSet={(info) => {
-          setViewType && setViewType(info.view.type);
+          if (setViewType) setViewType(info.view.type);
           action(info.start, info.end);
         }}
         eventClick={handleEventClick}

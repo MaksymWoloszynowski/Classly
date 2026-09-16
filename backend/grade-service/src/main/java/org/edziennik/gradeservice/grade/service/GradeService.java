@@ -11,7 +11,6 @@ import org.edziennik.gradeservice.gradeCategory.exception.GradeCategoryNotFoundE
 import org.edziennik.gradeservice.gradeCategory.entity.GradeCategory;
 import org.edziennik.gradeservice.gradeCategory.repository.GradeCategoryRepository;
 import org.edziennik.gradeservice.grpc.SchoolStructureGrpcClient;
-import org.edziennik.gradeservice.security.TeacherAccessService;
 import org.edziennik.schoolstructureservice.grpc.*;
 import org.edziennik.security.AuthenticatedUser;
 import org.springframework.data.jpa.domain.Specification;
@@ -25,13 +24,11 @@ import java.util.stream.Collectors;
 public class GradeService {
     private final SchoolStructureGrpcClient schoolStructureClient;
     private final GradeRepository gradeRepository;
-    private final TeacherAccessService teacherAccessService;
     private final GradeCategoryRepository gradeCategoryRepository;
 
-    public GradeService(GradeRepository gradeRepository, SchoolStructureGrpcClient schoolStructureClient, TeacherAccessService teacherAccessService, GradeCategoryRepository gradeCategoryRepository) {
+    public GradeService(GradeRepository gradeRepository, SchoolStructureGrpcClient schoolStructureClient, GradeCategoryRepository gradeCategoryRepository) {
         this.gradeRepository = gradeRepository;
         this.schoolStructureClient = schoolStructureClient;
-        this.teacherAccessService = teacherAccessService;
         this.gradeCategoryRepository = gradeCategoryRepository;
     }
 
@@ -73,9 +70,6 @@ public class GradeService {
 
     public GradeResponseDTO createGrade(GradeRequestDTO gradeRequestDTO, AuthenticatedUser user) {
         GradeCategory gradeCategory = getGradeCategoryFromRequestDTO(gradeRequestDTO);
-        UUID teachingAssignmentId = gradeCategory.getTeachingAssignmentId();
-
-        teacherAccessService.requireAssignmentAccess(user, teachingAssignmentId);
 
         Grade newGrade = gradeRepository.save(GradeMapper.toModel(gradeRequestDTO, gradeCategory));
 
@@ -84,7 +78,6 @@ public class GradeService {
 
     public GradeResponseDTO updateGrade(UUID gradeId, GradeRequestDTO gradeRequestDTO, AuthenticatedUser user) {
         Grade grade = getGrade(gradeId);
-        teacherAccessService.requireAssignmentAccess(user, grade.getGradeCategory().getTeachingAssignmentId());
 
         grade.setGrade(gradeRequestDTO.getGrade());
         Grade updated = gradeRepository.save(grade);
@@ -94,7 +87,6 @@ public class GradeService {
 
     public void deleteGrade(UUID id, AuthenticatedUser user) {
         Grade grade = getGrade(id);
-        teacherAccessService.requireAssignmentAccess(user, grade.getGradeCategory().getTeachingAssignmentId());
 
         gradeRepository.delete(grade);
     }

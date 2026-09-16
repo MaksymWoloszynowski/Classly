@@ -4,6 +4,7 @@ import type { SemesterGrade } from "../../../types/domain/semesterGrade";
 import GradeButton from "../gradeButton/GradeButton";
 import type { SubjectGrades } from "../../../types/views/subjectGrades";
 import type { Grade } from "@types-local/index";
+import { useTranslation } from "@hooks/useTranslation";
 
 interface GradesTileProps {
   grades: SubjectGrades;
@@ -22,6 +23,7 @@ const GradesTile = ({
   setSelectedGrade,
   setAssignment,
 }: GradesTileProps) => {
+  const { t } = useTranslation();
   const proposedType =
     selectedSemester === 1 ? "PROPOSED_SEMESTER" : "PROPOSED_ANNUAL";
   const finalType = selectedSemester === 1 ? "FINAL_SEMESTER" : "FINAL_ANNUAL";
@@ -42,14 +44,14 @@ const GradesTile = ({
       </div>
       <div className={styles.tileContent}>
         <div className={styles.row}>
-          <div className={styles.column}>Semester average</div>
+          <div className={styles.column}>{t("semesterAverage")}</div>
           <div className={styles.column}>{grades?.average.toPrecision(3)}</div>
         </div>
         <div className={styles.row}>
           <div className={styles.column}>
             {selectedSemester === 1
-              ? "Proposed semester grade"
-              : "Proposed annual grade"}
+              ? t("proposedSemesterGrade")
+              : t("proposedAnnualGrade")}
           </div>
           <div className={styles.column}>
             {
@@ -64,8 +66,8 @@ const GradesTile = ({
         <div className={styles.row}>
           <div className={styles.column}>
             {selectedSemester === 1
-              ? "Final semester grade"
-              : "Final annual grade"}
+              ? t("finalSemesterGrade")
+              : t("finalAnnualGrade")}
           </div>
           <div className={styles.column}>
             {

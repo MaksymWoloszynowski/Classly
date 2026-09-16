@@ -1,13 +1,5 @@
 .overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  padding: 1rem;
+  composes: overlay from "@styles/Modal.module.css";
   background: rgba(0, 0, 0, 0.35);
 }
 
@@ -24,21 +16,19 @@
 }
 
 .header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  composes: header from "@styles/Modal.module.css";
+  margin-bottom: 0;
 }
 
 .close {
+  composes: close from "@styles/Modal.module.css";
   width: 2rem;
   height: 2rem;
 
-  border: 0;
   border-radius: 50%;
-  cursor: pointer;
 }
 
-.details h2 {
+.subject {
   margin: 0 0 1.5rem;
   font-size: 1.5rem;
 }
@@ -72,9 +62,7 @@
 }
 
 .footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.75rem;
+  composes: actions from "@styles/Modal.module.css";
   margin-top: 2rem;
 }
 
@@ -125,4 +113,8 @@
 
 .homework {
   border-color: var(--color-assessment-homework);
+}
+
+.classTest {
+  border-color: var(--color-assessment-class-test);
 }

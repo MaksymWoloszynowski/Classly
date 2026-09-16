@@ -1,15 +1,24 @@
+import { useTranslation } from "@hooks/useTranslation";
 import type { AssessmentType, AttendanceType } from "./enums";
 
-export const assessmentTypeLabels: Record<AssessmentType, string> = {
-  TEST: "Test",
-  QUIZ: "Quiz",
-  CLASS_TEST: "Class test",
-  HOMEWORK: "Homework",
+export const useAssessmentTypeLabels = (): Record<AssessmentType, string> => {
+  const { t } = useTranslation();
+
+  return {
+    TEST: t("test"),
+    QUIZ: t("quiz"),
+    CLASS_TEST: t("classTest"),
+    HOMEWORK: t("homework"),
+  };
 };
 
-export const attendanceTypeLabels: Record<AttendanceType, string> = {
-  PRESENT: "Present",
-  TARDY: "Tardy",
-  ABSENT: "Absent",
-  UNEXCUSED_ABSENCE: "Unexcused Absence",
+export const useAttendanceTypeLabels = (): Record<AttendanceType, string> => {
+  const { t } = useTranslation();
+
+  return {
+    PRESENT: t("present"),
+    TARDY: t("tardy"),
+    ABSENT: t("absent"),
+    UNEXCUSED_ABSENCE: t("unexcusedAbsence"),
+  };
 };

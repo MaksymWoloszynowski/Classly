@@ -1,8 +1,9 @@
-import type { SemesterGrade, TeachingAssignment } from "@types-local/index";
+import type { SemesterGrade, SemesterGradeType, TeachingAssignment } from "@types-local/index";
 import type { GradeCategory, GradeSummary } from "@types-local/index";
 import TeacherGradeCell from "../teacherGradeCell/TeacherGradeCell";
 import styles from "./TeacherGradesTable.module.css";
 import type { StudentSummary } from "@types-local/domain/studentSummary";
+import { useTranslation } from "@hooks/useTranslation";
 
 type TeacherGradesTableProps = {
   students: StudentSummary[];
@@ -10,11 +11,14 @@ type TeacherGradesTableProps = {
   semesterGrades: SemesterGrade[];
   assignment: TeachingAssignment;
   semester: number;
-  setSelectedGrade: (grade: any) => void;
-  setAssignment: (assignment: TeachingAssignment) => void;
   onSaved: (categoryId: string, studentId: string, grade: GradeSummary) => void;
-  gradeToEdit: any
-  setGradeToEdit: (grade: any) => void
+  onDeleted: (categoryId: string, gradeId: string) => void;
+  onSemesterGradeEdit: (
+    studentId: string,
+    type: SemesterGradeType,
+    grade?: SemesterGrade,
+  ) => void;
+  onCategoryEdit: (category: GradeCategory) => void;
 };
 
 const TeacherGradesTable = ({
@@ -23,12 +27,12 @@ const TeacherGradesTable = ({
   semesterGrades,
   assignment,
   semester,
-  setSelectedGrade,
-  setAssignment,
   onSaved,
-  gradeToEdit,
-  setGradeToEdit
+  onDeleted,
+  onSemesterGradeEdit,
+  onCategoryEdit,
 }: TeacherGradesTableProps) => {
+  const { t } = useTranslation();
   const isFirstSemester = semester === 1;
   const proposedType = isFirstSemester
     ? "PROPOSED_SEMESTER"
@@ -56,25 +60,29 @@ const TeacherGradesTable = ({
         grade.studentId === studentId &&
         grade.teachingAssignmentId === assignment.id &&
         grade.type === type,
-    )?.grade ?? "-";
+    )?.grade ?? "+";
 
   return (
     <div className={styles.tableContainer}>
       <table className={styles.teacherTable}>
         <thead>
           <tr>
-            <th className={styles.numberColumn}>No.</th>
-            <th className={styles.studentColumn}>Student</th>
+              <th className={styles.numberColumn}>{t("number")}</th>
+              <th className={styles.studentColumn}>{t("student")}</th>
             {categories.map((category) => (
               <th key={category.id} className={styles.categoryColumn}>
-                <span>
+                <button
+                  type="button"
+                  className={styles.categoryButton}
+                  onClick={() => onCategoryEdit(category)}
+                >
                   {category.description || category.type.replace("_", " ")}
-                </span>
+                </button>
               </th>
             ))}
-            <th>Average</th>
-            <th>Proposed</th>
-            <th>Final</th>
+              <th>{t("average")}</th>
+              <th>{t("proposedGrade")}</th>
+              <th>{t("finalGrade")}</th>
           </tr>
         </thead>
         <tbody>
@@ -90,27 +98,58 @@ const TeacherGradesTable = ({
                   student={student}
                   category={category}
                   assignment={assignment}
-                  setSelectedGrade={setSelectedGrade}
                   onSaved={onSaved}
-                  setAssignment={setAssignment}
-                  setGradeToEdit={setGradeToEdit}
-                  gradeToEdit={gradeToEdit}
+                  onDeleted={onDeleted}
                 />
               ))}
               <td className={styles.summaryCell}>{getAverage(student.id)}</td>
               <td className={styles.summaryCell}>
-                {getSemesterGrade(student.id, proposedType)}
+                <button
+                  type="button"
+                  className={styles.semesterGradeButton}
+                  onClick={() =>
+                    onSemesterGradeEdit(
+                      student.id,
+                      proposedType,
+                      semesterGrades.find(
+                        (grade) =>
+                          grade.studentId === student.id &&
+                        grade.teachingAssignmentId === assignment.id &&
+                          grade.type === proposedType,
+                      ),
+                    )
+                  }
+                >
+                  {getSemesterGrade(student.id, proposedType)}
+                </button>
               </td>
               <td className={styles.summaryCell}>
-                {getSemesterGrade(student.id, finalType)}
+                <button
+                  type="button"
+                  className={styles.semesterGradeButton}
+                  onClick={() =>
+                    onSemesterGradeEdit(
+                      student.id,
+                      finalType,
+                      semesterGrades.find(
+                        (grade) =>
+                          grade.studentId === student.id &&
+                        grade.teachingAssignmentId === assignment.id &&
+                          grade.type === finalType,
+                      ),
+                    )
+                  }
+                >
+                  {getSemesterGrade(student.id, finalType)}
+                </button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      {students.length === 0 && (
-        <p className={styles.emptyState}>No students in group.</p>
-      )}
+        {students.length === 0 && (
+          <p className={styles.emptyState}>{t("noStudentsInGroup")}</p>
+        )}
     </div>
   );
 };

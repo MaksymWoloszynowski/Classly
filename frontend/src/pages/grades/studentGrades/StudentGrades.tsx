@@ -3,6 +3,7 @@ import GradesHeaderButtons from "@components/grades/gradesHeaderButtons/GradesHe
 import GradesTable from "@components/grades/gradesTable/GradesTable";
 import GradesTileContainer from "@components/grades/gradesTileContainer/GradesTileContainer";
 import LoadingOverlay from "@components/loadingOverlay/LoadingOverlay";
+import ErrorMessage from "@components/errorMessage/ErrorMessage";
 import useStudentScope from "@hooks/useStudentScope";
 import { useMediaQuery } from "@mui/material";
 import {
@@ -15,6 +16,7 @@ import {
 import { useEffect, useState } from "react";
 import styles from "../Grades.module.css";
 import GradeModal from "@components/grades/gradeModal/GradeModal";
+import { useTranslation } from "../../../hooks/useTranslation";
 
 const StudentGrades = () => {
   const isMobile = useMediaQuery("(max-width:1000px)");
@@ -26,8 +28,10 @@ const StudentGrades = () => {
   const [semesterGrades, setSemesterGrades] = useState<SemesterGrade[]>([]);
   const [annualGrades, setAnnualGrades] = useState<SemesterGrade[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
   const { activeStudent, isLoadingStudent, teachingAssignments } =
     useStudentScope();
+  const { t } = useTranslation();
 
   const [selectedGrade, setSelectedGrade] = useState<Grade | null>(null);
   const [assignment, setAssignment] = useState<TeachingAssignment | null>(null);
@@ -114,6 +118,7 @@ const StudentGrades = () => {
         setAnnualGrades(annualGrades);
       } catch (error) {
         console.error(error);
+        setError("Grades could not be loaded.");
       } finally {
         setIsLoading(false);
       }
@@ -125,7 +130,8 @@ const StudentGrades = () => {
   return (
     <div>
       {(isLoading || isLoadingStudent) && <LoadingOverlay />}
-      <div className={styles.pageTitle}>Grades</div>
+      {error && <ErrorMessage message={error} />}
+      <div className={styles.pageTitle}>{t("grades")}</div>
       <div className={styles.page}>
         <GradesHeaderButtons
           setSelectedSemester={setSelectedSemester}

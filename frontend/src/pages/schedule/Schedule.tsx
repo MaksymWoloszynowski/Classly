@@ -1,5 +1,6 @@
 import {
   useCalendarController,
+  type EventClickInfo,
   type EventDisplayInfo,
 } from "@fullcalendar/react";
 import api from "../../api/api";
@@ -9,20 +10,24 @@ import useAuth from "../../hooks/useAuth";
 import useStudentScope from "../../hooks/useStudentScope";
 import type { Schedule } from "../../types/domain/schedule";
 import LoadingOverlay from "../../components/loadingOverlay/LoadingOverlay";
+import ErrorMessage from "../../components/errorMessage/ErrorMessage";
 import styles from "./Schedule.module.css";
 import ScheduleEvent from "@components/schedule/scheduleEvent/ScheduleEvent";
 import SessionRealizationModal from "@components/sessions/sessionRealizationModal/SessionRealizationModal";
 import type { Session } from "../../types/domain/session";
+import { useTranslation } from "../../hooks/useTranslation";
 
 const SchedulePage = () => {
   const [schedule, setSchedule] = useState<Schedule[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
   const [sessions, setSessions] = useState<Session[]>([]);
   const [selectedOccurrence, setSelectedOccurrence] = useState<Schedule | null>(null);
 
   const controller = useCalendarController();
   const { auth } = useAuth();
   const { activeStudent } = useStudentScope();
+  const { t } = useTranslation();
 
   const fetchSchedule = async (start?: Date, end?: Date) => {
     const viewStart = start ?? controller.view?.activeStart;
@@ -31,6 +36,7 @@ const SchedulePage = () => {
     if (!viewStart || !viewEnd) return;
 
     setLoading(true);
+    setError(null);
     try {
       const from = viewStart.toLocaleDateString("en-CA");
       const to = viewEnd.toLocaleDateString("en-CA");
@@ -50,6 +56,7 @@ const SchedulePage = () => {
       setSessions(sessionsResponse.data);
     } catch (error) {
       console.error("Error fetching schedule:", error);
+      setError("The schedule could not be loaded.");
     } finally {
       setLoading(false);
     }
@@ -83,8 +90,11 @@ const SchedulePage = () => {
     return <ScheduleEvent eventInfo={eventInfo} />;
   };
 
-  const handleEventClick = (info: { event: { extendedProps: { occurrence: Schedule; realized: boolean } } }) => {
-    const { occurrence } = info.event.extendedProps;
+  const handleEventClick = (info: EventClickInfo) => {
+    const { occurrence } = info.event.extendedProps as {
+      occurrence: Schedule;
+      realized: boolean;
+    };
     const cancelled = occurrence.override?.type === "CANCELLED";
     if (auth?.role === "ROLE_TEACHER" && occurrence.scheduleId && !cancelled) {
       setSelectedOccurrence(occurrence);
@@ -103,8 +113,9 @@ const SchedulePage = () => {
   return (
     <>
       {loading && <LoadingOverlay />}
+      {error && <ErrorMessage message={error} />}
       <div className={styles.page}>
-        <div className={styles.pageTitle}>Schedule</div>
+        <div className={styles.pageTitle}>{t("schedule")}</div>
         <div className={styles.calendar}>
         <Calendar
           controller={controller}

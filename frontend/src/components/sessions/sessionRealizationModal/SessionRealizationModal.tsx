@@ -9,7 +9,9 @@ import { attendanceTypes, type AttendanceType } from "../../../types/enums";
 import type { Group } from "../../../types/domain/group";
 import type { TeachingAssignment } from "../../../types/domain/teachingAssignment";
 import styles from "./SessionRealizationModal.module.css";
-import { attendanceTypeLabels } from "@types-local/labels";
+import ErrorMessage from "@components/errorMessage/ErrorMessage";
+import { useTranslation } from "../../../hooks/useTranslation";
+import { useAttendanceTypeLabels } from "@types-local/labels";
 
 type SessionRealizationModalProps = {
   occurrence: Schedule;
@@ -32,7 +34,9 @@ const SessionRealizationModal = ({
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
+  const { t } = useTranslation();
+  const attendanceTypeLabels = useAttendanceTypeLabels();
+ 
   useEffect(() => {
     const load = async () => {
       try {
@@ -71,7 +75,7 @@ const SessionRealizationModal = ({
 
     if (!occurrence.scheduleId) {
       setError(
-        "Nie można zrealizować zajęć, które nie pochodzą z regularnego planu.",
+        "Sessions that are not part of the regular schedule cannot be realized.",
       );
       return;
     }
@@ -110,7 +114,7 @@ const SessionRealizationModal = ({
       });
       onSaved(response.data);
       onClose();
-    } catch (requestError: unknown) {
+    } catch {
       setError("Failed to save realization.");
     } finally {
       setSubmitting(false);
@@ -136,14 +140,14 @@ const SessionRealizationModal = ({
             type="button"
             className={styles.close}
             onClick={onClose}
-            aria-label="Close"
+            aria-label={t("close")}
           >
             <X />
           </button>
         </div>
 
         <label className={styles.label} htmlFor="session-description">
-          Description (optional)
+          {t("description")} ({t("optional")})
         </label>
         <textarea
           id="session-description"
@@ -151,13 +155,12 @@ const SessionRealizationModal = ({
           value={description}
           onChange={(event) => setDescription(event.target.value)}
           maxLength={255}
-          required
           autoFocus
         />
 
-        <div className={styles.attendanceTitle}>Attendance</div>
+        <div className={styles.attendanceTitle}>{t("attendanceLabel")}</div>
         {loading ? (
-          <p>Loading students...</p>
+          <p>{t("loadingStudents")}</p>
         ) : (
           <div className={styles.attendance}>
             {students.map((student) => (
@@ -185,11 +188,11 @@ const SessionRealizationModal = ({
           </div>
         )}
 
-        {error && <p className={styles.error}>{error}</p>}
+        {error && <ErrorMessage message={error} />}
 
         <div className={styles.actions}>
           <button type="button" className={styles.cancel} onClick={onClose}>
-            Cancel
+            {t("cancel")}
           </button>
           <button
             type="submit"
@@ -199,8 +202,8 @@ const SessionRealizationModal = ({
             {submitting
               ? "Saving..."
               : session
-                ? "Save Changes"
-                : "Mark as Realized"}
+                ? t("saveChanges")
+                : t("markRealized")}
           </button>
         </div>
       </form>

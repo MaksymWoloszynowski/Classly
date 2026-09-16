@@ -4,15 +4,18 @@ import type { Assessment } from "@types-local/index";
 import { useEffect, useState } from "react";
 import {
   useCalendarController,
+  type EventClickInfo,
   type EventDisplayInfo,
 } from "@fullcalendar/react";
 import useAuth from "@hooks/useAuth";
 import api from "@api/api";
 import LoadingOverlay from "@components/loadingOverlay/LoadingOverlay";
+import ErrorMessage from "@components/errorMessage/ErrorMessage";
 import Calendar from "@components/calendar/Calendar";
 import AssessmentModal from "@components/assessment/assessmentModal/AssessmentModal";
 import AssessmentCreateModal from "@components/assessment/assessmentCreateModal/AssessmentCreateModal";
 import { Plus, X } from "lucide-react";
+import { useTranslation } from "../../../hooks/useTranslation";
 
 const typeClass: Record<AssessmentType, string> = {
   TEST: styles.test,
@@ -31,6 +34,7 @@ type AssessmentEventProps = {
 const TeacherAssessments = () => {
   const [assessments, setAssessments] = useState<Assessment[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   const [selectedAssessment, setSelectedAssessment] =
     useState<Assessment | null>(null);
@@ -46,6 +50,7 @@ const TeacherAssessments = () => {
 
   const controller = useCalendarController();
   const { auth } = useAuth();
+  const { t } = useTranslation();
 
   const assignments = auth?.teacher?.teachingAssignments ?? [];
   const activeAssignmentId = selectedAssignmentId || assignments[0]?.id || "";
@@ -70,6 +75,7 @@ const TeacherAssessments = () => {
 
     try {
       setLoading(true);
+      setError(null);
 
       const endpoint = addAssessment
         ? `/api/assessment/student/date?groupId=${selectedAssignment?.groupId}&from=${startFormat}&to=${endFormat}`
@@ -80,12 +86,13 @@ const TeacherAssessments = () => {
       setAssessments(response.data);
     } catch (error) {
       console.error("Error fetching assessments:", error);
+      setError("Assessments could not be loaded.");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleEventClick = (info: EventDisplayInfo) => {
+  const handleEventClick = (info: EventClickInfo) => {
     const assessment = assessments.find((item) => item.id === info.event.id);
 
     if (assessment) {
@@ -135,6 +142,7 @@ const TeacherAssessments = () => {
       setSelectedAssessment(null);
     } catch (error) {
       console.error("Error deleting assessment:", error);
+      setError("The assessment could not be deleted.");
     } finally {
       setLoading(false);
     }
@@ -161,9 +169,10 @@ const TeacherAssessments = () => {
   return (
     <>
       {loading && <LoadingOverlay />}
+      {error && <ErrorMessage message={error} />}
 
       <div className={styles.page}>
-        <div className={styles.pageTitle}>Assessments</div>
+        <div className={styles.pageTitle}>{t("assessments")}</div>
 
         <div className={styles.assessmentControls}>
           {!addAssessment ? (
@@ -175,12 +184,12 @@ const TeacherAssessments = () => {
               }}
             >
               <Plus />
-              Add assessment
+              {t("addAssessment")}
             </button>
           ) : (
             <>
               <label className={styles.assignmentPicker}>
-                <span>Subject and group</span>
+                <span>{t("subjectAndGroup")}</span>
 
                 <select
                   value={activeAssignmentId}
@@ -192,7 +201,7 @@ const TeacherAssessments = () => {
                 >
                   {assignments.map((assignment) => (
                     <option key={assignment.id} value={assignment.id}>
-                      {assignment.subjectName} · Group {assignment.groupName}
+                      {assignment.subjectName} · {t("group")} {assignment.groupName}
                     </option>
                   ))}
                 </select>
@@ -205,9 +214,9 @@ const TeacherAssessments = () => {
                     setAddAssessment(false);
                     setSelectedDate(null);
                   }}
-                  aria-label="Close add assessment mode"
+                  aria-label={t("closeAddAssessmentMode")}
                 >
-                  <span>Cancel</span>
+                  <span>{t("cancel")}</span>
                   <X size={18} />
                 </button>
               </div>

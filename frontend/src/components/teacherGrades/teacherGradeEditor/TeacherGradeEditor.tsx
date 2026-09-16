@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import api from "@api/api";
 import type { Grade, GradeCategory, GradeSummary } from "@types-local/index";
 import styles from "./TeacherGradeEditor.module.css";
 import type { StudentSummary } from "@types-local/domain/studentSummary";
+import ErrorMessage from "@components/errorMessage/ErrorMessage";
 
 type TeacherGradeEditorProps = {
   student: StudentSummary;
@@ -23,17 +25,32 @@ const TeacherGradeEditor = ({
   const isEditing = Boolean(grade);
 
   const [saving, setSaving] = useState(false);
-  const [gradeValue, setGradeValue] = useState(grade?.grade || "");
+  const [gradeValue, setGradeValue] = useState<number | string>(
+    grade?.grade ?? "",
+  );
+  const [error, setError] = useState<string | null>(null);
 
   const submit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const numericGrade = Number(gradeValue);
+
+    if (
+      gradeValue === "" ||
+      Number.isNaN(numericGrade) ||
+      numericGrade < 0 ||
+      numericGrade > 100
+    ) {
+      setError("Grade must be between 0 and 100.");
+      return;
+    }
 
     try {
       setSaving(true);
+      setError(null);
 
       const payload = {
         gradeCategoryId: category.id,
-        grade: gradeValue,
+        grade: numericGrade,
         studentId: student.id,
       };
 
@@ -51,12 +68,13 @@ const TeacherGradeEditor = ({
       onClose();
     } catch (error) {
       console.error(error);
+      setError("Error saving grade.");
     } finally {
       setSaving(false);
     }
   };
 
-  return (
+  return createPortal(
     <div className={styles.overlay} onClick={onClose}>
       <form
         className={styles.editor}
@@ -65,7 +83,7 @@ const TeacherGradeEditor = ({
       >
         <div className={styles.editorHeader}>
           <div>
-            {student.firstName} {student.lastName}
+            {student.lastName} {student.firstName}
             <span>
               {category.description || category.type.replace("_", " ")}
             </span>
@@ -91,6 +109,7 @@ const TeacherGradeEditor = ({
             onChange={(event) => setGradeValue(event.target.value)}
           />
         </label>
+        {error && <ErrorMessage message={error} />}
 
         <div className={styles.editorActions}>
           <button
@@ -110,7 +129,8 @@ const TeacherGradeEditor = ({
           </button>
         </div>
       </form>
-    </div>
+    </div>,
+    document.body,
   );
 };
 

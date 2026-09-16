@@ -2,8 +2,10 @@ import type { Assessment, AssessmentType } from "@types-local/index";
 import { X } from "lucide-react";
 import styles from "./AssessmentModal.module.css";
 import { formatDate } from "@utils/date";
-import { assessmentTypeLabels } from "@types-local/labels";
 import useTeacher from "@hooks/useTeacher";
+import { createPortal } from "react-dom";
+import { useTranslation } from "../../../hooks/useTranslation";
+import { useAssessmentTypeLabels } from "@types-local/labels";
 
 const typeClass: Record<AssessmentType, string> = {
   TEST: styles.test,
@@ -26,8 +28,10 @@ const AssessmentModal = ({
   onUpdate,
 }: AssessmentModalProps) => {
   const { isAssignmentTeacher } = useTeacher();
+  const { t } = useTranslation();
+  const assessmentTypeLabels = useAssessmentTypeLabels();
 
-  return (
+  return createPortal(
     <div className={styles.overlay} onClick={() => setSelectedAssessment(null)}>
       <div
         className={`${styles.details} ${typeClass[selectedAssessment.type]}`}
@@ -42,23 +46,23 @@ const AssessmentModal = ({
             type="button"
             className={styles.close}
             onClick={() => setSelectedAssessment(null)}
-            aria-label="Close"
+            aria-label={t("close")}
           >
             <X />
           </button>
         </div>
 
-        <h2>{selectedAssessment.subjectName}</h2>
+        <div className={styles.subject}>{selectedAssessment.subjectName} · {t("group")} {selectedAssessment.groupName} </div>
 
         <div className={styles.info}>
           <div>
-            <span>Date</span>
+            <span>{t("date")}</span>
 
             <div>{formatDate(new Date(selectedAssessment.dateDue))}</div>
           </div>
 
           <div>
-            <span>Teacher</span>
+            <span>{t("teacher")}</span>
 
             <div>{selectedAssessment.teacherName}</div>
           </div>
@@ -66,7 +70,7 @@ const AssessmentModal = ({
 
         {selectedAssessment.description && (
           <div className={styles.description}>
-            <span>Description</span>
+            <span>{t("description")}</span>
 
             <p>{selectedAssessment.description}</p>
           </div>
@@ -75,7 +79,7 @@ const AssessmentModal = ({
         {isAssignmentTeacher(selectedAssessment.teachingAssignmentId) && (
           <div className={styles.footer}>
             <button type="button" className={styles.button} onClick={onUpdate}>
-              Update
+              {t("update")}
             </button>
 
             <button
@@ -83,12 +87,13 @@ const AssessmentModal = ({
               className={`${styles.button} ${styles.delete}`}
               onClick={onDelete}
             >
-              Delete
+              {t("delete")}
             </button>
           </div>
         )}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 };
 

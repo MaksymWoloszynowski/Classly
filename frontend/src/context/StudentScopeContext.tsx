@@ -8,6 +8,7 @@ import type { TeachingAssignment } from "../types/domain/teachingAssignment";
 type StudentScopeContextValue = {
   activeStudent: Student | null;
   isLoadingStudent: boolean;
+  error: string | null;
   selectStudent: (studentId: string) => void;
   availableStudents: StudentSummary[];
   teachingAssignments: TeachingAssignment[];
@@ -20,6 +21,7 @@ export const StudentScopeProvider = ({ children }: { children: React.ReactNode }
   const [activeStudent, setActiveStudent] = useState<Student | null>(null);
   const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
   const [isLoadingStudent, setIsLoadingStudent] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [teachingAssignments, setTeachingAssignmnets] = useState<TeachingAssignment[]>([]);
 
   const availableStudents = auth?.parent?.students ?? [];
@@ -49,12 +51,14 @@ export const StudentScopeProvider = ({ children }: { children: React.ReactNode }
 
     const loadStudent = async () => {
       setIsLoadingStudent(true);
+      setError(null);
       try {
         const studentResponse = await api.get<Student>(`/api/student/${selectedStudentId}`);
         setActiveStudent(studentResponse.data);
       } catch (error) {
         console.error("Error fetching selected student:", error);
         setActiveStudent(null);
+        setError("The student profile could not be loaded.");
       } finally {
         setIsLoadingStudent(false);
       }
@@ -67,6 +71,7 @@ export const StudentScopeProvider = ({ children }: { children: React.ReactNode }
   if (!activeStudent?.groupId) return;
 
   const loadAssignments = async () => {
+    setError(null);
     try {
       const response = await api.get<TeachingAssignment[]>(
         `/api/teaching-assignment?groupId=${activeStudent.groupId}`
@@ -76,6 +81,7 @@ export const StudentScopeProvider = ({ children }: { children: React.ReactNode }
     } catch (error) {
       console.error("Error fetching teaching assignments:", error);
       setTeachingAssignmnets([]);
+      setError("The student's subjects could not be loaded.");
     }
   };
 
@@ -87,6 +93,7 @@ export const StudentScopeProvider = ({ children }: { children: React.ReactNode }
       value={{
         activeStudent,
         isLoadingStudent,
+        error,
         selectStudent: setSelectedStudentId,
         availableStudents,
         teachingAssignments,

@@ -4,6 +4,11 @@ import api from "../../api/api";
 import useAuth from "../../hooks/useAuth";
 import { Link, useNavigate } from "react-router-dom";
 import LoadingOverlay from "../../components/loadingOverlay/LoadingOverlay";
+import ErrorMessage from "../../components/errorMessage/ErrorMessage";
+import axios from "axios";
+import useLocalePath from "../../hooks/useLocalePath";
+import { useTranslation } from "../../hooks/useTranslation";
+import TopBar from "../../components/topBar/TopBar";
 
 const Login = () => {
   const { setAuth } = useAuth();
@@ -11,7 +16,10 @@ const Login = () => {
   const [password, setPassword] = useState<string>("");
   const emailRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
+  const localePath = useLocalePath();
   const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     emailRef.current?.focus();
@@ -19,17 +27,25 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
+    setError(null);
     try {
       await api.post("/auth/login", { email, password });
-      setLoading(true);
       const me = await api.get("/api/my-profile");
       setAuth(me.data);
 
       navigate(
-        me.data.role === "ROLE_TEACHER" ? "/teacher/home" : "/student/home",
+        me.data.role === "ROLE_TEACHER"
+          ? localePath("/teacher/dashboard")
+          : localePath("/student/dashboard"),
       );
     } catch (error) {
       console.error("Error during login:", error);
+      setError(
+        axios.isAxiosError(error)
+          ? (error.response?.data?.message ?? t("loginFailed"))
+          : "Login failed.",
+      );
     } finally {
       setLoading(false);
     }
@@ -37,12 +53,15 @@ const Login = () => {
 
   return (
     <section className={styles.page}>
-      {loading && <LoadingOverlay />}  
-      <div className={styles.container}>
-        <h1 className={styles.title}>Sign In</h1>
-        <form className={styles.form} onSubmit={handleSubmit}>
+      <TopBar />
+      <div className={styles.formArea}>
+        {loading && <LoadingOverlay />}
+        <div className={styles.container}>
+          {error && <ErrorMessage message={error} />}
+          <h1 className={styles.title}>{t("login")}</h1>
+          <form className={styles.form} onSubmit={handleSubmit}>
           <label className={styles.label} htmlFor="email">
-            Email:
+            {t("email")}:
           </label>
           <input
             type="email"
@@ -55,7 +74,7 @@ const Login = () => {
           />
 
           <label className={styles.label} htmlFor="password">
-            Password:
+            {t("password")}:
           </label>
           <input
             type="password"
@@ -66,10 +85,11 @@ const Login = () => {
             className={styles.input}
           />
           <button className={styles.button}>Sign In</button>
-        </form>
+          </form>
 
-        <div className={styles.footer_text}>
-          <Link to="/register">Create an account</Link>
+          <div className={styles.footerText}>
+            <Link to={localePath("/register")}>{t("register")}</Link>
+          </div>
         </div>
       </div>
     </section>

@@ -1,28 +1,31 @@
 import { useEffect, useState } from "react";
 
-import type { Schedule } from "../../types/domain/schedule";
-import type { Assessment } from "../../types/domain/assessment";
-import type { Attendance } from "../../types/domain/attendance";
+import type { Schedule } from "../../../types/domain/schedule";
+import type { Assessment } from "../../../types/domain/assessment";
+import type { Attendance } from "../../../types/domain/attendance";
 
-import api from "../../api/api";
-import useStudentScope from "../../hooks/useStudentScope";
+import api from "../../../api/api";
+import useStudentScope from "../../../hooks/useStudentScope";
 
 import Calendar from "@components/calendar/Calendar";
 import LoadingOverlay from "@components/loadingOverlay/LoadingOverlay";
+import ErrorMessage from "@components/errorMessage/ErrorMessage";
 import ScheduleEvent from "@components/schedule/scheduleEvent/ScheduleEvent";
 
-import styles from "./Dashboard.module.css";
+import styles from "../Dashboard.module.css";
 import {
   useCalendarController,
   type EventDisplayInfo,
 } from "@fullcalendar/react";
 import DashboardGrades from "@components/dashboard/dashboardGrades/DashboardGrades";
-import type { LatestGradesByTeachingAssignment } from "../../types";
+import type { LatestGradesByTeachingAssignment } from "../../../types";
 import DashboardAttendanceItem from "@components/dashboard/dashboardAttendance/DashboardAttendanceItem";
 import DashboardAssessmentItem from "@components/dashboard/dashboardAssessment/DashboardAssessmentItem";
+import { useTranslation } from "../../../hooks/useTranslation";
 
-const Dashboard = () => {
+const StudentDashboard = () => {
   const { activeStudent } = useStudentScope();
+  const { t } = useTranslation();
 
   const [schedule, setSchedule] = useState<Schedule[]>([]);
   const [grades, setGrades] = useState<LatestGradesByTeachingAssignment | null>(
@@ -32,6 +35,7 @@ const Dashboard = () => {
   const [attendance, setAttendance] = useState<Attendance[]>([]);
 
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const controller = useCalendarController();
   const today = new Date();
@@ -53,6 +57,7 @@ const Dashboard = () => {
       setSchedule(response.data);
     } catch (error) {
       console.error("Error fetching schedule:", error);
+      setError("The schedule could not be loaded.");
     }
   };
 
@@ -68,6 +73,7 @@ const Dashboard = () => {
       setAssessments(response.data);
     } catch (error) {
       console.error("Error fetching assessments:", error);
+      setError("Assessments could not be loaded.");
     }
   };
 
@@ -83,6 +89,7 @@ const Dashboard = () => {
       setGrades(response.data);
     } catch (error) {
       console.error("Error fetching grades:", error);
+      setError("Grades could not be loaded.");
     }
   };
 
@@ -98,6 +105,7 @@ const Dashboard = () => {
       setAttendance(response.data);
     } catch (error) {
       console.error("Error fetching attendance:", error);
+      setError("Attendance could not be loaded.");
     }
   };
 
@@ -107,6 +115,7 @@ const Dashboard = () => {
     }
 
     setLoading(true);
+    setError(null);
 
     Promise.all([
       fetchSchedule(),
@@ -117,10 +126,6 @@ const Dashboard = () => {
       setLoading(false);
     });
   }, [activeStudent?.id]);
-
-  /*
-   * SCHEDULE
-   */
 
   const events = schedule.map((item) => {
     const override = item.override;
@@ -162,12 +167,13 @@ const Dashboard = () => {
   return (
     <>
       {loading && <LoadingOverlay />}
+      {error && <ErrorMessage message={error} />}
 
-      <div className={styles.pageTitle}>Dashboard</div>
+      <div className={styles.pageTitle}>{t("dashboard")}</div>
 
       <div className={styles.dashboard}>
         <div className={`${styles.card} ${styles.schedule}`}>
-          <div className={styles.cardTitle}>Schedule</div>
+          <div className={styles.cardTitle}>{t("schedule")}</div>
           <Calendar
             controller={controller}
             events={events}
@@ -181,31 +187,34 @@ const Dashboard = () => {
         </div>
 
         <div className={`${styles.card} ${styles.grades}`}>
-          <div className={styles.cardTitle}>Latest grades</div>
+          <div className={styles.cardTitle}>{t("grades")}</div>
 
           {grades ? (
             <DashboardGrades grades={grades} />
           ) : (
-            <div className={styles.empty}>No grades</div>
+            <div className={styles.empty}>{t("gradesLoadError")}</div>
           )}
         </div>
 
         <div className={`${styles.card} ${styles.assessments}`}>
-          <div className={styles.cardTitle}>Upcoming assessments</div>
+          <div className={styles.cardTitle}>{t("assessments")}</div>
 
           {assessments.length > 0 ? (
             <div className={styles.assessmentList}>
               {assessments.map((assessment) => (
-                <DashboardAssessmentItem key={assessment.id} assessment={assessment} />
+                <DashboardAssessmentItem
+                  key={assessment.id}
+                  assessment={assessment}
+                />
               ))}
             </div>
           ) : (
-            <div className={styles.empty}>No upcoming assessments</div>
+            <div className={styles.empty}>{t("noUpcomingAssessments")}</div>
           )}
         </div>
 
         <div className={`${styles.card} ${styles.attendance}`}>
-          <div className={styles.cardTitle}>Attendance — last 3 days</div>
+          <div className={styles.cardTitle}>{t("attendance")}</div>
 
           {attendance.length > 0 ? (
             <div className={styles.attendanceDays}>
@@ -215,14 +224,17 @@ const Dashboard = () => {
 
                   <div className={styles.attendanceList}>
                     {items.map((item) => (
-                      <DashboardAttendanceItem key={item.id} attendance={item} />
+                      <DashboardAttendanceItem
+                        key={item.id}
+                        attendance={item}
+                      />
                     ))}
                   </div>
                 </div>
               ))}
             </div>
           ) : (
-            <div className={styles.empty}>No attendance issues</div>
+            <div className={styles.empty}>{t("noAttendanceIssues")}</div>
           )}
         </div>
       </div>
@@ -230,4 +242,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default StudentDashboard;

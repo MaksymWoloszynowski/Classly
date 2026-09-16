@@ -1,27 +1,15 @@
 .overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-  background: rgba(0, 0, 0, 0.4);
+  composes: overlay from "@styles/Modal.module.css";
 }
 
 .modal {
+  composes: modal from "@styles/Modal.module.css";
   width: min(32rem, 100%);
-  padding: 1.5rem;
-  border-radius: 0.75rem;
-  background: var(--color-surface);
-  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
 }
 
 .header {
-  display: flex;
+  composes: header from "@styles/Modal.module.css";
   align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem;
   margin-bottom: 1.5rem;
 }
 
@@ -34,6 +22,7 @@
   font-size: 0.9rem;
 }
 .close {
+  composes: close from "@styles/Modal.module.css";
   color: var(--color-text-secondary);
 }
 .label {
@@ -72,16 +61,12 @@
 }
 
 .error {
-  margin-top: 0.75rem;
-  color: var(--color-grade-red);
+  composes: error from "@styles/Modal.module.css";
   font-size: 0.9rem;
 }
 
 .actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.75rem;
-  margin-top: 1.5rem;
+  composes: actions from "@styles/Modal.module.css";
 }
 .cancel,
 .submit {
