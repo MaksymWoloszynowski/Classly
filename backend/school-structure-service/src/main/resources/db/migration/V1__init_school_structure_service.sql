@@ -1,5 +1,6 @@
 CREATE TABLE teachers (
     id UUID PRIMARY KEY,
+    social_id VARCHAR(11) UNIQUE,
     first_name VARCHAR(255) NOT NULL,
     last_name VARCHAR(255) NOT NULL
 );
@@ -17,6 +18,7 @@ CREATE TABLE school_groups (
 
 CREATE TABLE students (
       id UUID PRIMARY KEY,
+      social_id VARCHAR(11) UNIQUE,
       first_name VARCHAR(255) NOT NULL,
       last_name VARCHAR(255) NOT NULL,
       date_of_birth DATE NOT NULL,
@@ -25,6 +27,7 @@ CREATE TABLE students (
 
 CREATE TABLE parents (
      id UUID PRIMARY KEY,
+     social_id VARCHAR(11) UNIQUE,
      first_name VARCHAR(255) NOT NULL,
      last_name VARCHAR(255) NOT NULL
 );

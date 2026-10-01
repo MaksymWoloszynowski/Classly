@@ -32,6 +32,39 @@ const StudentGrades = lazy(
 const StudentDashboard = lazy(
   () => import("./pages/dashboard/studentDashboard/StudentDashboard"),
 );
+const AdminDashboard = lazy(
+  () => import("./pages/dashboard/adminDashboard/AdminDashboard"),
+);
+const AdminStudents = lazy(
+  () => import("./pages/admin/adminStudents/AdminStudents"),
+);
+const AdminTeachers = lazy(
+  () => import("./pages/admin/adminTeachers/AdminTeachers"),
+);
+const AdminParents = lazy(
+  () => import("./pages/admin/adminParents/AdminParents"),
+);
+const AdminGroups = lazy(() => import("./pages/admin/adminGroups/AdminGroups"));
+const AdminSubjects = lazy(
+  () => import("./pages/admin/adminSubjects/AdminSubjects"),
+);
+const AdminTeachingAssignments = lazy(
+  () =>
+    import("./pages/admin/adminTeachingAssignments/AdminTeachingAssignments"),
+);
+const AdminClassificationPeriods = lazy(
+  () =>
+    import("./pages/admin/adminClassificationPeriods/AdminClassificationPeriods"),
+);
+const AdminSchedule = lazy(
+  () =>
+    import("./pages/admin/adminSchedule/AdminSchedule"),
+);
+const AdminAccessCodes = lazy(
+  () =>
+    import("./pages/admin/adminAccessCodes/AdminAccessCodes"),
+);
+
 const NotFound = lazy(() => import("./pages/status/NotFound"));
 const Unauthorized = lazy(() => import("./pages/status/Unauthorized"));
 
@@ -114,6 +147,47 @@ function App() {
                   path="nauczyciel/sprawdziany"
                   element={<TeacherAssessments />}
                 />
+              </Route>
+            </Route>
+
+            <Route element={<RequireAuth allowedRoles={["ROLE_ADMIN"]} />}>
+              <Route element={<AppLayout />}>
+                <Route path="admin/dashboard" element={<AdminDashboard />} />
+                <Route path="admin/panel" element={<AdminDashboard />} />
+
+                <Route path="admin/students" element={<AdminStudents />} />
+                <Route path="admin/uczniowie" element={<AdminStudents />} />
+                <Route path="admin/teachers" element={<AdminTeachers />} />
+                <Route path="admin/nauczyciele" element={<AdminTeachers />} />
+                <Route path="admin/parents" element={<AdminParents />} />
+                <Route path="admin/rodzice" element={<AdminParents />} />
+                <Route path="admin/groups" element={<AdminGroups />} />
+                <Route path="admin/grupy" element={<AdminGroups />} />
+                <Route path="admin/subjects" element={<AdminSubjects />} />
+                <Route path="admin/przedmioty" element={<AdminSubjects />} />
+                <Route
+                  path="admin/teaching-assignments"
+                  element={<AdminTeachingAssignments />}
+                />
+                <Route
+                  path="admin/przypisania-nauczycieli"
+                  element={<AdminTeachingAssignments />}
+                />
+
+                <Route
+                  path="admin/okresy-klasyfikacyjne"
+                  element={<AdminClassificationPeriods />}
+                />
+                <Route
+                  path="admin/classification-periods"
+                  element={<AdminClassificationPeriods />}
+                />
+
+                <Route path="admin/schedule" element={<AdminSchedule />} />
+                <Route path="admin/plan" element={<AdminSchedule />} />
+                <Route path="admin/access-codes" element={<AdminAccessCodes />} />
+                <Route path="admin/kody-dostepu" element={<AdminAccessCodes />} />
+
               </Route>
             </Route>
 

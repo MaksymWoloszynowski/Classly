@@ -1,6 +1,7 @@
 import type { Attendance } from "@types-local/domain/attendance";
 import styles from "./DashboardAttendanceItem.module.css";
-import { useAttendanceTypeLabels } from "@types-local/labels";
+import { useAttendanceTypeLabels, useSubjectLabels } from "@types-local/labels";
+import { formatSubject } from "@utils/subject";
 
 const DashboardAttendanceItem = ({
   attendance,
@@ -8,7 +9,8 @@ const DashboardAttendanceItem = ({
   attendance: Attendance;
 }) => {
   const attendanceTypeLabels = useAttendanceTypeLabels();
-  
+  const subjectLabels = useSubjectLabels();
+
   return (
     <div key={attendance.id} className={styles.attendanceItem}>
       <div className={styles.attendanceTime}>
@@ -24,7 +26,7 @@ const DashboardAttendanceItem = ({
         })}
       </div>
 
-      <div className={styles.attendanceSubject}>{attendance.subject}</div>
+      <div className={styles.attendanceSubject}>{subjectLabels[formatSubject(attendance.subject)]}</div>
 
       <div className={`${styles.attendanceStatus} ${styles[attendance.type]}`}>
         {attendanceTypeLabels[attendance.type]}

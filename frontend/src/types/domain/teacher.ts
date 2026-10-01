@@ -1,8 +1,16 @@
 import type { TeachingAssignment } from "./teachingAssignment";
+import type { GroupSummary } from "./groupSummary";
 
-export type Teacher = {
+interface BaseTeacher {
     id: string;
     firstName: string;
     lastName: string;
     teachingAssignments: TeachingAssignment[];
+    homeroomGroups: GroupSummary[];
+}
+
+export type Teacher = BaseTeacher;
+
+export type AdminTeacher = BaseTeacher & {
+    socialId: string;
 }

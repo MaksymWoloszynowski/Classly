@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package org.classly.events;
+
+option java_multiple_files = true;
+option java_package = "org.classly.events";
+
+message UserCreatedEvent {
+  string id = 1;
+  string role = 2;
+}

@@ -64,6 +64,8 @@
   outline-offset: 2px;
 }
 
+
+
 @media (max-width: 480px) {
   .page {
     padding: 1rem;

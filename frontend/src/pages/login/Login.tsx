@@ -34,11 +34,20 @@ const Login = () => {
       const me = await api.get("/api/my-profile");
       setAuth(me.data);
 
-      navigate(
-        me.data.role === "ROLE_TEACHER"
-          ? localePath("/teacher/dashboard")
-          : localePath("/student/dashboard"),
-      );
+      switch (me.data.role) {
+        case "ROLE_TEACHER":
+          navigate(localePath("/teacher/dashboard"));
+          break;
+        case "ROLE_STUDENT":
+        case "ROLE_PARENT":
+          navigate(localePath("/student/dashboard"));
+          break;
+        case "ROLE_ADMIN":
+          navigate(localePath("/admin/dashboard"));
+          break;
+        default:
+          navigate(localePath("/"));
+      }
     } catch (error) {
       console.error("Error during login:", error);
       setError(

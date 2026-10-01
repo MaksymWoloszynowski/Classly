@@ -6,6 +6,9 @@ import { formatDate } from "../../../utils/date";
 import { createPortal } from "react-dom";
 
 import useTeacher from "@hooks/useTeacher";
+import { useTranslation } from "@hooks/useTranslation";
+import { useGradeTypeLabels, useSubjectLabels } from "@types-local/labels";
+import { formatSubject } from "@utils/subject";
 
 type GradeModalProps = {
   selectedGrade: Grade;
@@ -23,12 +26,15 @@ const GradeModal = ({
   onUpdate,
 }: GradeModalProps) => {
   const { isAssignmentTeacher } = useTeacher();
+  const {t} = useTranslation()
+  const subjectLabels = useSubjectLabels()
+  const gradeTypeLabels = useGradeTypeLabels();
 
   return createPortal(
     <div className={styles.overlay} onClick={() => setSelectedGrade(null)}>
       <div className={styles.modal}>
         <div className={styles.header}>
-          <div className={styles.headerTitle}>{assignment?.subjectName}</div>
+          <div className={styles.headerTitle}>{assignment && subjectLabels[formatSubject(assignment.subjectName)]}</div>
           <button
             type="button"
             className={styles.close}
@@ -39,27 +45,27 @@ const GradeModal = ({
           </button>
         </div>
         <div className={styles.column}>
-          <div className={styles.row}>Date:</div>
+          <div className={styles.row}>{t("date")}:</div>
           <div className={styles.row}>
             {formatDate(new Date(selectedGrade.date))}
           </div>
         </div>
         <div className={styles.column}>
-          <div className={styles.row}>Type:</div>
+          <div className={styles.row}>{t("type")}:</div>
           <div className={styles.row}>
-            {selectedGrade.type.replace("_", " ")}
+            {gradeTypeLabels[selectedGrade.type]}
           </div>
         </div>
         <div className={styles.column}>
-          <div className={styles.row}>Description:</div>
+          <div className={styles.row}>{t("description")}:</div>
           <div className={styles.row}>{selectedGrade.description}</div>
         </div>
         <div className={styles.column}>
-          <div className={styles.row}>Weight:</div>
+          <div className={styles.row}>{t("weight")}:</div>
           <div className={styles.row}>{selectedGrade.weight}</div>
         </div>
         <div className={styles.column}>
-          <div className={styles.row}>Grade:</div>
+          <div className={styles.row}>{t("grade")}:</div>
           <div
             className={`${styles.row} ${styles[selectedGrade.type.toLowerCase()]}`}
           >

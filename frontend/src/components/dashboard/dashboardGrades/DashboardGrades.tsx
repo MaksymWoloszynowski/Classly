@@ -6,6 +6,8 @@ import type {
   TeachingAssignment,
 } from "@types-local/index";
 import styles from "./DashboardGrades.module.css";
+import { useSubjectLabels } from "@types-local/labels";
+import { formatSubject } from "@utils/subject";
 
 type DashboardGradesProps = {
   grades: LatestGradesByTeachingAssignment;
@@ -13,6 +15,7 @@ type DashboardGradesProps = {
 
 const DashboardGrades = ({ grades }: DashboardGradesProps) => {
   const { teachingAssignments, activeStudent } = useStudentScope();
+  const subjectLabels = useSubjectLabels();
 
   if (!activeStudent || !teachingAssignments) {
     return null;
@@ -30,7 +33,7 @@ const DashboardGrades = ({ grades }: DashboardGradesProps) => {
     <div className={styles.container}>
       {filteredAssignments.map((assignment: TeachingAssignment) => (
         <div key={assignment.id} className={styles.row}>
-          <div>{assignment.subjectName}</div>
+          <div>{subjectLabels[formatSubject(assignment.subjectName)]}</div>
           <div className={styles.grades}>
             {grades[assignment.id]?.map((grade: Grade) => (
               <GradeButton

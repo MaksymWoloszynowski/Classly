@@ -11,7 +11,9 @@ import type { TeachingAssignment } from "../../../types/domain/teachingAssignmen
 import styles from "./SessionRealizationModal.module.css";
 import ErrorMessage from "@components/errorMessage/ErrorMessage";
 import { useTranslation } from "../../../hooks/useTranslation";
-import { useAttendanceTypeLabels } from "@types-local/labels";
+import { useAttendanceTypeLabels, useSubjectLabels } from "@types-local/labels";
+import { formatSubject } from "@utils/subject";
+import FormFooterButtons from "@components/formFooterButtons/FormFooterButtons";
 
 type SessionRealizationModalProps = {
   occurrence: Schedule;
@@ -36,6 +38,7 @@ const SessionRealizationModal = ({
   const [error, setError] = useState<string | null>(null);
   const { t } = useTranslation();
   const attendanceTypeLabels = useAttendanceTypeLabels();
+  const subjectLabels = useSubjectLabels()
  
   useEffect(() => {
     const load = async () => {
@@ -130,7 +133,7 @@ const SessionRealizationModal = ({
       >
         <div className={styles.header}>
           <div>
-            <div>{occurrence.subjectName} · Group {occurrence.groupName}</div>
+            <div>{subjectLabels[formatSubject(occurrence.subjectName)]} · Group {occurrence.groupName}</div>
             <p>
               {occurrence.date}, {occurrence.startTime.slice(0, 5)}–
               {occurrence.endTime.slice(0, 5)}
@@ -190,22 +193,11 @@ const SessionRealizationModal = ({
 
         {error && <ErrorMessage message={error} />}
 
-        <div className={styles.actions}>
-          <button type="button" className={styles.cancel} onClick={onClose}>
-            {t("cancel")}
-          </button>
-          <button
-            type="submit"
-            className={styles.submit}
-            disabled={submitting || loading || students.length === 0}
-          >
-            {submitting
-              ? "Saving..."
-              : session
-                ? t("saveChanges")
-                : t("markRealized")}
-          </button>
-        </div>
+        <FormFooterButtons
+          saving={submitting}
+          onClose={onClose}
+          saveText={session ? t("saveChanges") : t("markRealized")}
+        />
       </form>
     </div>
   );

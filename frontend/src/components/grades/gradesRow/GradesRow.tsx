@@ -4,6 +4,8 @@ import styles from "./GradesRow.module.css";
 import type { SemesterGrade } from "../../../types/domain/semesterGrade";
 import type { SubjectGrades } from "../../../types/views/subjectGrades";
 import type { Grade } from "@types-local/index";
+import { useSubjectLabels } from "@types-local/labels";
+import { formatSubject } from "@utils/subject";
 
 interface GradesRowProps {
   grades: SubjectGrades;
@@ -25,10 +27,11 @@ const GradesRow = ({
   const proposedType =
     selectedSemester === 1 ? "PROPOSED_SEMESTER" : "PROPOSED_ANNUAL";
   const finalType = selectedSemester === 1 ? "FINAL_SEMESTER" : "FINAL_ANNUAL";
+  const subjectLabels = useSubjectLabels()
 
   return (
     <tr className={styles.row}>
-      <td>{assignment.subjectName}</td>
+      <td>{subjectLabels[formatSubject(assignment.subjectName)]}</td>
       <td>
         <div className={styles.grades}>
           {grades?.grades.map((grade) => (

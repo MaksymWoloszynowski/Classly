@@ -4,21 +4,23 @@ WORKDIR /app
 
 COPY pom.xml .
 
-RUN --mount=type=secret,id=maven_settings,target=/root/.m2/settings.xml \
-    --mount=type=cache,target=/root/.m2 \
-    mvn dependency:go-offline -B
+COPY common/pom.xml common/pom.xml
+COPY common/src common/src
 
-COPY src ./src
+COPY teaching-service/pom.xml teaching-service/pom.xml
+COPY teaching-service/src teaching-service/src
 
-RUN --mount=type=secret,id=maven_settings,target=/root/.m2/settings.xml \
-    --mount=type=cache,target=/root/.m2 \
-    mvn package -B -DskipTests
+RUN mvn install -N -DskipTests -B
+
+RUN mvn -f common/pom.xml install -DskipTests -B
+
+RUN mvn -f teaching-service/pom.xml package -DskipTests -B
 
 FROM eclipse-temurin:17-jre
 
 WORKDIR /app
 
-COPY --from=build /app/target/*.jar app.jar
+COPY --from=build /app/teaching-service/target/*.jar app.jar
 
 EXPOSE 8084
 

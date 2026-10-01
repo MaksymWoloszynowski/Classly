@@ -77,7 +77,7 @@ const TeacherGradeEditor = ({
   return createPortal(
     <div className={styles.overlay} onClick={onClose}>
       <form
-        className={styles.editor}
+        className={styles.modal}
         onSubmit={submit}
         onClick={(event) => event.stopPropagation()}
       >

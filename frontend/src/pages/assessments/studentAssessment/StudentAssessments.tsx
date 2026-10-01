@@ -14,6 +14,8 @@ import ErrorMessage from "@components/errorMessage/ErrorMessage";
 import Calendar from "@components/calendar/Calendar";
 import AssessmentModal from "@components/assessment/assessmentModal/AssessmentModal";
 import { useTranslation } from "../../../hooks/useTranslation";
+import { useAssessmentTypeLabels, useSubjectLabels } from "@types-local/labels";
+import { formatSubject } from "@utils/subject";
 
 const typeClass: Record<AssessmentType, string> = {
   TEST: styles.test,
@@ -39,6 +41,8 @@ const StudentAssessments = () => {
   const controller = useCalendarController();
   const { activeStudent } = useStudentScope();
   const { t } = useTranslation();
+  const subjectLabels = useSubjectLabels()
+  const assessmentTypeLabels = useAssessmentTypeLabels()
 
   const fetchAssessments = async (start?: Date, end?: Date) => {
     const viewStart = start ?? controller.view?.activeStart;
@@ -84,10 +88,12 @@ const StudentAssessments = () => {
   const renderEventContent = (eventInfo: EventDisplayInfo) => {
     const { subject, type } = eventInfo.event
       .extendedProps as AssessmentEventProps;
+      
+      console.log
     return (
       <div className={`${styles.event} ${typeClass[type]}`}>
-        <span className={styles.type}>{type.replace("_", " ")}</span>
-        <span className={styles.subject}>{subject}</span>
+        <span className={styles.type}>{assessmentTypeLabels[type]}</span>
+        <span className={styles.subject}>{subjectLabels[formatSubject(subject)]}</span>
       </div>
     );
   };

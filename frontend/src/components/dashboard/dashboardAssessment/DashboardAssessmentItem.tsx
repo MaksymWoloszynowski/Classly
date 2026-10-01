@@ -2,6 +2,8 @@ import type { Assessment, AssessmentType } from "@types-local/index";
 import styles from "./DashboardAssessmentItem.module.css";
 import { useState } from "react";
 import AssessmentModal from "@components/assessment/assessmentModal/AssessmentModal";
+import { useSubjectLabels } from "@types-local/labels";
+import { formatSubject } from "@utils/subject";
 
 const typeClass: Record<AssessmentType, string> = {
   TEST: styles.test,
@@ -18,6 +20,8 @@ const DashboardAssessmentItem = ({
   const [selectedAssessment, setSelectedAssessment] =
     useState<Assessment | null>(null);
 
+  const subjectLabels = useSubjectLabels();
+
   return (
     <>
       <div
@@ -25,7 +29,7 @@ const DashboardAssessmentItem = ({
         onClick={() => setSelectedAssessment(assessment)}
       >
         <div>
-          <div className={styles.subject}>{assessment.subjectName}</div>
+          <div className={styles.subject}>{subjectLabels[formatSubject(assessment.subjectName)]}</div>
 
           <span className={`${styles.type} ${typeClass[assessment.type]}`}>
             {assessment.type.replace("_", " ")}

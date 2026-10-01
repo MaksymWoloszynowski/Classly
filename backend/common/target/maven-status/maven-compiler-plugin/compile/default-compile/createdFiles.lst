@@ -1,4 +1,4 @@
-org/edziennik/security/SecurityConfig.class
-org/edziennik/security/JwtAuthenticationFilter.class
-org/edziennik/security/JwtVerifier.class
-org/edziennik/security/AuthenticatedUser.class
+org/classly/security/JwtAuthenticationFilter.class
+org/classly/security/JwtVerifier.class
+org/classly/security/AuthenticatedUser.class
+org/classly/security/SecurityConfig.class

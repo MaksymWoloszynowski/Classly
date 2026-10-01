@@ -1,77 +1,81 @@
-# React + TypeScript + Vite
+# Classly - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
 
-Currently, two official plugins are available:
+React + TypeScript frontend for the Classly school management system. Talks to the backend exclusively through the API Gateway (`http://localhost:8080`), authenticated via httpOnly JWT cookies. Available in two languages - Polish and English.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Technologies
 
-## React Compiler
+[![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Vite](https://img.shields.io/badge/Vite-B73BFE?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+## Quick Start
 
-Note: This will impact Vite dev & build performances.
+### Prerequisites
 
-## Expanding the ESLint configuration
+- **Node.js 20+**
+- The backend (`api-gateway` + all domain services) running - see the main repo's `README.md`
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 📥 Installation
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+git clone https://github.com/MaksymWoloszynowski/Classly.git
+cd frontend
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Configuration
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Create `frontend/.env.local` or copy the example file:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+cp .env.example .env.local
+```
 
+```env
+VITE_API_BASE_URL=http://localhost:8080
+```
+
+For Docker Compose, the production build uses `VITE_API_BASE_URL=/`. Requests are then proxied by the frontend Nginx to the internal API Gateway.
+
+### Running
+
+```bash
+npm run dev
+```
+
+The app will be available at `http://localhost:5173`.
+
+### Building
+
+```bash
+npm run build
+```
+
+Output is written to `dist/`.
+
+## Authentication Notes
+
+- Login/register/refresh calls go to `VITE_API_BASE_URL/auth/*`.
+- All requests must be made with `credentials: 'include'` (or `axios.defaults.withCredentials = true`) so the httpOnly cookies are sent.
+- Access tokens expire after 15 minutes - a response interceptor automatically calls `/auth/refresh` on a `401` and retries the original request once.
+- The current user's profile is available via `GET /api/my-profile`.
+
+## Project Structure
+
+```
+frontend/
+├── src/
+│   ├── api/            # API client, interceptors, endpoint wrappers
+│   ├── components/     # Shared UI components
+│   ├── features/       # Feature-based modules (grades, schedule, attendance...)
+│   ├── hooks/          # Shared React hooks
+│   ├── routes/         # Route definitions / pages
+│   ├── types/          # Shared TypeScript types
+│   └── main.tsx
+├── public/
+├── index.html
+├── vite.config.ts
+└── package.json
 ```

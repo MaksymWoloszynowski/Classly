@@ -1,17 +1,22 @@
 services:
   schedule-service:
     build:
-      context: .
-      secrets:
-        - maven_settings
+      context: ..
+      dockerfile: schedule-service/Dockerfile
     container_name: schedule-service
     restart: unless-stopped
     networks:
       - school_network
     environment:
       DB_HOST: schedule-service-db
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET is required}
       SCHOOL_STRUCTURE_HOST: school-structure-service
       SCHOOL_STRUCTURE_GRPC_PORT: 9090
+    secrets:
+      - source: db_user
+        target: DB_USER
+      - source: db_password
+        target: DB_PASSWORD
     ports:
       - "8083:8083"
     depends_on:
@@ -26,12 +31,17 @@ services:
       - school_network
     environment:
       POSTGRES_DB: schedule-service-db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER_FILE: /run/secrets/DB_USER
+      POSTGRES_PASSWORD_FILE: /run/secrets/DB_PASSWORD
+    secrets:
+      - source: db_user
+        target: DB_USER
+      - source: db_password
+        target: DB_PASSWORD
     volumes:
       - schedule_service_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d schedule-service-db"]
+      test: ["CMD-SHELL", "pg_isready -U \"$$(cat /run/secrets/DB_USER)\" -d schedule-service-db"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -45,5 +55,7 @@ networks:
     external: true
 
 secrets:
-  maven_settings:
-    file: ../settings.xml
+  db_user:
+    environment: DB_USER
+  db_password:
+    environment: DB_PASSWORD

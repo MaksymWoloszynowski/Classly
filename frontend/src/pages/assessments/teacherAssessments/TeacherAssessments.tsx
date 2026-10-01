@@ -16,6 +16,8 @@ import AssessmentModal from "@components/assessment/assessmentModal/AssessmentMo
 import AssessmentCreateModal from "@components/assessment/assessmentCreateModal/AssessmentCreateModal";
 import { Plus, X } from "lucide-react";
 import { useTranslation } from "../../../hooks/useTranslation";
+import { useAssessmentTypeLabels, useSubjectLabels } from "@types-local/labels";
+import { formatSubject } from "@utils/subject";
 
 const typeClass: Record<AssessmentType, string> = {
   TEST: styles.test,
@@ -51,6 +53,8 @@ const TeacherAssessments = () => {
   const controller = useCalendarController();
   const { auth } = useAuth();
   const { t } = useTranslation();
+  const subjectLabels = useSubjectLabels()
+  const assessmentTypeLabels = useAssessmentTypeLabels()
 
   const assignments = auth?.teacher?.teachingAssignments ?? [];
   const activeAssignmentId = selectedAssignmentId || assignments[0]?.id || "";
@@ -120,9 +124,9 @@ const TeacherAssessments = () => {
 
     return (
       <div className={`${styles.event} ${typeClass[type]}`}>
-        <span className={styles.type}>{type.replace("_", " ")}</span>
+        <span className={styles.type}>{assessmentTypeLabels[type]}</span>
 
-        <span className={styles.subject}>{subject}</span>
+        <span className={styles.subject}>{subjectLabels[formatSubject(subject)]}</span>
       </div>
     );
   };

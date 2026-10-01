@@ -9,6 +9,7 @@ import ErrorMessage from "../../components/errorMessage/ErrorMessage";
 import useLocalePath from "../../hooks/useLocalePath";
 import { useTranslation } from "../../hooks/useTranslation.js";
 import TopBar from "../../components/topBar/TopBar";
+import LoadingOverlay from "@components/loadingOverlay/LoadingOverlay.js";
 
 const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,128}$/;
 
@@ -16,6 +17,7 @@ const Register = () => {
   const { setAuth } = useAuth();
   const navigate = useNavigate();
   const localePath = useLocalePath();
+  const [loading, setLoading] = useState(false);
   const emailRef = useRef<HTMLInputElement | null>(null);
 
   const [accessCode, setAccessCode] = useState("");
@@ -52,6 +54,7 @@ const Register = () => {
       return;
     }
     try {
+      setLoading(true);
       await api.post("/auth/register", {
         email,
         password,
@@ -70,10 +73,14 @@ const Register = () => {
       } else {
         setErrMsg("Registration failed.");
       }
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
+    <>
+    {loading && <LoadingOverlay />}
     <section className={styles.page}>
       <TopBar />
       <div className={styles.formArea}>
@@ -192,6 +199,7 @@ const Register = () => {
         </div>
       </div>
     </section>
+    </>
   );
 };
 

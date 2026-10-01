@@ -1,15 +1,15 @@
 services:
   school-structure-service:
     build:
-      context: .
-      secrets:
-        - maven_settings
+      context: ..
+      dockerfile: school-structure-service/Dockerfile
     container_name: school-structure-service
     restart: unless-stopped
     networks:
       - school_network
     environment:
       DB_HOST: school-structure-service-db
+    env_file: "./.env"
     ports:
       - "8081:8081"
     depends_on:
@@ -24,12 +24,17 @@ services:
       - school_network
     environment:
       POSTGRES_DB: school-structure-service-db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER_FILE: /run/secrets/DB_USER
+      POSTGRES_PASSWORD_FILE: /run/secrets/DB_PASSWORD
+    secrets:
+      - source: db_user
+        target: DB_USER
+      - source: db_password
+        target: DB_PASSWORD
     volumes:
       - school-structure_service_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d school-structure-service-db"]
+      test: ["CMD-SHELL", "pg_isready -U \"$$(cat /run/secrets/DB_USER)\" -d school-structure-service-db"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -43,5 +48,7 @@ networks:
     external: true
 
 secrets:
-  maven_settings:
-    file: ../settings.xml
+  db_user:
+    environment: DB_USER
+  db_password:
+    environment: DB_PASSWORD

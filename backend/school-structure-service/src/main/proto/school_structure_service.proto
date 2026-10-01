@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option java_package = "org.edziennik.schoolstructureservice.grpc";
+option java_package = "org.classly.schoolstructureservice.grpc";
 option java_multiple_files = true;
 
 service SchoolStructureService {
@@ -8,6 +8,8 @@ service SchoolStructureService {
   rpc GetStudents(StudentIdsRequest) returns (StudentListResponse);
   rpc GetSubject (SubjectRequest) returns (SubjectResponse);
   rpc GetTeacher (TeacherRequest) returns (TeacherResponse);
+  rpc GetTeachers (TeacherIdsRequest) returns (TeacherListResponse);
+  rpc GetParents (ParentIdsRequest) returns (ParentListResponse);
   rpc GetStudentIdsByGroup (GroupRequest) returns (StudentIdListResponse);
   rpc GetTeachingAssignment (TeachingAssignmentRequest) returns (TeachingAssignmentResponse);
   rpc GetTeachingAssignments(TeachingAssignmentIdsRequest) returns (TeachingAssignmentListResponse);
@@ -34,19 +36,41 @@ message StudentListResponse {
   repeated StudentResponse students = 1;
 }
 
-message SubjectRequest {
-  string subject_id = 1;
-}
-
-message SubjectResponse {
-  string name = 1;
-}
-
 message TeacherRequest {
   string teacher_id = 1;
 }
 
 message TeacherResponse {
+  string id = 1;
+  string name = 2;
+}
+
+message TeacherIdsRequest {
+  repeated string teacherIds = 1;
+}
+
+message TeacherListResponse {
+  repeated TeacherResponse teacher = 1;
+}
+
+message ParentResponse {
+  string id = 1;
+  string name = 2;
+}
+
+message ParentIdsRequest {
+  repeated string parentIds = 1;
+}
+
+message ParentListResponse {
+  repeated ParentResponse parents = 1;
+}
+
+message SubjectRequest {
+  string subject_id = 1;
+}
+
+message SubjectResponse {
   string name = 1;
 }
 

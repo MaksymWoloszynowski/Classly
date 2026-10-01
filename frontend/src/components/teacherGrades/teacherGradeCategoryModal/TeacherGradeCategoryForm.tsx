@@ -2,8 +2,10 @@ import { useState } from "react";
 import api from "@api/api";
 import type { GradeCategory, TeachingAssignment } from "@types-local/index";
 import { gradeTypes, type GradeType } from "@types-local/enums";
-import styles from "./TeacherGradeCategoryModal.module.css";
 import ErrorMessage from "@components/errorMessage/ErrorMessage";
+import { useTranslation } from "@hooks/useTranslation";
+import { useGradeTypeLabels } from "@types-local/labels";
+import FormFooterButtons from "@components/formFooterButtons/FormFooterButtons";
 
 type TeacherGradeCategoryFormProps = {
   assignment: TeachingAssignment;
@@ -22,23 +24,24 @@ const TeacherGradeCategoryForm = ({
   onCreated,
   onUpdated,
 }: TeacherGradeCategoryFormProps) => {
+  const {t} = useTranslation();
   const [description, setDescription] = useState(category?.description ?? "");
   const [type, setType] = useState<GradeType>(category?.type ?? "CURRENT");
   const [weight, setWeight] = useState(String(category?.weight ?? 1));
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const gradeTypeLabels = useGradeTypeLabels()
 
   const submit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const numericWeight = Number(weight);
 
     if (
-      !description.trim() ||
       !Number.isFinite(numericWeight) ||
       numericWeight < 0 ||
       numericWeight > 3
     ) {
-      setError("Enter a description and a weight between 0 and 3.");
+      setError("Enter a weight between 0 and 3.");
       return;
     }
 
@@ -78,7 +81,7 @@ const TeacherGradeCategoryForm = ({
       onClick={(event) => event.stopPropagation()}
     >
       <label>
-        Description
+        {t("description")}
         <input
           value={description}
           onChange={(event) => setDescription(event.target.value)}
@@ -86,20 +89,20 @@ const TeacherGradeCategoryForm = ({
         />
       </label>
       <label>
-        Type
+        {t("type")}
         <select
           value={type}
           onChange={(event) => setType(event.target.value as GradeType)}
         >
           {gradeTypes.map((gradeType) => (
             <option key={gradeType} value={gradeType}>
-              {gradeType.replace("_", " ")}
+              {gradeTypeLabels[gradeType]}
             </option>
           ))}
         </select>
       </label>
       <label>
-        Weight
+        {t("weight")}
         <input
           type="number"
           min="0"
@@ -110,14 +113,11 @@ const TeacherGradeCategoryForm = ({
         />
       </label>
       {error && <ErrorMessage message={error} />}
-      <div className={styles.actions}>
-        <button type="button" onClick={onCancel} disabled={saving}>
-          Cancel
-        </button>
-        <button type="submit" disabled={saving}>
-          {saving ? "Saving..." : category ? "Save changes" : "Add category"}
-        </button>
-      </div>
+      <FormFooterButtons
+        onClose={onCancel}
+        saveText={category ? t("saveChanges") : t("addCategory")}
+        saving={saving}
+      />
     </form>
   );
 };

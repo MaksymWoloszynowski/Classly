@@ -3,6 +3,8 @@ services:
     build: ./
     container_name: api-gateway
     restart: unless-stopped
+    env_file:
+      - ./.env
     networks:
       - school_network
     ports:

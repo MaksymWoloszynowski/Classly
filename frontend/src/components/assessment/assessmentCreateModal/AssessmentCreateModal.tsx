@@ -10,7 +10,9 @@ import type { TeachingAssignment } from "@types-local/domain/teachingAssignment"
 import styles from "./AssessmentCreateModal.module.css";
 import ErrorMessage from "@components/errorMessage/ErrorMessage";
 import { useTranslation } from "../../../hooks/useTranslation";
-import { useAssessmentTypeLabels } from "@types-local/labels";
+import { useAssessmentTypeLabels, useSubjectLabels } from "@types-local/labels";
+import { formatSubject } from "@utils/subject";
+import FormFooterButtons from "@components/formFooterButtons/FormFooterButtons";
 
 type AssessmentCreateModalProps = {
   date: string;
@@ -29,7 +31,8 @@ const AssessmentCreateModal = ({
 }: AssessmentCreateModalProps) => {
   const isEditing = Boolean(assessment);
   const { t } = useTranslation();
-  const assessmentTypeLabels = useAssessmentTypeLabels()
+  const assessmentTypeLabels = useAssessmentTypeLabels();
+  const subjectLabels = useSubjectLabels();
   const [type, setType] = useState<AssessmentType | "">(assessment?.type ?? "");
 
   const [description, setDescription] = useState(assessment?.description ?? "");
@@ -85,7 +88,8 @@ const AssessmentCreateModal = ({
             <div>{isEditing ? t("updateAssessment") : t("addAssessment")}</div>
 
             <p>
-              {assignment.subjectName} · {assignment.groupName}
+              {subjectLabels[formatSubject(assignment.subjectName)]} ·{" "}
+              {t("group")} {assignment.groupName}
             </p>
 
             <p>{date}</p>
@@ -135,28 +139,11 @@ const AssessmentCreateModal = ({
 
         {error && <ErrorMessage message={error} />}
 
-        <div className={styles.actions}>
-          <button
-            type="button"
-            className={styles.cancel}
-            onClick={onClose}
-            disabled={saving}
-          >
-            {t("cancel")}
-          </button>
-
-          <button
-            type="submit"
-            className={styles.submit}
-            disabled={saving || !type}
-          >
-            {saving
-              ? "Saving..."
-              : isEditing
-                ? t("updateAssessment")
-                : t("addAssessment")}
-          </button>
-        </div>
+        <FormFooterButtons
+          saving={saving}
+          onClose={onClose}
+          saveText={isEditing ? t("updateAssessment") : t("addAssessment")}
+        />
       </form>
     </div>
   );

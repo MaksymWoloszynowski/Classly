@@ -13,7 +13,7 @@ const ErrorMessage = ({
   const { t } = useTranslation();
 
   return (
-    <div className={styles.error} role="alert">
+    <div className={styles.error}>
       <span>{message ?? t("genericError")}</span>
       {onRetry && (
         <button type="button" onClick={onRetry}>

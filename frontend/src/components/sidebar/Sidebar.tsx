@@ -4,7 +4,6 @@ import useAuth from "../../hooks/useAuth";
 import useStudentScope from "../../hooks/useStudentScope";
 
 import {
-  House,
   GraduationCap,
   CalendarDays,
   ClipboardCheck,
@@ -14,6 +13,14 @@ import {
   X,
   Mail,
   User,
+  LayoutDashboard,
+  Users,
+  UserRound,
+  UsersRound,
+  BookOpen,
+  Link2,
+  CalendarCog,
+  KeyRound,
 } from "lucide-react";
 import { useState } from "react";
 import useLogout from "../../hooks/useLogout";
@@ -23,7 +30,7 @@ import { useTranslation } from "../../hooks/useTranslation";
 import type { TranslationKey } from "../../i18n/translations";
 
 const studentMenu = [
-  { to: "/student/dashboard", label: "dashboard", icon: House },
+  { to: "/student/dashboard", label: "dashboard", icon: LayoutDashboard },
   { to: "/student/grades", label: "grades", icon: GraduationCap },
   { to: "/student/schedule", label: "schedule", icon: CalendarDays },
   { to: "/student/assessments", label: "assessments", icon: ClipboardCheck },
@@ -32,11 +39,41 @@ const studentMenu = [
 ];
 
 const teacherMenu = [
-  { to: "/teacher/dashboard", label: "dashboard", icon: House },
+  { to: "/teacher/dashboard", label: "dashboard", icon: LayoutDashboard },
   { to: "/teacher/grades", label: "grades", icon: GraduationCap },
   { to: "/teacher/schedule", label: "mySchedule", icon: CalendarDays },
   { to: "/teacher/realizations", label: "realizations", icon: BookOpenCheck },
   { to: "/teacher/assessments", label: "assessments", icon: ClipboardCheck },
+];
+
+const adminMenu = [
+  { to: "/admin/dashboard", label: "dashboard", icon: LayoutDashboard },
+  { to: "/admin/students", label: "adminStudents", icon: GraduationCap },
+  { to: "/admin/teachers", label: "adminTeachers", icon: UserRound },
+  { to: "/admin/parents", label: "adminParents", icon: Users },
+  { to: "/admin/groups", label: "adminGroups", icon: UsersRound },
+  { to: "/admin/subjects", label: "adminSubjects", icon: BookOpen },
+  {
+    to: "/admin/teaching-assignments",
+    label: "teachingAssignments",
+    icon: Link2,
+  },
+  {
+    to: "/admin/classification-periods",
+    label: "adminClassificationPeriods",
+    icon: CalendarCog,
+  },
+{
+    to: "/admin/schedule",
+    label: "schedule",
+    icon: CalendarDays,
+  },
+  {
+    to: "/admin/access-codes",
+    label: "accessCodes",
+    icon: KeyRound,
+  },
+
 ];
 
 const Sidebar = () => {
@@ -51,8 +88,9 @@ const Sidebar = () => {
     isLoadingStudent,
     error,
   } = useStudentScope();
+  const isAdmin = auth?.role === "ROLE_ADMIN";
   const isTeacher = auth?.role === "ROLE_TEACHER";
-  const menu = isTeacher ? teacherMenu : studentMenu;
+  const menu = isAdmin ? adminMenu : isTeacher ? teacherMenu : studentMenu;
   const [menuOpen, setMenuOpen] = useState(false);
   const [logoutVisible, setLogoutVisible] = useState(false);
 
@@ -70,7 +108,7 @@ const Sidebar = () => {
         />
       )}
 
-      {auth?.role === "ROLE_PARENT" && (
+      {!isAdmin && auth?.role === "ROLE_PARENT" && (
         <label className={styles.studentPicker}>
           <span>{t("studentProfile")}</span>
           <select
@@ -89,7 +127,11 @@ const Sidebar = () => {
 
       {error && <ErrorMessage message={error} />}
 
-      {isTeacher ? (
+      {isAdmin ? (
+        <div className={styles.sidebarTitle}>
+          <p>{t("adminPanel")}</p>
+        </div>
+      ) : isTeacher ? (
         <div className={styles.sidebarTitle}>
           <p>{t("teacherPanel")}</p>
           <p>

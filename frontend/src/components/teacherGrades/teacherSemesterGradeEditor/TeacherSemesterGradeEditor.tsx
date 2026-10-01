@@ -137,7 +137,7 @@ const TeacherSemesterGradeEditor = ({
               <button
                 type="button"
                 className={`${styles.button} ${styles.delete}`}
-                onClick={() => void remove()}
+                onClick={() => remove()}
                 disabled={saving}
               >
                 Delete

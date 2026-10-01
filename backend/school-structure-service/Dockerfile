@@ -4,21 +4,32 @@ WORKDIR /app
 
 COPY pom.xml .
 
-RUN --mount=type=secret,id=maven_settings,target=/root/.m2/settings.xml \
-    --mount=type=cache,target=/root/.m2 \
-    mvn dependency:go-offline -B
+COPY common/pom.xml common/pom.xml
+COPY common/src common/src
 
-COPY src ./src
+COPY school-structure-service/pom.xml school-structure-service/pom.xml
+COPY school-structure-service/src school-structure-service/src
 
-RUN --mount=type=secret,id=maven_settings,target=/root/.m2/settings.xml \
-    --mount=type=cache,target=/root/.m2 \
-    mvn package -B -DskipTests
+RUN --mount=type=cache,target=/root/.m2 \
+	mvn install -N -DskipTests -B \
+	-Daether.connector.basic.retryCount=5 \
+	-Dmaven.wagon.http.retryHandler.count=5
+
+RUN --mount=type=cache,target=/root/.m2 \
+	mvn -f common/pom.xml install -DskipTests -B \
+	-Daether.connector.basic.retryCount=5 \
+	-Dmaven.wagon.http.retryHandler.count=5
+
+RUN --mount=type=cache,target=/root/.m2 \
+	mvn -f school-structure-service/pom.xml package -DskipTests -B \
+	-Daether.connector.basic.retryCount=5 \
+	-Dmaven.wagon.http.retryHandler.count=5
 
 FROM eclipse-temurin:17-jre
 
 WORKDIR /app
 
-COPY --from=build /app/target/*.jar app.jar
+COPY --from=build /app/school-structure-service/target/*.jar app.jar
 
 EXPOSE 8081
 

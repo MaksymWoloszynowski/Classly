@@ -5,7 +5,8 @@ import { formatDate } from "@utils/date";
 import useTeacher from "@hooks/useTeacher";
 import { createPortal } from "react-dom";
 import { useTranslation } from "../../../hooks/useTranslation";
-import { useAssessmentTypeLabels } from "@types-local/labels";
+import { useAssessmentTypeLabels, useSubjectLabels } from "@types-local/labels";
+import { formatSubject } from "@utils/subject";
 
 const typeClass: Record<AssessmentType, string> = {
   TEST: styles.test,
@@ -30,6 +31,7 @@ const AssessmentModal = ({
   const { isAssignmentTeacher } = useTeacher();
   const { t } = useTranslation();
   const assessmentTypeLabels = useAssessmentTypeLabels();
+  const subjectlabels = useSubjectLabels();
 
   return createPortal(
     <div className={styles.overlay} onClick={() => setSelectedAssessment(null)}>
@@ -52,7 +54,7 @@ const AssessmentModal = ({
           </button>
         </div>
 
-        <div className={styles.subject}>{selectedAssessment.subjectName} · {t("group")} {selectedAssessment.groupName} </div>
+        <div className={styles.subject}>{subjectlabels[formatSubject(selectedAssessment.subjectName)]} · {t("group")} {selectedAssessment.groupName} </div>
 
         <div className={styles.info}>
           <div>

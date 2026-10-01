@@ -9,6 +9,8 @@ import ErrorMessage from "../../components/errorMessage/ErrorMessage";
 import SessionRealizationModal from "../../components/sessions/sessionRealizationModal/SessionRealizationModal";
 import styles from "./Realizations.module.css";
 import { useTranslation } from "../../hooks/useTranslation";
+import { useSubjectLabels } from "@types-local/labels";
+import { formatSubject } from "@utils/subject";
 
 const today = () => new Date().toLocaleDateString("en-CA");
 
@@ -25,6 +27,7 @@ const Realizations = () => {
     null,
   );
   const [error, setError] = useState<string | null>(null);
+  const subjectLabels = useSubjectLabels()
 
   useEffect(() => {
     const load = async () => {
@@ -130,7 +133,7 @@ const Realizations = () => {
                       <span>
                         {item.startTime.slice(0, 5)}–{item.endTime.slice(0, 5)}
                       </span>
-                      <span>{item.subjectName}</span>
+                      <span>{subjectLabels[formatSubject(item.subjectName)]}</span>
                       <span>{t("group")}: {item.groupName}</span>
                       {session && (
                         <Check

@@ -26,7 +26,16 @@ export type TeacherProfile = {
   teacher: Teacher;
 };
 
+export type AdminProfile = {
+  userId: string;
+  role: "ROLE_ADMIN";
+  student: null;
+  parent: null;
+  teacher: null;
+};
+
 export type Profile =
   | StudentProfile
   | ParentProfile
-  | TeacherProfile;
+  | TeacherProfile
+  | AdminProfile;

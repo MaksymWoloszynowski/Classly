@@ -1,3 +1,3 @@
 jwt:
-  secret: ${JWT_SECRET:VvyRVvEHvgAySvx17fYT6sCr1AXkuDvW66uiuFDwfVP}
+  secret: ${JWT_SECRET}
   access-token-validity-ms: 900000

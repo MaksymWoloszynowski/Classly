@@ -4,6 +4,8 @@ import { X } from "lucide-react";
 import type { GradeCategory, TeachingAssignment } from "@types-local/index";
 import styles from "./TeacherGradeCategoryModal.module.css";
 import TeacherGradeCategoryForm from "./TeacherGradeCategoryForm";
+import { useTranslation } from "@hooks/useTranslation";
+import { useGradeTypeLabels } from "@types-local/labels";
 
 type TeacherGradeCategoryModalProps = {
   assignment: TeachingAssignment;
@@ -23,12 +25,14 @@ const TeacherGradeCategoryModal = ({
   onUpdated,
 }: TeacherGradeCategoryModalProps) => {
   const [isEditing, setIsEditing] = useState(!category);
+  const {t} = useTranslation();
+  const gradeTypeLabels = useGradeTypeLabels()
 
   return createPortal(
     <div className={styles.overlay} onClick={onClose}>
       <div className={styles.modal} onClick={(event) => event.stopPropagation()}>
         <div className={styles.header}>
-          <div>{category ? "Grade category" : "New grade category"}</div>
+          <div>{category ? t("gradeCategory") : t("newGradeCategory")}</div>
           <button
             type="button"
             className={styles.close}
@@ -50,24 +54,21 @@ const TeacherGradeCategoryModal = ({
         ) : (
           <div className={styles.details}>
             <div>
-              <span>Description</span>
+              <span>{t("description")}</span>
               <span>{category?.description}</span>
             </div>
             <div>
-              <span>Type</span>
-              <span>{category?.type.replace("_", " ")}</span>
+              <span>{t("type")}</span>
+              <span>{category && gradeTypeLabels[category.type]}</span>
             </div>
             <div>
-              <span>Weight</span>
+              <span>{t("weight")}</span>
               <span>{category?.weight}</span>
             </div>
           </div>
         )}
         {!isEditing && (
           <div className={styles.actions}>
-            <button type="button" onClick={onClose}>
-              Cancel
-            </button>
             {category && (
               <button
                 type="button"
@@ -77,7 +78,7 @@ const TeacherGradeCategoryModal = ({
                   setIsEditing(true);
                 }}
               >
-                Edit
+                {t("edit")}
               </button>
             )}
           </div>

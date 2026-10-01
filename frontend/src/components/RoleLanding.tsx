@@ -12,6 +12,9 @@ const RoleLanding = () => {
   if (auth?.role === "ROLE_STUDENT" || auth?.role === "ROLE_PARENT") {
     return <Navigate to={localePath("/student/dashboard")} replace />;
   }
+  if (auth?.role === "ROLE_ADMIN") {
+    return <Navigate to={localePath("/admin/dashboard")} replace />;
+  }
 
   return <LandingPage />;
 };

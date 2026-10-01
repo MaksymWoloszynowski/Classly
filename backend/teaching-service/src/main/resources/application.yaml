@@ -2,13 +2,15 @@ server:
   port: 8084
 
 spring:
+  config:
+    import: optional:configtree:/run/secrets/
   application:
     name: teaching-service
 
   datasource:
     url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/teaching-service-db
-    username: postgres
-    password: postgres
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
 
   jpa:
     hibernate:
@@ -19,15 +21,22 @@ spring:
     enabled: true
     locations: classpath:db/migration
 
-grpc:
-  client:
-    school-structure-service:
-      address: static://${SCHOOL_STRUCTURE_HOST:localhost}:${SCHOOL_STRUCTURE_GRPC_PORT:9090}
-      negotiationType: plaintext
+  grpc:
+    client:
+      channel:
+        schoolStructure:
+          target: static://${SCHOOL_STRUCTURE_HOST:localhost}:${SCHOOL_STRUCTURE_GRPC_PORT:9090}
+          negotiation-type: plaintext
 
-  server:
-    port: -1
+    server:
+      port: -1
 
 jwt:
-  secret: ${JWT_SECRET:VvyRVvEHvgAySvx17fYT6sCr1AXkuDvW66uiuFDwfVP}
+  secret: ${JWT_SECRET}
   access-token-validity-ms: 900000
+
+springdoc:
+  api-docs:
+    path: /docs/teaching/v3/api-docs
+  swagger-ui:
+    path: /docs/teaching/swagger-ui.html

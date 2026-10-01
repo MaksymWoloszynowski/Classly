@@ -11,6 +11,8 @@ import useStudentScope from "../../hooks/useStudentScope";
 import api from "../../api/api";
 import styles from "./Attendance.module.css";
 import { useTranslation } from "../../hooks/useTranslation";
+import { useSubjectLabels } from "@types-local/labels";
+import { formatSubject } from "@utils/subject";
 
 const AttendancePage = () => {
   const { activeStudent } = useStudentScope();
@@ -20,6 +22,7 @@ const AttendancePage = () => {
   const [error, setError] = useState<string | null>(null);
   const [viewType, setViewType] = useState("timeGridWeek");
   const controller = useCalendarController();
+  const subjectLabels = useSubjectLabels()
 
   const fetchAttendance = async (start: Date, end: Date) => {
     try {
@@ -88,7 +91,7 @@ const AttendancePage = () => {
           })}
         </div>
         <div>
-          <div className={styles.subject}>{eventInfo.event.title}</div>
+          <div className={styles.subject}>{subjectLabels[formatSubject(eventInfo.event.title)]}</div>
 
           <div className={styles.teacher}>
             {eventInfo.event.extendedProps.teacher}

@@ -12,7 +12,7 @@ spring:
             - id: school-structure-service-route
               uri: http://school-structure-service:8081
               predicates:
-                - Path=/api/group/**,/api/student/**,/api/teacher/**,/api/subject/**,/api/parent/**,/api/teaching-assignment/**,/api/my-profile/**,/api/classification-period/**
+                - Path=/api/group/**,/api/admin/**,/api/student/**,/api/teacher/**,/api/subject/**,/api/parent/**,/api/teaching-assignment/**,/api/my-profile/**,/api/classification-period/**,/api/statistics/**
               filters:
                 - StripPrefix=1
 
@@ -36,6 +36,31 @@ spring:
                 - Path=/api/assessment/**,/api/attendance/**,/api/session/**
               filters:
                 - StripPrefix=1
+
+            - id: grade-swagger
+              uri: http://grade-service:8082
+              predicates:
+                - Path=/docs/grade/**
+
+            - id: schedule-swagger
+              uri: http://schedule-service:8083
+              predicates:
+                - Path=/docs/schedule/**
+
+            - id: school-structure-swagger
+              uri: http://school-structure-service:8081
+              predicates:
+                - Path=/docs/school-structure/**
+
+            - id: teaching-swagger
+              uri: http://teaching-service:8084
+              predicates:
+                - Path=/docs/teaching/**
+
+            - id: auth-swagger
+              uri: http://auth-service:8085
+              predicates:
+                - Path=/docs/auth/**
 
 jwt:
   secret: ${JWT_SECRET:VvyRVvEHvgAySvx17fYT6sCr1AXkuDvW66uiuFDwfVP}

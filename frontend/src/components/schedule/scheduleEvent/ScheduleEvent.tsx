@@ -3,6 +3,8 @@ import styles from "./ScheduleEvent.module.css";
 import useAuth from "@hooks/useAuth";
 import { CheckIcon } from "lucide-react";
 import { useTranslation } from "@hooks/useTranslation";
+import { useSubjectLabels } from "@types-local/labels";
+import { formatSubject } from "@utils/subject";
 
 interface EventDisplayProps {
   eventInfo: EventDisplayInfo;
@@ -10,6 +12,7 @@ interface EventDisplayProps {
 
 const ScheduleEvent = ({ eventInfo }: EventDisplayProps) => {
   const { t } = useTranslation();
+  const subjectLabels = useSubjectLabels()
   const { auth } = useAuth();
   const { teacher, room, override, group, realized } =
     eventInfo.event.extendedProps;
@@ -45,7 +48,7 @@ const ScheduleEvent = ({ eventInfo }: EventDisplayProps) => {
       </div>
 
       <div>
-        <div className={styles.subject}>{eventInfo.event.title}</div>
+        <div className={styles.subject}>{subjectLabels[formatSubject(eventInfo.event.title)]}</div>
 
         <div className={styles.details}>
           <span>{isTeacher ? `${t("group")} ${group}` : teacher}</span>

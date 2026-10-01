@@ -34,3 +34,9 @@ export type SemesterGradeType =
   | "FINAL_ANNUAL";
 
 export type ScheduleOverrideType = "CANCELLED" | "SUBSTITUTION" | "ROOM_CHANGE";
+
+export type UserRole =
+  | "ROLE_STUDENT"
+  | "ROLE_PARENT"
+  | "ROLE_TEACHER"
+  | "ROLE_ADMIN";

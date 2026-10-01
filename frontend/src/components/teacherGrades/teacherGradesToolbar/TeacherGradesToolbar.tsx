@@ -4,6 +4,8 @@ import type {
 } from "@types-local/index";
 import styles from "./TeacherGradesToolbar.module.css";
 import { useTranslation } from "@hooks/useTranslation";
+import { useSubjectLabels } from "@types-local/labels";
+import { formatDate } from "@fullcalendar/react";
 
 type TeacherGradesToolbarProps = {
   assignments: TeachingAssignment[];
@@ -25,6 +27,7 @@ const TeacherGradesToolbar = ({
   onAddCategory,
 }: TeacherGradesToolbarProps) => {
   const { t } = useTranslation();
+  const subjectLabels = useSubjectLabels()
 
   return (
   <div className={styles.toolbar}>
@@ -38,7 +41,7 @@ const TeacherGradesToolbar = ({
           {assignments.length === 0 && <option value="">{t("noAssignments")}</option>}
         {assignments.map((assignment) => (
           <option key={assignment.id} value={assignment.id}>
-            {assignment.subjectName} · Group {assignment.groupName}
+            {subjectLabels[formatDate(assignment.subjectName)]} · {t("group")} {assignment.groupName}
           </option>
         ))}
       </select>
