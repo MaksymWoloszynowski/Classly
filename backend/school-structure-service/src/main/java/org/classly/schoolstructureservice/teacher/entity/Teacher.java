@@ -36,8 +36,10 @@ public class Teacher {
     private String lastName;
 
     @OneToMany(mappedBy = "teacher")
+    @Builder.Default
     private Set<TeachingAssignment> teachingAssignments = new HashSet<>();
 
     @OneToMany(mappedBy = "homeroomTeacher")
+    @Builder.Default
     private Set<Group> groups = new HashSet<>();
 }

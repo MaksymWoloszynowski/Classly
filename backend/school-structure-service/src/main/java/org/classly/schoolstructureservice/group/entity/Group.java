@@ -27,6 +27,7 @@ public class Group {
     @NotBlank
     private String name;
 
+    @Builder.Default
     @OneToMany(mappedBy = "group")
     private Set<Student> students = new HashSet<>();
 
@@ -34,6 +35,7 @@ public class Group {
     @JoinColumn(name = "homeroom_teacher_id")
     private Teacher homeroomTeacher;
 
+    @Builder.Default
     @OneToMany(mappedBy = "group")
     private Set<TeachingAssignment> teachingAssignments = new HashSet<>();
 }

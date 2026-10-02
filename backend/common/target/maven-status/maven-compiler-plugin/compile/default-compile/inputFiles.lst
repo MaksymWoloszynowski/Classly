@@ -1,4 +1,4 @@
-/Users/maksym/Documents/Projects/Classly/backend/common/src/main/java/org/edziennik/security/AuthenticatedUser.java
-/Users/maksym/Documents/Projects/Classly/backend/common/src/main/java/org/edziennik/security/JwtAuthenticationFilter.java
-/Users/maksym/Documents/Projects/Classly/backend/common/src/main/java/org/edziennik/security/JwtVerifier.java
-/Users/maksym/Documents/Projects/Classly/backend/common/src/main/java/org/edziennik/security/SecurityConfig.java
+/home/maksym/Documents/Projects/Classly/backend/common/src/main/java/org/classly/security/AuthenticatedUser.java
+/home/maksym/Documents/Projects/Classly/backend/common/src/main/java/org/classly/security/JwtAuthenticationFilter.java
+/home/maksym/Documents/Projects/Classly/backend/common/src/main/java/org/classly/security/JwtVerifier.java
+/home/maksym/Documents/Projects/Classly/backend/common/src/main/java/org/classly/security/SecurityConfig.java

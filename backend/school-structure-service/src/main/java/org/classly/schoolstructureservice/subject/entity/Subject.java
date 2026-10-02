@@ -26,5 +26,6 @@ public class Subject {
     private String name;
 
     @OneToMany(mappedBy = "subject")
+    @Builder.Default
     private Set<TeachingAssignment> teachingAssignments = new HashSet<>();
 }

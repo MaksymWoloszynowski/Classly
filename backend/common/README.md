@@ -40,4 +40,3 @@ The current project version is inherited as `0.0.1-SNAPSHOT` from `backend/pom.x
     <version>0.0.1-SNAPSHOT</version>
 </dependency>
 ```
-```

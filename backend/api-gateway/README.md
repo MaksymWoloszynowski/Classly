@@ -11,9 +11,9 @@ The gateway listens on port `8080` by default.
 | Gateway path | Downstream service | Prefix removed |
 |---|---|---|
 | `/auth/**` | auth-service (`8085`) | no |
-| `/api/group/**`, `/api/student/**`, `/api/teacher/**`, `/api/subject/**`, `/api/parent/**`, `/api/teaching-assignment/**`, `/api/my-profile/**`, `/api/classification-period/**` | school-structure-service (`8081`) | `/api` |
+| `/api/group/**`, `/api/admin/**`, `/api/student/**`, `/api/teacher/**`, `/api/subject/**`, `/api/parent/**`, `/api/teaching-assignment/**`, `/api/my-profile/**`, `/api/classification-period/**`, `/api/statistics/**` | school-structure-service (`8081`) | `/api` |
 | `/api/grade/**`, `/api/semester-grade/**`, `/api/grade-category/**` | grade-service (`8082`) | `/api` |
-| `/api/schedule/**`, `/api/schedule-override/**` | schedule-service (`8083`) | `/api` |
+| `/api/schedule/**`, `/api/schedule-override/**`, `/api/additional-schedule/**` | schedule-service (`8083`) | `/api` |
 | `/api/assessment/**`, `/api/attendance/**`, `/api/session/**` | teaching-service (`8084`) | `/api` |
 
 Example URLs through the gateway:
@@ -27,7 +27,7 @@ http://localhost:8080/api/student
 
 - Verifies the JWT signature and expiry on protected requests.
 - Rejects missing or invalid tokens with `401`.
-- Applies credentials-aware CORS for the frontend.
+- Routes the OpenAPI and Swagger UI paths for each service under `/docs/<service>/`.
 
 ## Configuration
 

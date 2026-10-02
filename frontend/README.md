@@ -7,7 +7,7 @@ React + TypeScript frontend for the Classly school management system. Talks to t
 ## Technologies
 
 [![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-6-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Vite](https://img.shields.io/badge/Vite-B73BFE?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
 
 ## Quick Start
@@ -57,8 +57,7 @@ Output is written to `dist/`.
 
 ## Authentication Notes
 
-- Login/register/refresh calls go to `VITE_API_BASE_URL/auth/*`.
-- All requests must be made with `credentials: 'include'` (or `axios.defaults.withCredentials = true`) so the httpOnly cookies are sent.
+- Login/register/refresh calls go to `/auth/*`.
 - Access tokens expire after 15 minutes - a response interceptor automatically calls `/auth/refresh` on a `401` and retries the original request once.
 - The current user's profile is available via `GET /api/my-profile`.
 
@@ -67,12 +66,16 @@ Output is written to `dist/`.
 ```
 frontend/
 ├── src/
-│   ├── api/            # API client, interceptors, endpoint wrappers
-│   ├── components/     # Shared UI components
-│   ├── features/       # Feature-based modules (grades, schedule, attendance...)
+│   ├── api/            # API client and interceptors
+│   ├── components/     # Shared and feature-specific UI components
+│   ├── context/        # React contexts
 │   ├── hooks/          # Shared React hooks
-│   ├── routes/         # Route definitions / pages
+│   ├── i18n/           # Polish and English translations
+│   ├── layouts/        # Page layouts
+│   ├── pages/          # Application pages
+│   ├── styles/         # Global styles
 │   ├── types/          # Shared TypeScript types
+│   ├── utils/          # Shared utilities
 │   └── main.tsx
 ├── public/
 ├── index.html

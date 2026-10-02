@@ -31,6 +31,7 @@ public class Parent {
     @NotBlank
     private String lastName;
 
+    @Builder.Default
     @ManyToMany
     @JoinTable(
             name = "parents_students",

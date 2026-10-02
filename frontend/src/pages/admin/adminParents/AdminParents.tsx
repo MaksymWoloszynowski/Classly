@@ -94,7 +94,7 @@ const AdminParents = () => {
     {
       key: "number",
       header: t("number"),
-      render: (_parent, index) => `${index + 1}.`,
+      render: (_parent, index) => `${index + 1 + parentsPerPage*(currentPage-1)}.`,
     },
     {
       key: "name",

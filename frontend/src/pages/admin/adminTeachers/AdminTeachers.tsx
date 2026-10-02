@@ -26,7 +26,7 @@ const emptyForm: TeacherForm = {
   socialId: "",
 };
 
-const TeachersPerPage = 10;
+const teachersPerPage = 10;
 
 type SortOption = "lastName,asc" | "firstName,asc" | "dateOfBirth,desc";
 
@@ -57,7 +57,7 @@ const AdminTeachers = () => {
       const teachersResponse = await api.get<TeacherPage>("/api/admin/teacher", {
         params: {
           page: currentPage - 1,
-          size: TeachersPerPage,
+          size: teachersPerPage,
           sort,
           search: search.trim() || undefined,
         },
@@ -85,7 +85,7 @@ const AdminTeachers = () => {
     {
       key: "number",
       header: t("number"),
-      render: (_teacher, index) => `${index + 1}.`,
+      render: (_teacher, index) => `${index + 1+teachersPerPage*(currentPage-1)}.`,
     },
     {
       key: "name",
@@ -131,6 +131,7 @@ const AdminTeachers = () => {
       const payload = {
         firstName: form.firstName.trim(),
         lastName: form.lastName.trim(),
+        socialId: form.socialId.trim()
       };
       if (editingTeacher) {
         await api.put<AdminTeacher>(`/api/teacher/${editingTeacher.id}`, payload);

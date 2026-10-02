@@ -55,7 +55,7 @@ services:
       - school_internal_network
     environment:
       DB_HOST: school-structure-service-db
-      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET is required}
+      JWT_SECRET: ${JWT_SECRET}
     secrets:
       - source: school_structure_db_user
         target: DB_USER
@@ -75,7 +75,7 @@ services:
       - school_internal_network
     environment:
       DB_HOST: grade-service-db
-      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET is required}
+      JWT_SECRET: ${JWT_SECRET}
       SCHOOL_STRUCTURE_HOST: school-structure-service
       SCHOOL_STRUCTURE_GRPC_PORT: 9090
     secrets:
@@ -99,7 +99,7 @@ services:
       - school_internal_network
     environment:
       DB_HOST: schedule-service-db
-      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET is required}
+      JWT_SECRET: ${JWT_SECRET}
       SCHOOL_STRUCTURE_HOST: school-structure-service
       SCHOOL_STRUCTURE_GRPC_PORT: 9090
     secrets:
@@ -123,7 +123,7 @@ services:
       - school_internal_network
     environment:
       DB_HOST: teaching-service-db
-      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET is required}
+      JWT_SECRET: ${JWT_SECRET}
       SCHOOL_STRUCTURE_HOST: school-structure-service
       SCHOOL_STRUCTURE_GRPC_PORT: 9090
     secrets:
@@ -146,7 +146,7 @@ services:
       - auth_network
     environment:
       DB_HOST: auth-service-db
-      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET is required}
+      JWT_SECRET: ${JWT_SECRET}
     secrets:
       - source: auth_db_user
         target: DB_USER

@@ -94,7 +94,7 @@ const AdminStudents = () => {
     {
       key: "number",
       header: t("number"),
-      render: (_student, index) => `${index + 1}.`,
+      render: (_student, index) => `${index + 1+studentsPerPage*(currentPage-1)}.`,
     },
     {
       key: "name",

@@ -24,7 +24,7 @@ CREATE TABLE access_codes (
     role VARCHAR(50) NOT NULL,
     ref_id UUID NOT NULL,
     used BOOLEAN NOT NULL DEFAULT FALSE,
-    expires_at TIMESTAMP
+    expires_at timestamptz NOT NULL
 );
 
 CREATE INDEX idx_access_codes_code ON access_codes(code);
