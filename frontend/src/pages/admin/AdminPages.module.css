@@ -1,0 +1,240 @@
+.page {
+  max-width: 1180px;
+  margin: 0 auto;
+  color: var(--color-text-primary);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.pageTitle {
+  composes: pageTitle from "../../index.css";
+  margin-bottom: 0.25rem;
+}
+
+.secondaryButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font: inherit;
+}
+
+.secondaryButton {
+  border: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+  background: white;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.85rem;
+}
+
+.searchBox {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: min(100%, 25rem);
+  min-height: 2.7rem;
+  padding: 0 0.85rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.45rem;
+  background: white;
+  color: var(--color-text-secondary);
+}
+
+.searchBox:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--color-primary) 14%, transparent);
+}
+
+.searchBox input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  color: inherit;
+  background: transparent;
+  font: inherit;
+}
+
+.count,
+.sortControl {
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+}
+
+.sortControl {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.sortControl select {
+  min-height: 2.7rem;
+}
+
+.overlay {
+  position: fixed;
+  z-index: 10;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(30, 36, 48, 0.45);
+}
+
+.modal {
+  composes: modal from "@styles/Modal.module.css";
+}
+
+.modalHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.modalTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.closeButton {
+  color: var(--color-text-secondary);
+}
+
+.form {
+  display: grid;
+  gap: 1rem;
+}
+
+.form label {
+  display: grid;
+  gap: 0.4rem;
+  color: var(--color-text-secondary);
+  font-size: 0.85rem;
+}
+
+.form input {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.4rem;
+  color: var(--color-text-primary);
+  background: white;
+  font: inherit;
+}
+
+.form input:focus {
+  outline: 0;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--color-primary) 14%, transparent);
+}
+
+.studentPicker {
+  display: grid;
+  max-height: 18rem;
+  overflow-y: auto;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.4rem;
+  background: var(--color-bg);
+}
+
+.studentOption {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.45rem;
+  color: var(--color-text-primary);
+  cursor: pointer;
+}
+
+.studentOption input {
+  width: auto;
+}
+
+.studentsList {
+  display: grid;
+  max-height: 18rem;
+  overflow-y: auto;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.4rem;
+  background: var(--color-bg);
+}
+
+.studentItem {
+  display: flex !important;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.45rem;
+  color: var(--color-text-primary) !important;
+  cursor: pointer;
+}
+
+.studentItem input {
+  width: auto;
+}
+
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.65rem;
+  margin-top: 0.5rem;
+}
+
+.groupCard {
+    margin-bottom: 1.5rem;
+}
+
+.groupHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+}
+
+.groupName {
+    font-size: 1.5rem;
+}
+
+.roleButtons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.roleButtons button {
+    padding: 0.4rem 0.75rem;
+    border-radius: 0.4rem;
+    font: inherit;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+}
+
+@media (max-width: 640px) {
+  .header,
+  .toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .searchBox {
+    width: 100%;
+  }
+}

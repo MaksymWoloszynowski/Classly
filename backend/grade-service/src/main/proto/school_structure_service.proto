@@ -1,0 +1,82 @@
+syntax = "proto3";
+
+option java_package = "org.classly.schoolstructureservice.grpc";
+option java_multiple_files = true;
+
+service SchoolStructureService {
+  rpc GetStudent (StudentRequest) returns (StudentResponse);
+  rpc GetStudents(StudentIdsRequest) returns (StudentListResponse);
+  rpc GetSubject (SubjectRequest) returns (SubjectResponse);
+  rpc GetTeacher (TeacherRequest) returns (TeacherResponse);
+  rpc GetStudentIdsByGroup (GroupRequest) returns (StudentIdListResponse);
+  rpc GetTeachingAssignment (TeachingAssignmentRequest) returns (TeachingAssignmentResponse);
+  rpc GetTeachingAssignments(TeachingAssignmentIdsRequest) returns (TeachingAssignmentListResponse);
+  rpc GetTeachingAssignmentIdsByGroup(GroupRequest) returns (TeachingAssignmentIdListResponse);
+  rpc GetTeachingAssignmentIdsByTeacher(TeacherRequest) returns (TeachingAssignmentIdListResponse);
+}
+
+message StudentRequest {
+  string student_id = 1;
+}
+
+message StudentResponse {
+  string id = 1;
+  string first_name = 2;
+  string last_name = 3;
+  string group_id = 4;
+}
+
+message StudentIdsRequest {
+  repeated string studentIds = 1;
+}
+
+message StudentListResponse {
+  repeated StudentResponse students = 1;
+}
+
+message SubjectRequest {
+  string subject_id = 1;
+}
+
+message SubjectResponse {
+  string name = 1;
+}
+
+message TeacherRequest {
+  string teacher_id = 1;
+}
+
+message TeacherResponse {
+  string id = 1;
+  string name = 2;
+}
+
+message GroupRequest {
+  string group_id = 1;
+}
+message TeachingAssignmentRequest {
+  string teaching_assignment_id = 1;
+}
+
+message TeachingAssignmentResponse {
+  string id = 1;
+  string subject = 2;
+  string teacher = 3;
+  string group = 4;
+}
+
+message TeachingAssignmentIdsRequest {
+  repeated string teaching_assignment_ids = 1;
+}
+
+message TeachingAssignmentListResponse {
+  repeated TeachingAssignmentResponse teaching_assignments = 1;
+}
+
+message StudentIdListResponse {
+  repeated string student_ids = 1;
+}
+
+message TeachingAssignmentIdListResponse {
+  repeated string teaching_assignment_ids = 1;
+}

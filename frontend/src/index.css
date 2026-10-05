@@ -1,0 +1,123 @@
+:root {
+  --color-primary: #2c3e63;
+  --color-primary-hover: #1f2c48;
+  --color-accent: #e8a845;
+  --color-accent-dark: #a37c40;
+
+  --color-bg: #f5f7fa;
+  --color-bg-dark: #ddd;
+  --color-surface: #ffffff;
+
+  --color-text-primary: #1e2430;
+  --color-text-secondary: #6b7280;
+
+  --color-border: #e2e6ec;
+
+  --color-grade-red: #c0392b;
+  --color-grade-blue: #4a7fbf;
+  --color-grade-green: #5b9a6f;
+
+  --color-attendance-present: #5b9a6f;
+  --color-attendance-unexcused-absence: #c0392b;
+  --color-attendance-tardy: #e8a845;
+  --color-attendance-absent: #8b9aae;
+
+  --color-override-cancelled: #c0392b;
+  --color-override-substitution: #e8a845;
+  --color-override-room-change: #4a7fbf;
+
+  --color-assessment-test: #dc2626;
+  --color-assessment-quiz: #2563eb;
+  --color-assessment-class-test: #7c3aed;
+  --color-assessment-homework: #ea580c;
+
+  --color-delete: #dc2626;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+h1,h2,h3,h4,p {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family:
+    "Roboto", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial,
+    "Lucida Grande", sans-serif;
+  background-color: var(--color-bg);
+}
+
+a {
+  text-decoration: none;
+  transition:
+    color 0.15s ease,
+    text-decoration 0.15s ease;
+  color: var(--color-surface);
+}
+
+a:focus-visible {
+  outline: none;
+  text-decoration: underline;
+}
+
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+select {
+  min-height: 2.5rem;
+  padding: 0.55rem 2.35rem 0.55rem 0.8rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  color: var(--color-text-primary);
+  background-color: var(--color-surface);
+  background-image: linear-gradient(45deg, transparent 50%, var(--color-primary) 50%),
+    linear-gradient(135deg, var(--color-primary) 50%, transparent 50%);
+  background-position: calc(100% - 1rem) 1.05rem, calc(100% - 0.7rem) 1.05rem;
+  background-size: 0.35rem 0.35rem, 0.35rem 0.35rem;
+  background-repeat: no-repeat;
+  font: inherit;
+  line-height: 1.25;
+  appearance: none;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    background-color 0.15s ease;
+}
+
+select:hover {
+  border-color: var(--color-primary);
+  background-color: color-mix(in srgb, var(--color-primary) 4%, var(--color-surface));
+}
+
+select:focus-visible {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 18%, transparent);
+}
+
+select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.pageTitle {
+    margin-bottom: 1.25rem;
+    font-size: 1.8rem;
+}
+
+.calendar {
+  background-color: var(--color-surface);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+}

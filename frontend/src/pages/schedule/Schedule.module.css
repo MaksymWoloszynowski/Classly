@@ -1,0 +1,7 @@
+.calendar {
+  composes: calendar from "../../index.css";
+}
+
+.pageTitle {
+  composes: pageTitle from "../../index.css";
+}

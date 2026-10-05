@@ -1,0 +1,64 @@
+.tableShell {
+  overflow: auto;
+  border: 1px solid var(--color-border);
+  border-radius: 0.55rem;
+  background: white;
+  box-shadow: 0 0.5rem 1.5rem rgba(44, 62, 99, 0.07);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+th {
+  padding: 0.85rem 1rem;
+  color: var(--color-text-secondary);
+  background: var(--color-bg);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+td {
+  padding: 1rem;
+  border-top: 1px solid var(--color-border);
+  white-space: nowrap;
+}
+
+tr:hover td {
+  background: color-mix(in srgb, var(--color-accent) 5%, white);
+}
+
+.actionsHeading,
+.actionsCell {
+  text-align: right;
+}
+
+.actionsCell {
+  white-space: nowrap;
+}
+
+.iconButton {
+  display: inline-grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.4rem;
+  color: var(--color-primary);
+}
+
+.iconButton:hover {
+  background: var(--color-bg);
+}
+
+.deleteButton {
+  color: var(--color-delete);
+}
+
+.empty {
+  padding: 3rem 1rem;
+  color: var(--color-text-secondary);
+  text-align: center;
+}

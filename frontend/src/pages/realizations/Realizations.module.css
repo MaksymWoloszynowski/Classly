@@ -1,0 +1,150 @@
+.pageTitle {
+  composes: pageTitle from "../../index.css";
+}
+
+.date {
+  display: block;
+  margin: 1rem 0 0.5rem;
+  font-size: 1rem;
+}
+
+.filters {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.filters input[type="date"] {
+  padding: 0.4rem;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-left: 1rem;
+}
+
+.list {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.listItem {
+  margin-bottom: 1rem;
+  border-radius: 0.5rem;
+  width: fit-content;
+  background: var(--color-surface);
+  box-shadow: 0 0.15rem 0.4rem rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--color-border);
+  padding: 0.5rem 1rem;
+}
+
+.item {
+  display: grid;
+  grid-template-columns: 6rem 1fr 1fr 1fr;
+  width: 100%;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.75rem;
+  border: 0;
+  border-bottom: 1px solid var(--color-border);
+  background: transparent;
+  text-align: left;
+}
+
+.item:not(:disabled) {
+  cursor: pointer;
+}
+
+.item:hover:not(:disabled),
+.selected {
+  background: color-mix(in srgb, var(--color-primary) 10%, transparent);
+}
+
+.item:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.check {
+  color: var(--color-attendance-present);
+}
+
+.occurrence {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--color-border);
+  text-align: left;
+}
+
+.occurrence:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.occurrence em {
+  color: var(--color-text-secondary);
+  font-size: 0.8rem;
+  font-style: normal;
+}
+
+.form label {
+  display: block;
+  margin-top: 1rem;
+}
+
+.form textarea {
+  display: block;
+  width: 100%;
+  min-height: 5rem;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+}
+
+.student {
+  display: flex !important;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.student select {
+  min-width: 11rem;
+}
+
+.save {
+  margin-top: 1rem;
+  padding: 0.65rem 1rem;
+  border-radius: 0.35rem;
+  background: var(--color-primary);
+  color: white;
+}
+
+.error {
+  margin-top: 1rem;
+  color: var(--color-grade-red);
+}
+
+@media (max-width: 800px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .item {
+    grid-template-columns: 5rem 1fr auto;
+  }
+
+  .item span:nth-child(3) {
+    display: none;
+  }
+}

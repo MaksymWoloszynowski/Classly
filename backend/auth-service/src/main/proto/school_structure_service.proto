@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+option java_package = "org.classly.schoolstructureservice.grpc";
+option java_multiple_files = true;
+
+service SchoolStructureService {
+  rpc GetStudents(StudentIdsRequest) returns (StudentListResponse);
+  rpc GetParents(ParentIdsRequest) returns (ParentListResponse);
+  rpc GetTeachers(TeacherIdsRequest) returns (TeacherListResponse);
+}
+
+message StudentResponse {
+  string id = 1;
+  string first_name = 2;
+  string last_name = 3;
+  string group_id = 4;
+}
+
+message StudentIdsRequest {
+  repeated string studentIds = 1;
+}
+
+message StudentListResponse {
+  repeated StudentResponse students = 1;
+}
+
+message TeacherResponse {
+  string id = 1;
+  string name = 2;
+}
+
+message TeacherIdsRequest {
+  repeated string teacherIds = 1;
+}
+
+message TeacherListResponse {
+  repeated TeacherResponse teacher = 1;
+}
+
+message ParentResponse {
+  string id = 1;
+  string name = 2;
+}
+
+message ParentIdsRequest {
+  repeated string parentIds = 1;
+}
+
+message ParentListResponse {
+  repeated ParentResponse parents = 1;
+}

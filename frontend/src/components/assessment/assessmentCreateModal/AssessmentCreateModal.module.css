@@ -1,0 +1,53 @@
+.overlay {
+  composes: overlay from "@styles/Modal.module.css";
+}
+
+.modal {
+  composes: modal from "@styles/Modal.module.css";
+  width: min(32rem, 100%);
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.15);
+}
+
+.header {
+  composes: header from "@styles/Modal.module.css";
+  margin-bottom: 1.25rem;
+}
+
+.header h2 {
+  font-size: 1.2rem;
+}
+
+.header p {
+  margin-top: 0.3rem;
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+}
+
+.close {
+  composes: close from "@styles/Modal.module.css";
+  color: var(--color-text-secondary);
+}
+
+.label {
+  display: block;
+  margin: 1rem 0 0.5rem;
+  font-weight: 600;
+}
+
+.input,
+.textarea {
+  width: 100%;
+  padding: 0.65rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.4rem;
+  font: inherit;
+}
+
+.textarea {
+  min-height: 6rem;
+  resize: vertical;
+}
+
+.error {
+  composes: error from "@styles/Modal.module.css";
+}

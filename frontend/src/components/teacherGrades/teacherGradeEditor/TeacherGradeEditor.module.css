@@ -1,0 +1,85 @@
+.overlay {
+  composes: overlay from "@styles/Modal.module.css";
+}
+
+.modal {
+  composes: modal from "@styles/Modal.module.css";
+  width: min(20rem, 100%);
+}
+
+.editorHeader,
+.editorActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.editorHeader {
+  composes: header from "@styles/Modal.module.css";
+  margin-bottom: 1.25rem;
+}
+
+.editorHeader span {
+  display: block;
+  margin-top: 0.25rem;
+  color: var(--color-text-secondary);
+  font-size: 0.85rem;
+}
+
+.iconButton {
+  composes: close from "@styles/Modal.module.css";
+  padding: 0.35rem;
+  color: var(--color-text-secondary);
+}
+
+.editorField {
+  display: grid;
+  gap: 0.4rem;
+  color: var(--color-text-secondary);
+  font-size: 0.85rem;
+}
+
+.editorField input {
+  width: fit-content;
+  padding: 0.55rem 0.75rem;
+  border-radius: 0.3rem;
+  border: 1px solid var(--color-border);
+  font: inherit;
+}
+
+.editorActions {
+  composes: actions from "@styles/Modal.module.css";
+  justify-content: flex-end;
+  margin-top: 1.25rem;
+}
+
+.primaryButton,
+.secondaryButton,
+.deleteButton {
+  border-radius: 0.3rem;
+  padding: 0.55rem 0.8rem;
+  font-weight: 600;
+}
+
+.primaryButton {
+  background: var(--color-primary);
+  color: var(--color-surface);
+}
+
+.secondaryButton {
+  border: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+}
+
+.deleteButton {
+  margin-right: auto;
+  color: var(--color-delete);
+}
+
+.error {
+  composes: error from "@styles/Modal.module.css";
+  margin-top: 0.6rem;
+  color: var(--color-delete);
+  font-size: 0.85rem;
+}

@@ -1,0 +1,38 @@
+.error {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 1rem;
+  color: #8f2d24;
+  background: #fff4f2;
+  border: 1px solid #efb2aa;
+  border-radius: 0.5rem;
+  line-height: 1.4;
+}
+
+.error button {
+  flex-shrink: 0;
+  padding: 0.45rem 0.7rem;
+  color: #8f2d24;
+  border: 1px solid #d98f85;
+  border-radius: 0.35rem;
+  font: inherit;
+  font-weight: 600;
+}
+
+.error button:hover {
+  background: #ffe5e1;
+}
+
+.error button:focus-visible {
+  outline: 3px solid rgba(143, 45, 36, 0.2);
+  outline-offset: 2px;
+}
+
+@media (max-width: 480px) {
+  .error {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}

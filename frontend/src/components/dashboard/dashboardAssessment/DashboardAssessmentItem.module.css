@@ -1,0 +1,63 @@
+.assessment {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+
+  cursor: pointer;
+  padding: 0.75rem;
+
+  border-bottom: 1px solid var(--color-border);
+  transition: background-color 0.2s ease-in-out;
+}
+
+.assessment:hover {
+  background-color: var(--color-bg);
+}
+
+.assessment:last-child {
+  border-bottom: none;
+}
+
+.subject {
+  font-weight: 500;
+}
+
+.type {
+  margin-top: 0.2rem;
+  color: var(--color-text-secondary);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+}
+
+.assessmentDate {
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.type {
+    color: white;
+    padding: 0.2em 0.4em;
+    border-radius: 0.25rem;
+    font-size: 0.65rem;
+}
+
+.test {
+    background-color: var(--color-assessment-test);
+}
+
+.quiz {
+    background-color: var(--color-assessment-quiz);
+}
+
+.exam {
+    background-color: var(--color-assessment-exam);
+}
+
+.classTest {
+    background-color: var(--color-assessment-class-test);
+}
+
+.homework {
+    background-color: var(--color-assessment-homework);
+}
