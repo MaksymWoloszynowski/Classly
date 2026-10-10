@@ -18,10 +18,41 @@ jobs:
         defaults:
             run:
                 working-directory: backend
-        
+
+        env:
+            DB_HOST: localhost
+            DB_PORT: 5432
+            DB_USER: ci_user
+            DB_PASSWORD: ci_password
+            JWT_SECRET: ci-jwt-secret-at-least-32-characters-long
+            KAFKA_BOOTSTRAP_SERVERS: localhost:9092
+
+        services:
+            postgres:
+                image: postgres:16-alpine
+                env:
+                    POSTGRES_USER: ci_user
+                    POSTGRES_PASSWORD: ci_password
+                    POSTGRES_DB: auth-service-db
+                ports:
+                    - 5432:5432
+                options: >-
+                    --health-cmd "pg_isready -U ci_user"
+                    --health-interval 5s
+                    --health-timeout 5s
+                    --health-retries 10
+
         steps:
           - name: Checkout
             uses: actions/checkout@v5
+
+          - name: Create service databases
+            env:
+                PGPASSWORD: ${{ env.DB_PASSWORD }}
+            run: |
+                for db in schedule-service-db grade-service-db school-structure-service-db teaching-service-db; do
+                    psql -h localhost -U "$DB_USER" -d auth-service-db -c "CREATE DATABASE \"$db\""
+                done
 
           - name: Set up JDK 17
             uses: actions/setup-java@v5
