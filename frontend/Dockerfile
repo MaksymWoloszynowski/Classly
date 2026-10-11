@@ -1,10 +1,10 @@
-FROM node:20-alpine AS deps
+FROM node:24-alpine AS deps
 
 WORKDIR /opt/app
 COPY package*.json ./
-RUN npm install
+RUN npm ci
 
-FROM node:20-alpine AS build
+FROM node:24-alpine AS build
 
 WORKDIR /opt/app
 COPY --from=deps /opt/app/node_modules ./node_modules
