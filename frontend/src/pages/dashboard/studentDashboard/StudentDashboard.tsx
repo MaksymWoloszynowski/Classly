@@ -46,73 +46,73 @@ const StudentDashboard = () => {
     return result;
   };
 
-  const fetchSchedule = async () => {
-    try {
-      const date = today.toLocaleDateString("en-CA");
-
-      const response = await api.get<Schedule[]>(
-        `/api/schedule/student?groupId=${activeStudent?.groupId}&from=${date}&to=${date}`,
-      );
-
-      setSchedule(response.data);
-    } catch (error) {
-      console.error("Error fetching schedule:", error);
-      setError("The schedule could not be loaded.");
-    }
-  };
-
-  const fetchAssessments = async () => {
-    try {
-      const from = today.toLocaleDateString("en-CA");
-      const to = addDays(today, 7).toLocaleDateString("en-CA");
-
-      const response = await api.get<Assessment[]>(
-        `/api/assessment/student/date?groupId=${activeStudent?.groupId}&from=${from}&to=${to}`,
-      );
-
-      setAssessments(response.data);
-    } catch (error) {
-      console.error("Error fetching assessments:", error);
-      setError("Assessments could not be loaded.");
-    }
-  };
-
-  const fetchGrades = async () => {
-    try {
-      const from = addDays(today, -3).toLocaleDateString("en-CA");
-      const to = today.toLocaleDateString("en-CA");
-
-      const response = await api.get<LatestGradesByTeachingAssignment>(
-        `/api/grade/date?studentId=${activeStudent?.id}&from=${from}&to=${to}`,
-      );
-
-      setGrades(response.data);
-    } catch (error) {
-      console.error("Error fetching grades:", error);
-      setError("Grades could not be loaded.");
-    }
-  };
-
-  const fetchAttendance = async () => {
-    try {
-      const from = addDays(today, -2).toLocaleDateString("en-CA");
-      const to = today.toLocaleDateString("en-CA");
-
-      const response = await api.get<Attendance[]>(
-        `/api/attendance/date?studentId=${activeStudent?.id}&from=${from}&to=${to}`,
-      );
-
-      setAttendance(response.data);
-    } catch (error) {
-      console.error("Error fetching attendance:", error);
-      setError("Attendance could not be loaded.");
-    }
-  };
-
   useEffect(() => {
     if (!activeStudent) {
       return;
     }
+
+    const fetchSchedule = async () => {
+      try {
+        const date = today.toLocaleDateString("en-CA");
+
+        const response = await api.get<Schedule[]>(
+          `/api/schedule/student?groupId=${activeStudent?.groupId}&from=${date}&to=${date}`,
+        );
+
+        setSchedule(response.data);
+      } catch (error) {
+        console.error("Error fetching schedule:", error);
+        setError("The schedule could not be loaded.");
+      }
+    };
+
+    const fetchAssessments = async () => {
+      try {
+        const from = today.toLocaleDateString("en-CA");
+        const to = addDays(today, 7).toLocaleDateString("en-CA");
+
+        const response = await api.get<Assessment[]>(
+          `/api/assessment/student/date?groupId=${activeStudent?.groupId}&from=${from}&to=${to}`,
+        );
+
+        setAssessments(response.data);
+      } catch (error) {
+        console.error("Error fetching assessments:", error);
+        setError("Assessments could not be loaded.");
+      }
+    };
+
+    const fetchGrades = async () => {
+      try {
+        const from = addDays(today, -3).toLocaleDateString("en-CA");
+        const to = today.toLocaleDateString("en-CA");
+
+        const response = await api.get<LatestGradesByTeachingAssignment>(
+          `/api/grade/date?studentId=${activeStudent?.id}&from=${from}&to=${to}`,
+        );
+
+        setGrades(response.data);
+      } catch (error) {
+        console.error("Error fetching grades:", error);
+        setError("Grades could not be loaded.");
+      }
+    };
+
+    const fetchAttendance = async () => {
+      try {
+        const from = addDays(today, -2).toLocaleDateString("en-CA");
+        const to = today.toLocaleDateString("en-CA");
+
+        const response = await api.get<Attendance[]>(
+          `/api/attendance/date?studentId=${activeStudent?.id}&from=${from}&to=${to}`,
+        );
+
+        setAttendance(response.data);
+      } catch (error) {
+        console.error("Error fetching attendance:", error);
+        setError("Attendance could not be loaded.");
+      }
+    };
 
     setLoading(true);
     setError(null);

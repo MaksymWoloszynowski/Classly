@@ -22,7 +22,7 @@ export const StudentScopeProvider = ({ children }: { children: React.ReactNode }
   const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
   const [isLoadingStudent, setIsLoadingStudent] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [teachingAssignments, setTeachingAssignmnets] = useState<TeachingAssignment[]>([]);
+  const [teachingAssignments, setTeachingAssignmets] = useState<TeachingAssignment[]>([]);
 
   const availableStudents = auth?.parent?.students ?? [];
 
@@ -77,10 +77,10 @@ export const StudentScopeProvider = ({ children }: { children: React.ReactNode }
         `/api/teaching-assignment?groupId=${activeStudent.groupId}`
       );
 
-      setTeachingAssignmnets(response.data);
+      setTeachingAssignmets(response.data);
     } catch (error) {
       console.error("Error fetching teaching assignments:", error);
-      setTeachingAssignmnets([]);
+      setTeachingAssignmets([]);
       setError("The student's subjects could not be loaded.");
     }
   };
