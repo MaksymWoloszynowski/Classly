@@ -10,7 +10,7 @@ on:
         - ".github/workflows/backend-ci.yml"
 
 jobs:
-    changes:
+    backend-changes:
         runs-on: ubuntu-latest
         outputs:
             backend: ${{ steps.filter.outputs.backend }}
@@ -25,9 +25,9 @@ jobs:
                     - "backend/**"
                     - ".github/workflows/backend-ci.yml"
                 
-    build-and-test:
-        needs: changes
-        if: needs.changes.outputs.backend == 'true'
+    backend-build-and-test:
+        needs: backend-changes
+        if: needs.backend-changes.outputs.backend == 'true'
         runs-on: ubuntu-latest
         defaults:
             run:
