@@ -35,29 +35,29 @@ const Sessions = () => {
 
   const weekEnd = addDays(weekStart, 6);
 
-  const fetchSessions = async () => {
-    if (!activeStudent?.groupId) return;
-
-    setLoading(true);
-    setError(null);
-
-    try {
-      const response = await api.get(
-        `/api/session/date?groupId=${activeStudent.groupId}&from=${weekStart.toLocaleDateString("en-CA")}&to=${weekEnd.toLocaleDateString("en-CA")}`,
-      );
-
-      setSessions(response.data);
-    } catch (error) {
-      console.error(error);
-      setError("Realized sessions could not be loaded.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchSessions = async () => {
+      if (!activeStudent?.groupId) return;
+
+      setLoading(true);
+      setError(null);
+
+      try {
+        const response = await api.get(
+          `/api/session/date?groupId=${activeStudent.groupId}&from=${weekStart.toLocaleDateString("en-CA")}&to=${weekEnd.toLocaleDateString("en-CA")}`,
+        );
+
+        setSessions(response.data);
+      } catch (error) {
+        console.error(error);
+        setError("Realized sessions could not be loaded.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchSessions();
-  }, [weekStart, activeStudent?.groupId]);
+  }, [weekStart, weekEnd, activeStudent?.groupId]);
 
   const previousWeek = () => {
     setWeekStart((date) => addDays(date, -7));

@@ -42,52 +42,55 @@ const StudentGrades = () => {
   const displayedSemesterGrades =
     selectedSemester === 1 ? semesterGrades : annualGrades;
 
-  const fetchClassificationPeriods = async () => {
-    try {
-      const response = await api.get<ClassificationPeriod[]>(
-        "/api/classification-period",
+  useEffect(() => {
+    const fetchClassificationPeriods = async () => {
+      try {
+        const response = await api.get<ClassificationPeriod[]>(
+          "/api/classification-period",
+        );
+
+        return response.data;
+      } catch (error) {
+        console.error("Error fetching classification periods:", error);
+        return [];
+      }
+    };
+
+    const fetchFirstSemesterGrades = async (
+      periods: ClassificationPeriod[],
+    ) => {
+      const response = await api.get<StudentGradesByAssignment>(
+        `/api/grade?studentId=${activeStudent?.id}&classificationPeriod=${periods[0]?.id}`,
       );
 
       return response.data;
-    } catch (error) {
-      console.error("Error fetching classification periods:", error);
-      return [];
-    }
-  };
+    };
 
-  const fetchFirstSemesterGrades = async (periods: ClassificationPeriod[]) => {
-    const response = await api.get<StudentGradesByAssignment>(
-      `/api/grade?studentId=${activeStudent?.id}&classificationPeriod=${periods[0]?.id}`,
-    );
+    const fetchSecondSemesterGrades = async (
+      periods: ClassificationPeriod[],
+    ) => {
+      const response = await api.get<StudentGradesByAssignment>(
+        `/api/grade?studentId=${activeStudent?.id}&classificationPeriod=${periods[1]?.id}`,
+      );
 
-    return response.data;
-  };
+      return response.data;
+    };
 
-  const fetchSecondSemesterGrades = async (periods: ClassificationPeriod[]) => {
-    const response = await api.get<StudentGradesByAssignment>(
-      `/api/grade?studentId=${activeStudent?.id}&classificationPeriod=${periods[1]?.id}`,
-    );
+    const fetchSemesterGrades = async (periods: ClassificationPeriod[]) => {
+      const response = await api.get<SemesterGrade[]>(
+        `/api/semester-grade?studentId=${activeStudent?.id}&classificationPeriod=${periods[0]?.id}`,
+      );
 
-    return response.data;
-  };
+      return response.data;
+    };
 
-  const fetchSemesterGrades = async (periods: ClassificationPeriod[]) => {
-    const response = await api.get<SemesterGrade[]>(
-      `/api/semester-grade?studentId=${activeStudent?.id}&classificationPeriod=${periods[0]?.id}`,
-    );
+    const fetchAnnualGrades = async (periods: ClassificationPeriod[]) => {
+      const response = await api.get<SemesterGrade[]>(
+        `/api/semester-grade?studentId=${activeStudent?.id}&classificationPeriod=${periods[1]?.id}`,
+      );
 
-    return response.data;
-  };
-
-  const fetchAnnualGrades = async (periods: ClassificationPeriod[]) => {
-    const response = await api.get<SemesterGrade[]>(
-      `/api/semester-grade?studentId=${activeStudent?.id}&classificationPeriod=${periods[1]?.id}`,
-    );
-
-    return response.data;
-  };
-
-  useEffect(() => {
+      return response.data;
+    };
     const fetchData = async () => {
       if (!activeStudent) return;
 

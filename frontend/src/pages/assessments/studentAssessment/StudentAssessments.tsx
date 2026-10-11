@@ -89,7 +89,6 @@ const StudentAssessments = () => {
     const { subject, type } = eventInfo.event
       .extendedProps as AssessmentEventProps;
       
-      console.log
     return (
       <div className={`${styles.event} ${typeClass[type]}`}>
         <span className={styles.type}>{assessmentTypeLabels[type]}</span>

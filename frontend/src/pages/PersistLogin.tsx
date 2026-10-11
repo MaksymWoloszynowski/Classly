@@ -12,7 +12,7 @@ const PersistLogin = () => {
   useEffect(() => {
     const fetchMe = async () => {
       try {
-        await api.post("/auth/refresh", { withCredentials: true });
+        await api.post("/auth/refresh");
         const res = await api.get<Profile>("/api/my-profile", { withCredentials: true });
         setAuth(res.data); 
       } catch (error) {
@@ -24,7 +24,7 @@ const PersistLogin = () => {
     };
 
     fetchMe();
-  }, []);
+  }, [setAuth]);
 
   if (loading) return <LoadingOverlay />;
 
