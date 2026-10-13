@@ -68,7 +68,7 @@ public class GradeService {
         return mapToDTOLatest(grades);
     }
 
-    public GradeResponseDTO createGrade(GradeRequestDTO gradeRequestDTO, AuthenticatedUser user) {
+    public GradeResponseDTO createGrade(GradeRequestDTO gradeRequestDTO) {
         GradeCategory gradeCategory = getGradeCategoryFromRequestDTO(gradeRequestDTO);
 
         Grade newGrade = gradeRepository.save(GradeMapper.toModel(gradeRequestDTO, gradeCategory));

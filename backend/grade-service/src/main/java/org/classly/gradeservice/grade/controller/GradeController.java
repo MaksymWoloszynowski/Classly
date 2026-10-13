@@ -94,9 +94,9 @@ public class GradeController {
         @ApiResponse(responseCode = "403", description = "Teacher has no access to the grade category", content = @Content),
         @ApiResponse(responseCode = "404", description = "Grade category not found", content = @Content)
     })
-    @PreAuthorize("@gradeSecurity.requireGradeCategoryAccess(authentication, #gradeRequestDTO.gradeCategoryId)")
-    public ResponseEntity<GradeResponseDTO> createGrade(@io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Grade to create", required = true) @Validated({Default.class}) @RequestBody GradeRequestDTO gradeRequestDTO, @AuthenticationPrincipal AuthenticatedUser user) {
-        GradeResponseDTO gradeResponseDTO = gradeService.createGrade(gradeRequestDTO, user);
+    @PreAuthorize("@gradeSecurity.requireGradeCategoryAccess(authentication.principal, #gradeRequestDTO.gradeCategoryId)")
+    public ResponseEntity<GradeResponseDTO> createGrade(@io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Grade to create", required = true) @Validated({Default.class}) @RequestBody GradeRequestDTO gradeRequestDTO) {
+        GradeResponseDTO gradeResponseDTO = gradeService.createGrade(gradeRequestDTO);
 
         return ResponseEntity.created(URI.create("/grade/" + gradeResponseDTO.getId())).body(gradeResponseDTO);
     }
@@ -110,7 +110,7 @@ public class GradeController {
         @ApiResponse(responseCode = "403", description = "Teacher has no access to this grade", content = @Content),
         @ApiResponse(responseCode = "404", description = "Grade not found", content = @Content)
     })
-    @PreAuthorize("@gradeSecurity.canEdit(authentication, #id)")
+    @PreAuthorize("@gradeSecurity.canEdit(authentication.principal, #id)")
     public ResponseEntity<GradeResponseDTO> updateGrade(@Parameter(description = "Grade ID", required = true) @PathVariable UUID id, @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Updated grade data", required = true) @Validated({Default.class}) @RequestBody GradeRequestDTO gradeRequestDTO, @AuthenticationPrincipal AuthenticatedUser user) {
         GradeResponseDTO gradeResponseDTO = gradeService.updateGrade(id, gradeRequestDTO, user);
 
@@ -125,7 +125,7 @@ public class GradeController {
         @ApiResponse(responseCode = "403", description = "Teacher has no access to this grade", content = @Content),
         @ApiResponse(responseCode = "404", description = "Grade not found", content = @Content)
     })
-    @PreAuthorize("@gradeSecurity.canEdit(authentication, #id)")
+    @PreAuthorize("@gradeSecurity.canEdit(authentication.principal, #id)")
     public ResponseEntity<Void> deleteGrade(@Parameter(description = "Grade ID", required = true) @PathVariable UUID id, @AuthenticationPrincipal AuthenticatedUser user) {
         gradeService.deleteGrade(id, user);
 
