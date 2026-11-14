@@ -301,12 +301,40 @@ services:
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
 
+  prometheus:
+    image: prom/prometheus:v3.5.0
+#    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    networks:
+      - school_internal_network
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:12.2.0
+    restart: unless-stopped
+    ports:
+      - 3001:3000
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD}
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - school_internal_network
+    depends_on:
+      - prometheus
+
 volumes:
   auth_service_data:
   teaching_service_data:
   school-structure_service_data:
   grade_service_data:
   schedule_service_data:
+  prometheus_data:
+  grafana_data:
 
 networks:
   school_external_network:
