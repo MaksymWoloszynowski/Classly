@@ -40,3 +40,14 @@ springdoc:
     path: /docs/schedule/v3/api-docs
   swagger-ui:
     path: /docs/schedule/swagger-ui.html
+
+management:
+  server:
+    port: 9091
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  metrics:
+    tags:
+      application: ${spring.application.name}

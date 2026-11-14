@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: api-gateway
   cloud:
     gateway:
       server:
@@ -66,6 +68,13 @@ jwt:
   secret: ${JWT_SECRET:VvyRVvEHvgAySvx17fYT6sCr1AXkuDvW66uiuFDwfVP}
   access-token-validity-ms: 900000
 
-logging:
-  level:
-    org.springframework.security: DEBUG
+management:
+  server:
+    port: 9091
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  metrics:
+    tags:
+      application: ${spring.application.name}

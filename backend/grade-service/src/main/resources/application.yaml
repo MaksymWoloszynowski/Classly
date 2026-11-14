@@ -43,3 +43,14 @@ springdoc:
     path: /docs/grade/v3/api-docs
   swagger-ui:
     path: /docs/grade/swagger-ui.html
+
+management:
+  server:
+    port: 9091
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  metrics:
+    tags:
+      application: ${spring.application.name}
