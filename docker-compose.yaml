@@ -327,6 +327,26 @@ services:
     depends_on:
       - prometheus
 
+  loki:
+    image: grafana/loki:3.7.10
+    restart: unless-stopped
+    volumes:
+      - loki_data:/loki
+    networks:
+      - school_internal_network
+
+  alloy:
+    image: grafana/alloy:v1.22.0
+    restart: unless-stopped
+    command: run /etc/alloy/config.alloy
+    volumes:
+      - ./monitoring/config.alloy:/etc/alloy/config.alloy:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - school_internal_network
+    depends_on:
+      - loki
+
 volumes:
   auth_service_data:
   teaching_service_data:
@@ -335,6 +355,7 @@ volumes:
   schedule_service_data:
   prometheus_data:
   grafana_data:
+  loki_data:
 
 networks:
   school_external_network:

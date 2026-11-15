@@ -54,3 +54,8 @@ management:
   metrics:
     tags:
       application: ${spring.application.name}
+
+logging:
+  structured:
+    format:
+      console: ecs
