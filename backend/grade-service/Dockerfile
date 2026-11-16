@@ -1,4 +1,4 @@
-FROM maven:3.9-eclipse-temurin-17 AS build
+FROM maven:3.9-eclipse-temurin-21 AS build
 
 WORKDIR /app
 
@@ -16,12 +16,19 @@ RUN mvn -f common/pom.xml install -DskipTests -B
 
 RUN mvn -f grade-service/pom.xml package -DskipTests -B
 
-FROM eclipse-temurin:17-jre
+FROM eclipse-temurin:21-jre
 
 WORKDIR /app
 
+RUN useradd -r -u 10001 app
+
 COPY --from=build /app/grade-service/target/*.jar app.jar
+
+USER app
 
 EXPOSE 8082
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+HEALTHCHECK --interval=30s --timeout=5s --start-period=120s --retries=3 \
+  CMD curl -fs http://localhost:9091/actuator/health/readiness || exit 1
+
+ENTRYPOINT ["java", "-XX:MaxRAMPercentage=75", "-jar", "app.jar"]
