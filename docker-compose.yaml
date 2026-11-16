@@ -11,17 +11,17 @@ services:
         - school_external_network
       depends_on:
         api-gateway:
-          condition: service_started
+          condition: service_healthy
         auth-service:
-            condition: service_started
+            condition: service_healthy
         school-structure-service:
-          condition: service_started
+          condition: service_healthy
         grade-service:
-          condition: service_started
+          condition: service_healthy
         schedule-service:
-          condition: service_started
+          condition: service_healthy
         teaching-service:
-          condition: service_started
+          condition: service_healthy
 
   api-gateway:
     build:
@@ -35,15 +35,15 @@ services:
       - school_internal_network
     depends_on:
       auth-service:
-        condition: service_started
+        condition: service_healthy
       school-structure-service:
-        condition: service_started
+        condition: service_healthy
       grade-service:
-        condition: service_started
+        condition: service_healthy
       schedule-service:
-        condition: service_started
+        condition: service_healthy
       teaching-service:
-        condition: service_started
+        condition: service_healthy
 
   school-structure-service:
     build:
@@ -65,6 +65,8 @@ services:
       school-structure-service-db:
         condition: service_healthy
 
+      kafka:
+        condition: service_healthy
   grade-service:
     build:
       context: ./backend/
@@ -87,7 +89,7 @@ services:
       grade-service-db:
         condition: service_healthy
       school-structure-service:
-        condition: service_started
+        condition: service_healthy
 
   schedule-service:
     build:
@@ -111,7 +113,7 @@ services:
       schedule-service-db:
         condition: service_healthy
       school-structure-service:
-        condition: service_started
+        condition: service_healthy
 
   teaching-service:
     build:
@@ -135,7 +137,7 @@ services:
       teaching-service-db:
         condition: service_healthy
       school-structure-service:
-        condition: service_started
+        condition: service_healthy
 
   auth-service:
     build: ./backend/auth-service
@@ -158,6 +160,10 @@ services:
       auth-service-db:
         condition: service_healthy
 
+      kafka:
+        condition: service_healthy
+      school-structure-service:
+        condition: service_healthy
   auth-service-db:
     image: postgres:16-alpine
     # container_name: auth-service-db
@@ -301,6 +307,12 @@ services:
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
 
+    healthcheck:
+      test: [ "CMD", "/opt/kafka/bin/kafka-broker-api-versions.sh", "--bootstrap-server", "localhost:9092" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
   prometheus:
     image: prom/prometheus:v3.5.0
 #    container_name: prometheus
