@@ -1,4 +1,3 @@
-// Zbiera logi wszystkich kontenerów z Dockera i wysyła je do Loki.
 discovery.docker "containers" {
   host = "unix:///var/run/docker.sock"
 }

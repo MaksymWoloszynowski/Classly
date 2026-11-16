@@ -2,6 +2,7 @@ services:
   frontend:
       build: ./frontend
       # container_name: frontend
+      restart: unless-stopped
       ports:
         - 8000:3000
       configs:
@@ -64,9 +65,9 @@ services:
     depends_on:
       school-structure-service-db:
         condition: service_healthy
-
       kafka:
         condition: service_healthy
+
   grade-service:
     build:
       context: ./backend/
@@ -159,11 +160,11 @@ services:
     depends_on:
       auth-service-db:
         condition: service_healthy
-
       kafka:
         condition: service_healthy
       school-structure-service:
         condition: service_healthy
+
   auth-service-db:
     image: postgres:16-alpine
     # container_name: auth-service-db
@@ -286,9 +287,9 @@ services:
   kafka:
     image: apache/kafka:3.7.0
     # container_name: kafka
+    restart: unless-stopped
     networks:
       - school_internal_network
-      - school_network
     environment:
       KAFKA_NODE_ID: 1
       KAFKA_PROCESS_ROLES: broker,controller
@@ -306,20 +307,20 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
-
     healthcheck:
       test: [ "CMD", "/opt/kafka/bin/kafka-broker-api-versions.sh", "--bootstrap-server", "localhost:9092" ]
       interval: 30s
       timeout: 10s
       retries: 5
       start_period: 30s
+
   prometheus:
     image: prom/prometheus:v3.5.0
 #    container_name: prometheus
     ports:
       - "9090:9090"
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - prometheus_data:/prometheus
     networks:
       - school_internal_network
@@ -354,6 +355,7 @@ services:
     volumes:
       - ./monitoring/config.alloy:/etc/alloy/config.alloy:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - alloy_data:/var/lib/alloy/data
     networks:
       - school_internal_network
     depends_on:
@@ -368,6 +370,7 @@ volumes:
   prometheus_data:
   grafana_data:
   loki_data:
+  alloy_data:
 
 networks:
   school_external_network:
@@ -377,9 +380,6 @@ networks:
   grade_network:
   schedule_network:
   teaching_network:
-  school_network:
-    driver: bridge
-    external: true
 
 configs:
   nginx_config:
